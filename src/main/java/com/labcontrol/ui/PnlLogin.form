@@ -16,27 +16,25 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-        <Group type="102" alignment="0" attributes="0">
-          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-          <Component id="lblSistema" min="-2" max="-2" attributes="0"/>
-          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-        </Group>
-        <Group type="102" alignment="0" attributes="0">
-          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-          <Component id="pnlTarjeta" min="-2" pref="420" max="-2" attributes="0"/>
-          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-        </Group>
+          <Group type="102" attributes="0">
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="lblSistema" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="pnlTarjeta" alignment="0" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-        <Group type="102" alignment="0" attributes="0">
-          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-          <Component id="lblSistema" min="-2" max="-2" attributes="0"/>
-          <EmptySpace min="24" pref="24" max="24" attributes="0"/>
-          <Component id="pnlTarjeta" min="-2" max="-2" attributes="0"/>
-          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-        </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              <Component id="lblSistema" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="24" pref="24" max="24" attributes="0"/>
+              <Component id="pnlTarjeta" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -48,49 +46,50 @@
       </Properties>
     </Component>
     <Container class="javax.swing.JPanel" name="pnlTarjeta">
+
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-            <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="32" pref="32" max="32" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                <Component id="lblIniciar" alignment="0" max="32767" attributes="0"/>
-                <Component id="lblAcceso" alignment="0" max="32767" attributes="0"/>
-                <Component id="lblUsuario" alignment="0" max="32767" attributes="0"/>
-                <Component id="txtUsuario" alignment="0" max="32767" attributes="0"/>
-                <Component id="lblClave" alignment="0" max="32767" attributes="0"/>
-                <Component id="txtClave" alignment="0" max="32767" attributes="0"/>
-                <Component id="lblError" alignment="0" max="32767" attributes="0"/>
-                <Component id="btnIngresar" alignment="0" max="32767" attributes="0"/>
-                <Component id="lblAyuda" alignment="0" max="32767" attributes="0"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="32" pref="32" max="32" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="lblIniciar" alignment="0" max="32767" attributes="0"/>
+                      <Component id="lblAcceso" alignment="0" max="32767" attributes="0"/>
+                      <Component id="lblUsuario" alignment="0" max="32767" attributes="0"/>
+                      <Component id="txtUsuario" alignment="0" max="32767" attributes="0"/>
+                      <Component id="lblClave" alignment="0" max="32767" attributes="0"/>
+                      <Component id="txtClave" alignment="0" max="32767" attributes="0"/>
+                      <Component id="lblError" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btnIngresar" alignment="0" max="32767" attributes="0"/>
+                      <Component id="lblAyuda" alignment="0" pref="356" max="32767" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="32" pref="32" max="32" attributes="0"/>
               </Group>
-              <EmptySpace min="32" pref="32" max="32" attributes="0"/>
-            </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-            <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="28" pref="28" max="28" attributes="0"/>
-              <Component id="lblIniciar" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="lblAcceso" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="22" pref="22" max="22" attributes="0"/>
-              <Component id="lblUsuario" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="txtUsuario" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="12" pref="12" max="12" attributes="0"/>
-              <Component id="lblClave" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="txtClave" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-              <Component id="lblError" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="btnIngresar" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="14" pref="14" max="14" attributes="0"/>
-              <Component id="lblAyuda" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="28" pref="28" max="28" attributes="0"/>
-            </Group>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="28" pref="28" max="28" attributes="0"/>
+                  <Component id="lblIniciar" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="lblAcceso" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="22" pref="22" max="22" attributes="0"/>
+                  <Component id="lblUsuario" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="txtUsuario" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="12" pref="12" max="12" attributes="0"/>
+                  <Component id="lblClave" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="txtClave" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                  <Component id="lblError" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="btnIngresar" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="14" pref="14" max="14" attributes="0"/>
+                  <Component id="lblAyuda" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="28" pref="28" max="28" attributes="0"/>
+              </Group>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -98,7 +97,7 @@
         <Component class="javax.swing.JLabel" name="lblIniciar">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="Iniciar sesión"/>
+            <Property name="text" type="java.lang.String" value="Iniciar sesi&#xf3;n"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblAcceso">
@@ -119,7 +118,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblClave">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Contraseña"/>
+            <Property name="text" type="java.lang.String" value="Contrase&#xf1;a"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JPasswordField" name="txtClave">
@@ -147,7 +146,7 @@
         <Component class="javax.swing.JLabel" name="lblAyuda">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="Ingrese con su usuario y contraseña"/>
+            <Property name="text" type="java.lang.String" value="Ingrese con su usuario y contrase&#xf1;a"/>
           </Properties>
         </Component>
       </SubComponents>

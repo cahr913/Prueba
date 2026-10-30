@@ -1,4 +1,4 @@
-package com.labcontrol.ui.vista;
+package com.labcontrol.UI;
 
 public interface Refrescable {
 

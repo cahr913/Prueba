@@ -1,6 +1,6 @@
 package com.labcontrol.app;
 
-import com.labcontrol.ui.vista.FrmPrincipal;
+import com.labcontrol.UI.FrmPrincipal;
 import javax.swing.SwingUtilities;
 
 public class Main {

@@ -15,7 +15,15 @@ public class MantenimientoPreventivo extends Mantenimiento {
     public String getListaChequeo() { return listaChequeo; }
     public void setListaChequeo(String listaChequeo) { this.listaChequeo = listaChequeo; }
 
+    
+    @Override
     public void finalizar() {
-        setEstado(Estado.FINALIZADO);
+        super.finalizar();
+    }
+
+    
+    @Override
+    public double calcularCostoEstimado() {
+        return 25.0;
     }
 }

@@ -15,11 +15,23 @@ public class MantenimientoCorrectivo extends Mantenimiento {
         super.agregarPieza(pieza);
     }
 
+    
+    @Override
     public void finalizar() {
         if (getPiezas().isEmpty()) {
             throw new IllegalStateException(
                 "No se puede finalizar un mantenimiento correctivo sin piezas asignadas.");
         }
-        setEstado(Estado.FINALIZADO);
+        super.finalizar();
+    }
+
+    
+    @Override
+    public double calcularCostoEstimado() {
+        double total = 0.0;
+        for (Pieza p : getPiezas()) {
+            total += p.getCantidad() * 50.0; // valor unitario ejemplo
+        }
+        return total;
     }
 }

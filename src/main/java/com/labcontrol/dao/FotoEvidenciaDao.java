@@ -13,7 +13,11 @@ public class FotoEvidenciaDao {
         try (Connection cn = ConexionBD.abrir();
              PreparedStatement ps = cn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, f.getReporteid());
-            ps.setInt(2, f.getEquipoid());
+            if (f.getEquipoid() > 0) {
+                ps.setInt(2, f.getEquipoid());
+            } else {
+                ps.setNull(2, java.sql.Types.INTEGER);
+            }
             ps.setString(3, f.getRutaArchivo());
             ps.setString(4, f.getDescripcion());
             int filas = ps.executeUpdate();
@@ -31,7 +35,11 @@ public class FotoEvidenciaDao {
         try (Connection cn = ConexionBD.abrir();
              PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setInt(1, f.getReporteid());
-            ps.setInt(2, f.getEquipoid());
+            if (f.getEquipoid() > 0) {
+                ps.setInt(2, f.getEquipoid());
+            } else {
+                ps.setNull(2, java.sql.Types.INTEGER);
+            }
             ps.setString(3, f.getRutaArchivo());
             ps.setString(4, f.getDescripcion());
             ps.setInt(5, f.getId());
@@ -40,6 +48,29 @@ public class FotoEvidenciaDao {
                 throw new SQLException("No se actualizó ningún registro");
             }
         }
+    }
+
+    
+    public List<FotoEvidencia> listarPorReporte(int reporteDanoId) throws SQLException {
+        List<FotoEvidencia> lista = new ArrayList<>();
+        String sql = "SELECT * FROM foto_evidencia WHERE reporte_dano_id = (?) ORDER BY id";
+        try (Connection cn = ConexionBD.abrir();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setInt(1, reporteDanoId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    FotoEvidencia f = new FotoEvidencia();
+                    f.setId(rs.getInt("id"));
+                    f.setReporteid(rs.getInt("reporte_dano_id"));
+                    int equipo = rs.getInt("equipo_id");
+                    f.setEquipoid(rs.wasNull() ? 0 : equipo);
+                    f.setRutaArchivo(rs.getString("ruta_archivo"));
+                    f.setDescripcion(rs.getString("descripcion"));
+                    lista.add(f);
+                }
+            }
+        }
+        return lista;
     }
 
     public void eliminar(int id) throws SQLException {

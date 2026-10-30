@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Mantenimiento {
+
     public enum Tipo {
         PREVENTIVO,
         CORRECTIVO
@@ -28,7 +29,7 @@ public class Mantenimiento {
     private int responsableId;
     private String tipoTexto;
     private Tipo tipo;
-    private Estado estado;
+    private Estado estado = Estado.PENDIENTE;
     private String fallaReportada;
     private String diagnostico;
     private String actividadesRealizadas;
@@ -48,7 +49,7 @@ public class Mantenimiento {
             throw new IllegalArgumentException("Los identificadores deben ser positivos.");
         }
         if (numeroServicio == null || numeroServicio.trim().isEmpty()) {
-            throw new IllegalArgumentException("El número de servicio es obligatorio.");
+            throw new IllegalArgumentException("El numero de servicio es obligatorio.");
         }
         if (tipo == null || estado == null || fechaInicio == null) {
             throw new IllegalArgumentException("El tipo, el estado y la fecha son obligatorios.");
@@ -76,37 +77,82 @@ public class Mantenimiento {
         this.estadoFinalEquipo = estadoFinal;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() { 
+        return id; 
+    }
+    
+    public void setId(int id) { 
+        this.id = id; 
+    }
 
-    public int getIdMantenimiento() { return id; }
+    public int getIdMantenimiento() { 
+        return id; 
+    }
 
-    public String getNumeroServicio() { return numeroServicio; }
-    public void setNumeroServicio(String numeroServicio) { this.numeroServicio = numeroServicio; }
+    public String getNumeroServicio() { 
+        return numeroServicio; 
+    }
+    
+    public void setNumeroServicio(String numeroServicio) { 
+        this.numeroServicio = numeroServicio; 
+    }
 
-    public int getEquipoId() { return equipoId; }
-    public void setEquipoId(int equipoId) { this.equipoId = equipoId; }
+    public int getEquipoId() { 
+        return equipoId; 
+    }
+    public void setEquipoId(int equipoId) { 
+        this.equipoId = equipoId; 
+    }
 
-    public int getIdEquipo() { return equipoId; }
+    public int getIdEquipo() { 
+        return equipoId; 
+    }
 
-    public int getReporteDanoId() { return reporteDanoId; }
-    public void setReporteDanoId(int reporteDanoId) { this.reporteDanoId = reporteDanoId; }
+    public int getReporteDanoId() { 
+        return reporteDanoId; 
+    }
+    
+    public void setReporteDanoId(int reporteDanoId) { 
+        this.reporteDanoId = reporteDanoId; 
+    }
 
-    public LocalDate getFechaInicio() { return fechaInicio; }
-    public void setFechaInicio(LocalDate fechaInicio) { this.fechaInicio = fechaInicio; }
+    public LocalDate getFechaInicio() { 
+        return fechaInicio; 
+    }
+    
+    public void setFechaInicio(LocalDate fechaInicio) { 
+        this.fechaInicio = fechaInicio; 
+    }
 
-    public LocalDateTime getFechaInicioCompleta() { return fechaInicioCompleta; }
+    public LocalDateTime getFechaInicioCompleta() { 
+        return fechaInicioCompleta; 
+    }
 
-    public LocalDate getFechaFin() { return fechaFin; }
-    public void setFechaFin(LocalDate fechaFin) { this.fechaFin = fechaFin; }
+    public LocalDate getFechaFin() { 
+        return fechaFin; 
+    }
+    
+    public void setFechaFin(LocalDate fechaFin) { 
+        this.fechaFin = fechaFin; 
+    }
 
-    public int getResponsableId() { return responsableId; }
-    public void setResponsableId(int responsableId) { this.responsableId = responsableId; }
+    public int getResponsableId() { 
+        return responsableId; 
+    }
+    
+    public void setResponsableId(int responsableId) { 
+        this.responsableId = responsableId; 
+    }
 
-    public int getIdTecnico() { return responsableId; }
+    public int getIdTecnico() { 
+        return responsableId; 
+    }
 
-    public Tipo getTipo() { return tipo; }
-
+    public Tipo getTipo() { 
+        return tipo; 
+    }
+    
+    
     public void setTipo(Tipo tipo) {
         this.tipo = tipo;
         if (tipo != null) {
@@ -121,16 +167,43 @@ public class Mantenimiento {
         this.tipo = parseTipo(tipoTexto);
     }
 
+    // valor que se guarda en la base de datos: 'Preventivo' o 'Correctivo'
+    public String tipoValorBd() {
+        return tipo == Tipo.CORRECTIVO ? "Correctivo" : "Preventivo";
+    }
+
     public Estado getEstado() { return estado; }
 
     public void setEstado(Estado estado) {
         if (estado == null) {
             throw new IllegalArgumentException("El estado es obligatorio.");
         }
-        if (estado == Estado.FINALIZADO && tipo == Tipo.CORRECTIVO && piezas.isEmpty()) {
-            throw new IllegalArgumentException("El mantenimiento correctivo requiere una pieza antes de finalizar.");
-        }
         this.estado = estado;
+    }
+
+    public String getEstadoTexto() { return estado != null ? estado.name() : null; }
+
+    public void setEstadoTexto(String estadoTexto) {
+        if (estadoTexto == null || estadoTexto.isBlank()) {
+            this.estado = Estado.PENDIENTE;
+            return;
+        }
+        try {
+            this.estado = Estado.valueOf(estadoTexto.trim().toUpperCase());
+        } catch (IllegalArgumentException ex) {
+            this.estado = Estado.PENDIENTE;
+        }
+    }
+
+    public void finalizar() {
+        if (estado == Estado.FINALIZADO) {
+            throw new IllegalStateException("El mantenimiento ya esta finalizado.");
+        }
+        this.estado = Estado.FINALIZADO;
+    }
+
+    public double calcularCostoEstimado() {
+        return 0.0;
     }
 
     public String getFallaReportada() { return fallaReportada; }
@@ -159,7 +232,6 @@ public class Mantenimiento {
 
     public List<Pieza> getPiezas() { return piezas; }
 
-    /** Devuelve la primera pieza asociada (compatibilidad). */
     public Pieza getPieza() { return piezas.isEmpty() ? null : piezas.get(0); }
 
     public void agregarPieza(Pieza pieza) {
@@ -188,10 +260,7 @@ public class Mantenimiento {
 
     @Override
     public String toString() {
-        return "Mantenimiento #" + id
-                + " | Servicio: " + numeroServicio
-                + " | Equipo: " + equipoId
-                + " | Tipo: " + tipo
-                + " | Estado: " + estado;
+        return "Mantenimiento{" + "id=" + id + ", numeroServicio=" + numeroServicio
+                + ", equipoId=" + equipoId + ", tipo=" + tipo + ", estado=" + estado + "}";
     }
 }

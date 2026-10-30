@@ -1,32 +1,34 @@
 package com.labcontrol.dao;
 
-import com.labcontrol.modelo.Mantenimiento;
+import com.labcontrol.modelo.*;
 import com.labcontrol.db.ConexionBD;
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MantenimientoDao {
 
     public void insertar(Mantenimiento m) throws SQLException {
-        String sql = "INSERT INTO mantenimiento(numero_servicio, equipo_id, reporte_dano_id, fecha_inicio, fecha_fin, responsable_id, tipo, falla_reportada, diagnostico, actividades_realizadas, resultado, estado_final_equipo, recomendaciones, observaciones) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO mantenimiento(numero_servicio, equipo_id, reporte_dano_id, fecha_inicio, fecha_fin, "
+                + "responsable_id, tipo, estado, falla_reportada, diagnostico, actividades_realizadas, resultado, "
+                + "estado_final_equipo, recomendaciones, observaciones) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try (Connection cn = ConexionBD.abrir();
              PreparedStatement ps = cn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, m.getNumeroServicio());
             ps.setInt(2, m.getEquipoId());
-            ps.setInt(3, m.getReporteDanoId());
+            setNullableInt(ps, 3, m.getReporteDanoId());
             ps.setDate(4, m.getFechaInicio() != null ? java.sql.Date.valueOf(m.getFechaInicio()) : null);
             ps.setDate(5, m.getFechaFin() != null ? java.sql.Date.valueOf(m.getFechaFin()) : null);
             ps.setInt(6, m.getResponsableId());
-            ps.setString(7, m.getTipoTexto());
-            ps.setString(8, m.getFallaReportada());
-            ps.setString(9, m.getDiagnostico());
-            ps.setString(10, m.getActividadesRealizadas());
-            ps.setString(11, m.getResultado());
-            ps.setString(12, m.getEstadoFinalEquipo());
-            ps.setString(13, m.getRecomendaciones());
-            ps.setString(14, m.getObservaciones());
+            ps.setString(7, m.tipoValorBd());
+            ps.setString(8, m.getEstadoTexto());
+            ps.setString(9, m.getFallaReportada());
+            ps.setString(10, m.getDiagnostico());
+            ps.setString(11, m.getActividadesRealizadas());
+            ps.setString(12, m.getResultado());
+            ps.setString(13, m.getEstadoFinalEquipo());
+            ps.setString(14, m.getRecomendaciones());
+            ps.setString(15, m.getObservaciones());
             int filas = ps.executeUpdate();
             if (filas == 0) {
                 throw new SQLException("No se almacenó ningún registro");
@@ -38,24 +40,28 @@ public class MantenimientoDao {
     }
 
     public void actualizar(Mantenimiento m) throws SQLException {
-        String sql = "UPDATE mantenimiento SET numero_servicio=?, equipo_id=?, reporte_dano_id=?, fecha_inicio=?, fecha_fin=?, responsable_id=?, tipo=?, falla_reportada=?, diagnostico=?, actividades_realizadas=?, resultado=?, estado_final_equipo=?, recomendaciones=?, observaciones=? WHERE id=?";
+        String sql = "UPDATE mantenimiento SET numero_servicio=?, equipo_id=?, reporte_dano_id=?, fecha_inicio=?, "
+                + "fecha_fin=?, responsable_id=?, tipo=?, estado=?, falla_reportada=?, diagnostico=?, "
+                + "actividades_realizadas=?, resultado=?, estado_final_equipo=?, recomendaciones=?, observaciones=? "
+                + "WHERE id=?";
         try (Connection cn = ConexionBD.abrir();
              PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setString(1, m.getNumeroServicio());
             ps.setInt(2, m.getEquipoId());
-            ps.setInt(3, m.getReporteDanoId());
+            setNullableInt(ps, 3, m.getReporteDanoId());
             ps.setDate(4, m.getFechaInicio() != null ? java.sql.Date.valueOf(m.getFechaInicio()) : null);
             ps.setDate(5, m.getFechaFin() != null ? java.sql.Date.valueOf(m.getFechaFin()) : null);
             ps.setInt(6, m.getResponsableId());
-            ps.setString(7, m.getTipoTexto());
-            ps.setString(8, m.getFallaReportada());
-            ps.setString(9, m.getDiagnostico());
-            ps.setString(10, m.getActividadesRealizadas());
-            ps.setString(11, m.getResultado());
-            ps.setString(12, m.getEstadoFinalEquipo());
-            ps.setString(13, m.getRecomendaciones());
-            ps.setString(14, m.getObservaciones());
-            ps.setInt(15, m.getId());
+            ps.setString(7, m.tipoValorBd());
+            ps.setString(8, m.getEstadoTexto());
+            ps.setString(9, m.getFallaReportada());
+            ps.setString(10, m.getDiagnostico());
+            ps.setString(11, m.getActividadesRealizadas());
+            ps.setString(12, m.getResultado());
+            ps.setString(13, m.getEstadoFinalEquipo());
+            ps.setString(14, m.getRecomendaciones());
+            ps.setString(15, m.getObservaciones());
+            ps.setInt(16, m.getId());
             int filas = ps.executeUpdate();
             if (filas == 0) {
                 throw new SQLException("No se actualizó ningún registro");
@@ -82,25 +88,21 @@ public class MantenimientoDao {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    Mantenimiento m = new Mantenimiento();
-                    m.setId(rs.getInt("id"));
-                    m.setNumeroServicio(rs.getString("numero_servicio"));
-                    m.setEquipoId(rs.getInt("equipo_id"));
-                    m.setReporteDanoId(rs.getInt("reporte_dano_id"));
-                    java.sql.Date fi = rs.getDate("fecha_inicio");
-                    m.setFechaInicio(fi != null ? fi.toLocalDate() : null);
-                    java.sql.Date ff = rs.getDate("fecha_fin");
-                    m.setFechaFin(ff != null ? ff.toLocalDate() : null);
-                    m.setResponsableId(rs.getInt("responsable_id"));
-                    m.setTipoTexto(rs.getString("tipo"));
-                    m.setFallaReportada(rs.getString("falla_reportada"));
-                    m.setDiagnostico(rs.getString("diagnostico"));
-                    m.setActividadesRealizadas(rs.getString("actividades_realizadas"));
-                    m.setResultado(rs.getString("resultado"));
-                    m.setEstadoFinalEquipo(rs.getString("estado_final_equipo"));
-                    m.setRecomendaciones(rs.getString("recomendaciones"));
-                    m.setObservaciones(rs.getString("observaciones"));
-                    return m;
+                    return leer(rs);
+                }
+            }
+        }
+        return null;
+    }
+
+    public Mantenimiento buscarPorNumeroServicio(String numeroServicio) throws SQLException {
+        String sql = "SELECT * FROM mantenimiento WHERE numero_servicio = (?)";
+        try (Connection cn = ConexionBD.abrir();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setString(1, numeroServicio);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return leer(rs);
                 }
             }
         }
@@ -109,32 +111,48 @@ public class MantenimientoDao {
 
     public List<Mantenimiento> listar() throws SQLException {
         List<Mantenimiento> lista = new ArrayList<>();
-        String sql = "SELECT * FROM mantenimiento ORDER BY fecha_inicio DESC";
+        String sql = "SELECT * FROM mantenimiento ORDER BY fecha_inicio DESC, id DESC";
         try (Connection cn = ConexionBD.abrir();
              PreparedStatement ps = cn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                Mantenimiento m = new Mantenimiento();
-                m.setId(rs.getInt("id"));
-                m.setNumeroServicio(rs.getString("numero_servicio"));
-                m.setEquipoId(rs.getInt("equipo_id"));
-                m.setReporteDanoId(rs.getInt("reporte_dano_id"));
-                java.sql.Date fi = rs.getDate("fecha_inicio");
-                m.setFechaInicio(fi != null ? fi.toLocalDate() : null);
-                java.sql.Date ff = rs.getDate("fecha_fin");
-                m.setFechaFin(ff != null ? ff.toLocalDate() : null);
-                m.setResponsableId(rs.getInt("responsable_id"));
-                m.setTipoTexto(rs.getString("tipo"));
-                m.setFallaReportada(rs.getString("falla_reportada"));
-                m.setDiagnostico(rs.getString("diagnostico"));
-                m.setActividadesRealizadas(rs.getString("actividades_realizadas"));
-                m.setResultado(rs.getString("resultado"));
-                m.setEstadoFinalEquipo(rs.getString("estado_final_equipo"));
-                m.setRecomendaciones(rs.getString("recomendaciones"));
-                m.setObservaciones(rs.getString("observaciones"));
-                lista.add(m);
+                lista.add(leer(rs));
             }
         }
         return lista;
+    }
+
+    // Auxiliares
+    private Mantenimiento leer(ResultSet rs) throws SQLException {
+        Mantenimiento m = new Mantenimiento();
+        m.setId(rs.getInt("id"));
+        m.setNumeroServicio(rs.getString("numero_servicio"));
+        m.setEquipoId(rs.getInt("equipo_id"));
+        int reporte = rs.getInt("reporte_dano_id");
+        m.setReporteDanoId(rs.wasNull() ? 0 : reporte);
+        java.sql.Date fi = rs.getDate("fecha_inicio");
+        m.setFechaInicio(fi != null ? fi.toLocalDate() : null);
+        java.sql.Date ff = rs.getDate("fecha_fin");
+        m.setFechaFin(ff != null ? ff.toLocalDate() : null);
+        m.setResponsableId(rs.getInt("responsable_id"));
+        m.setTipoTexto(rs.getString("tipo"));
+        m.setEstadoTexto(rs.getString("estado"));
+        m.setFallaReportada(rs.getString("falla_reportada"));
+        m.setDiagnostico(rs.getString("diagnostico"));
+        m.setActividadesRealizadas(rs.getString("actividades_realizadas"));
+        m.setResultado(rs.getString("resultado"));
+        m.setEstadoFinalEquipo(rs.getString("estado_final_equipo"));
+        m.setRecomendaciones(rs.getString("recomendaciones"));
+        m.setObservaciones(rs.getString("observaciones"));
+        return m;
+    }
+
+    
+    private void setNullableInt(PreparedStatement ps, int indice, int valor) throws SQLException {
+        if (valor > 0) {
+            ps.setInt(indice, valor);
+        } else {
+            ps.setNull(indice, java.sql.Types.INTEGER);
+        }
     }
 }

@@ -1,198 +1,298 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
-package com.labcontrol.ui.vista;
+package com.labcontrol.UI;
+
+import com.labcontrol.modelo.Mantenimiento;
 import com.labcontrol.modelo.Pieza;
-import com.labcontrol.servicio.PiezaService;
+import com.labcontrol.servicio.MantenimientoServicio;
+import com.labcontrol.servicio.PiezaServicio;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.sql.SQLException;
-import javax.swing.JOptionPane;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
-import java.awt.GridLayout;
-/**
- *
- * @author hp
- */
+
 public class FrmPieza extends javax.swing.JFrame {
-    private final PiezaService servicio = new PiezaService();
+
+    private final PiezaServicio servicio = new PiezaServicio();
+    private final MantenimientoServicio mantenimientoService = new MantenimientoServicio();
+
+    private final Map<Integer, Mantenimiento> mantenimientos = new HashMap<>();
+
+    private Pieza editada;
+
+    private final JComboBox<OpcionCombo> cboMantenimiento = new JComboBox<>();
+    private final JTextField txtNombre = new JTextField(16);
+    private final JTextArea txtDescripcion = new JTextArea(2, 26);
+    private final JSpinner spnCantidad = new JSpinner(new SpinnerNumberModel(1, 1, 1000, 1));
+    private final JComboBox<String> cboAccion = new JComboBox<>(new String[]{"REPARACION", "REEMPLAZO"});
+    private final JTextField txtObservaciones = new JTextField(16);
+
+    private final JButton btnGuardar = new JButton("Guardar nueva pieza");
+    private final JButton btnActualizar = new JButton("Actualizar");
+    private final JButton btnEliminar = new JButton("Eliminar");
+    private final JButton btnLimpiar = new JButton("Limpiar");
+
     private DefaultTableModel modeloTabla;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel jLabel1, jLabel2, jLabel3, jLabel4, jLabel5, jLabel6, jLabel7, jLabel8;
-    private javax.swing.JTextField txtIDPieza, txtNombre, txtCantidad, txtTipoOperacion;
-    private javax.swing.JButton btnGuardar, btnBuscar, btnEliminar, btnLimpiar;
-    private javax.swing.JTable tblPiezas;
-    private javax.swing.JScrollPane jScrollPane1;
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmPieza.class.getName());
+    private final javax.swing.JTable tblPiezas = new javax.swing.JTable();
 
     public FrmPieza() {
-        initComponents();
-        configurarTabla();
+        super("Piezas Reparadas o Reemplazadas");
+        construir();
+        recargarCombos();
+        btnActualizar.setEnabled(false);
     }
 
-    private void configurarTabla() {
-        modeloTabla = new DefaultTableModel(
-            new Object[]{"ID", "Nombre de pieza", "Cantidad", "Tipo de operación"}, 0
-        ) {
+    private void construir() {
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout(8, 8));
+
+        JLabel titulo = new JLabel("  Piezas de Mantenimiento Correctivo");
+        titulo.setFont(titulo.getFont().deriveFont(Font.BOLD, 20f));
+        add(titulo, BorderLayout.NORTH);
+
+        JPanel form = new JPanel(new GridBagLayout());
+        form.setBorder(BorderFactory.createTitledBorder("Datos de la pieza"));
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(4, 6, 4, 6);
+        c.anchor = GridBagConstraints.WEST;
+        c.fill = GridBagConstraints.HORIZONTAL;
+
+        c.gridx = 0; c.gridy = 0; c.gridwidth = 2; form.add(new JLabel("Mantenimiento (Nº de servicio):"), c);
+        c.gridx = 2; c.gridwidth = 4; form.add(cboMantenimiento, c);
+
+        c.gridx = 0; c.gridy = 1; c.gridwidth = 1; form.add(new JLabel("Nombre de la pieza:"), c);
+        c.gridx = 1; form.add(txtNombre, c);
+        c.gridx = 2; form.add(new JLabel("Cantidad:"), c);
+        c.gridx = 3; form.add(spnCantidad, c);
+        c.gridx = 4; form.add(new JLabel("Acción:"), c);
+        c.gridx = 5; form.add(cboAccion, c);
+
+        c.gridx = 0; c.gridy = 2; form.add(new JLabel("Descripción:"), c);
+        c.gridx = 1; c.gridwidth = 5; form.add(new JScrollPane(txtDescripcion), c);
+
+        c.gridx = 0; c.gridy = 3; form.add(new JLabel("Observaciones:"), c);
+        c.gridx = 1; c.gridwidth = 5; form.add(txtObservaciones, c);
+        add(form, BorderLayout.NORTH);
+
+        JPanel sur = new JPanel(new BorderLayout(8, 8));
+        JPanel botones = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 4));
+        botones.add(btnGuardar);
+        botones.add(btnActualizar);
+        botones.add(btnEliminar);
+        botones.add(btnLimpiar);
+        sur.add(botones, BorderLayout.NORTH);
+
+        modeloTabla = new DefaultTableModel(new Object[]{
+                "ID", "Nº servicio", "Equipo", "Pieza", "Cantidad", "Acción"}, 0) {
             @Override
-            public boolean isCellEditable(int fila, int columna) { return false; }
+            public boolean isCellEditable(int fila, int columna) {
+                return false;
+            }
         };
         tblPiezas.setModel(modeloTabla);
+        tblPiezas.setRowHeight(24);
+        tblPiezas.getTableHeader().setReorderingAllowed(false);
+        tblPiezas.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                cargarSeleccionada();
+            }
+        });
+        JScrollPane scroll = new JScrollPane(tblPiezas);
+        scroll.setPreferredSize(new Dimension(850, 250));
+        sur.add(scroll, BorderLayout.CENTER);
+        add(sur, BorderLayout.SOUTH);
+
+        btnGuardar.addActionListener(e -> guardar());
+        btnActualizar.addActionListener(e -> actualizar());
+        btnEliminar.addActionListener(e -> eliminar());
+        btnLimpiar.addActionListener(e -> limpiar());
+
+        setSize(950, 560);
+        setLocationRelativeTo(null);
+    }
+
+    private void recargarCombos() {
+        mantenimientos.clear();
+        cboMantenimiento.removeAllItems();
+        try {
+            for (Mantenimiento m : mantenimientoService.listar()) {
+                mantenimientos.put(m.getId(), m);
+                cboMantenimiento.addItem(new OpcionCombo(m.getId(),
+                        m.getNumeroServicio() + " (" + m.tipoValorBd() + " - "
+                                + m.getEstadoTexto() + ")"));
+            }
+        } catch (SQLException e) {
+            Ui.error(this, "No se pudieron cargar los mantenimientos: " + e.getMessage());
+        }
+        if (cboMantenimiento.getItemCount() > 0) {
+            cboMantenimiento.setSelectedIndex(0);
+        }
         actualizarTabla();
     }
 
     private void actualizarTabla() {
         modeloTabla.setRowCount(0);
         try {
-            for (Pieza pieza : servicio.listar()) {
-                modeloTabla.addRow(new Object[]{pieza.getIdPieza(), pieza.getNombre(), pieza.getCantidad(), pieza.getTipoOperacion()});
+            for (Pieza p : servicio.listar()) {
+                Mantenimiento m = mantenimientos.get(p.getMantenimientoId());
+                modeloTabla.addRow(new Object[]{
+                        p.getId(),
+                        m != null ? m.getNumeroServicio() : "Nº " + p.getMantenimientoId(),
+                        m != null ? "Equipo " + m.getEquipoId() : "-",
+                        p.getNombre(),
+                        p.getCantidad(),
+                        p.getAccion() != null ? p.getAccion().name() : "-"
+                });
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error de base de datos: " + e.getMessage());
+            Ui.error(this, "Error de base de datos: " + e.getMessage());
         }
     }
 
-    private void limpiarCampos() {
-        txtIDPieza.setText(""); txtNombre.setText(""); txtCantidad.setText(""); txtTipoOperacion.setText("");
-        tblPiezas.clearSelection();
-    }
-
-    private void initComponents() {
-        jPanel1 = new javax.swing.JPanel(new GridLayout(4, 2, 10, 10));
-        jLabel1 = new javax.swing.JLabel("PIEZAS");
-        jLabel2 = new javax.swing.JLabel("Sistema de Gestion de Laboratorios");
-        jLabel3 = new javax.swing.JLabel("ID de pieza:");
-        jLabel4 = new javax.swing.JLabel("Nombre de pieza:");
-        jLabel5 = new javax.swing.JLabel("Cantidad:");
-        jLabel6 = new javax.swing.JLabel("Tipo de operacion:");
-        jLabel7 = new javax.swing.JLabel("");
-        jLabel8 = new javax.swing.JLabel("Tabla de piezas");
-
-        txtIDPieza = new javax.swing.JTextField(15);
-        txtNombre = new javax.swing.JTextField(15);
-        txtCantidad = new javax.swing.JTextField(15);
-        txtTipoOperacion = new javax.swing.JTextField(15);
-
-        btnGuardar = new javax.swing.JButton("Guardar");
-        btnBuscar = new javax.swing.JButton("Buscar");
-        btnEliminar = new javax.swing.JButton("Eliminar");
-        btnLimpiar = new javax.swing.JButton("Limpiar");
-
-        btnGuardar.addActionListener(this::btnGuardarActionPerformed);
-        btnBuscar.addActionListener(this::btnBuscarActionPerformed);
-        btnEliminar.addActionListener(this::btnEliminarActionPerformed);
-        btnLimpiar.addActionListener(this::btnLimpiarActionPerformed);
-
-        tblPiezas = new javax.swing.JTable();
-        jScrollPane1 = new javax.swing.JScrollPane(tblPiezas);
-
-        jPanel1.add(jLabel3); jPanel1.add(txtIDPieza);
-        jPanel1.add(jLabel4); jPanel1.add(txtNombre);
-        jPanel1.add(jLabel5); jPanel1.add(txtCantidad);
-        jPanel1.add(jLabel6); jPanel1.add(txtTipoOperacion);
-        jPanel1.add(btnGuardar); jPanel1.add(btnBuscar);
-        jPanel1.add(btnEliminar); jPanel1.add(btnLimpiar);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        pack();
-    }
-
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {
+    private void cargarSeleccionada() {
+        int fila = tblPiezas.getSelectedRow();
+        if (fila < 0) {
+            return;
+        }
+        int id = (int) tblPiezas.getValueAt(fila, 0);
         try {
-            int id = Integer.parseInt(txtIDPieza.getText().trim());
-            String nombre = txtNombre.getText().trim();
-            int cantidad = Integer.parseInt(txtCantidad.getText().trim());
-            Pieza.TipoOperacion tipo = Pieza.TipoOperacion.valueOf(txtTipoOperacion.getText().trim().toUpperCase());
-            Pieza pieza = new Pieza(id, nombre, cantidad, tipo);
-            servicio.registrar(pieza);
+            Pieza p = servicio.buscarPorId(id).orElse(null);
+            if (p == null) {
+                return;
+            }
+            editada = p;
+            seleccionarPorId(cboMantenimiento, p.getMantenimientoId());
+            txtNombre.setText(p.getNombre());
+            txtDescripcion.setText(p.getDescripcion());
+            spnCantidad.setValue(p.getCantidad());
+            cboAccion.setSelectedItem(p.getAccion() != null ? p.getAccion().name() : "REPARACION");
+            txtObservaciones.setText(p.getObservaciones());
+            btnActualizar.setEnabled(true);
+        } catch (SQLException e) {
+            Ui.error(this, "Error al cargar la pieza: " + e.getMessage());
+        }
+    }
+
+    private void seleccionarPorId(JComboBox<OpcionCombo> combo, int id) {
+        for (int i = 0; i < combo.getItemCount(); i++) {
+            if (combo.getItemAt(i).getId() == id) {
+                combo.setSelectedIndex(i);
+                return;
+            }
+        }
+        if (combo.getItemCount() > 0) {
+            combo.setSelectedIndex(0);
+        }
+    }
+
+    private void guardar() {
+        Pieza p = crearObjetoDesdeFormulario(true);
+        if (p == null) {
+            return;
+        }
+        try {
+            servicio.registrar(p);
             actualizarTabla();
-            limpiarCampos();
-            JOptionPane.showMessageDialog(this, "Pieza registrada correctamente.");
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "El ID y la cantidad deben ser números enteros.");
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+            limpiar();
+            Ui.info(this, "Pieza registrada correctamente.");
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error de base de datos: " + e.getMessage());
+            Ui.error(this, e.getMessage());
         }
     }
 
-    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {
+    private void actualizar() {
+        if (editada == null) {
+            Ui.aviso(this, "Seleccione una pieza de la tabla para actualizarla.");
+            return;
+        }
+        Pieza p = crearObjetoDesdeFormulario(false);
+        if (p == null) {
+            return;
+        }
         try {
-            int id = Integer.parseInt(txtIDPieza.getText().trim());
-            Pieza pieza = servicio.buscarPorId(id).orElse(null);
-            if (pieza == null) {
-                JOptionPane.showMessageDialog(this, "No se encontró la pieza.");
-                return;
-            }
-            txtNombre.setText(pieza.getNombre());
-            txtCantidad.setText(String.valueOf(pieza.getCantidad()));
-            txtTipoOperacion.setText(pieza.getTipoOperacion().name());
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Ingrese un ID de pieza válido.");
+            servicio.actualizar(p);
+            actualizarTabla();
+            limpiar();
+            Ui.info(this, "Pieza actualizada correctamente.");
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error de base de datos: " + e.getMessage());
+            Ui.error(this, e.getMessage());
         }
     }
 
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {
+    private void eliminar() {
+        int fila = tblPiezas.getSelectedRow();
+        if (fila < 0) {
+            Ui.aviso(this, "Seleccione una pieza de la tabla para eliminarla.");
+            return;
+        }
+        int id = (int) tblPiezas.getValueAt(fila, 0);
+        if (!Ui.confirmar(this, "¿Desea eliminar la pieza seleccionada?")) {
+            return;
+        }
         try {
-            int id = Integer.parseInt(txtIDPieza.getText().trim());
-            Pieza pieza = servicio.buscarPorId(id).orElse(null);
-            if (pieza == null) {
-                JOptionPane.showMessageDialog(this, "No se encontró la pieza.");
-                return;
-            }
-            int respuesta = JOptionPane.showConfirmDialog(this, "¿Desea eliminar la pieza " + pieza.getNombre() + "?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
-            if (respuesta == JOptionPane.YES_OPTION) {
-                servicio.eliminar(id);
-                actualizarTabla();
-                limpiarCampos();
-                JOptionPane.showMessageDialog(this, "Pieza eliminada correctamente.");
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Ingrese un ID de pieza válido.");
+            servicio.eliminar(id);
+            actualizarTabla();
+            limpiar();
+            Ui.info(this, "Pieza eliminada correctamente.");
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error de base de datos: " + e.getMessage());
+            Ui.error(this, "No se pudo eliminar: " + e.getMessage());
         }
     }
 
-    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {
-        limpiarCampos();
+    private Pieza crearObjetoDesdeFormulario(boolean nuevo) {
+        if (cboMantenimiento.getItemCount() == 0 || cboMantenimiento.getSelectedItem() == null) {
+            Ui.aviso(this, "No hay mantenimientos registrados. Registre un mantenimiento primero.");
+            return null;
+        }
+        String nombre = txtNombre.getText().trim();
+        if (nombre.isEmpty()) {
+            Ui.aviso(this, "Escriba el nombre de la pieza.");
+            txtNombre.requestFocus();
+            return null;
+        }
+        Pieza p = new Pieza();
+        if (!nuevo && editada != null) {
+            p.setId(editada.getId());
+        }
+        p.setMantenimientoId(((OpcionCombo) cboMantenimiento.getSelectedItem()).getId());
+        p.setNombre(nombre);
+        p.setDescripcion(txtDescripcion.getText().trim());
+        p.setCantidad((int) spnCantidad.getValue());
+        p.setAccion(com.labcontrol.modelo.Accion.valueOf((String) cboAccion.getSelectedItem()));
+        p.setObservaciones(txtObservaciones.getText().trim());
+        return p;
+    }
+
+    private void limpiar() {
+        editada = null;
+        tblPiezas.clearSelection();
+        txtNombre.setText("");
+        txtDescripcion.setText("");
+        spnCantidad.setValue(1);
+        cboAccion.setSelectedIndex(0);
+        txtObservaciones.setText("");
+        if (cboMantenimiento.getItemCount() > 0) {
+            cboMantenimiento.setSelectedIndex(0);
+        }
+        btnActualizar.setEnabled(false);
     }
 
     public static void main(String args[]) {
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (Exception ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
         java.awt.EventQueue.invokeLater(() -> new FrmPieza().setVisible(true));
     }
 }

@@ -1,11 +1,15 @@
 package com.labcontrol.modelo;
 
 public class Equipo {
+    
+    // estados del equipo
     public static final String ACTIVO = "ACTIVO";
     public static final String DANADO = "DAÑADO";
     public static final String MANTENIMIENTO = "EN MANTENIMIENTO";
-    public static final String[] ESTADOS = { ACTIVO, DANADO, MANTENIMIENTO };
+    public static final String FUERA_DE_SERVICIO = "FUERA DE SERVICIO";
+    public static final String[] ESTADOS = { ACTIVO, DANADO, MANTENIMIENTO, FUERA_DE_SERVICIO };
     public static final String[] TIPOS_OTROS = { "Impresora", "Proyector", "Switch", "Router", "Otro" };
+
 
     private int id;
     private String codigoInventario;
@@ -43,7 +47,10 @@ public class Equipo {
     }
 
     public void cambiarEstado(String nuevoEstado) {
-        this.estado = nuevoEstado;
+        if (nuevoEstado == null || nuevoEstado.trim().isEmpty()) {
+            throw new IllegalArgumentException("El estado del equipo es obligatorio.");
+        }
+        this.estado = nuevoEstado.trim().toUpperCase();
     }
 
     public boolean estaDisponible() {

@@ -1,13 +1,9 @@
--- mysql -u root -p < BaseDatos.sql
--- Por si quiero usar esta poronga en el linux
-
 CREATE DATABASE IF NOT EXISTS gestion_laboratorio
-	CHARACTER SET utf8mb4ent
-	COLLATE utf8mb4_unicode_ci;
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
 
 USE gestion_laboratorio;
 
--- crea el establecimiento
 CREATE TABLE centro_educativo (
     id INT NOT NULL AUTO_INCREMENT,
     codigo_institucional VARCHAR(20) NOT NULL UNIQUE,
@@ -20,7 +16,6 @@ CREATE TABLE centro_educativo (
     PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 
--- usuarios: administrador, docente y responsable
 CREATE TABLE usuario (
     id INT NOT NULL AUTO_INCREMENT,
     nombre VARCHAR(100) NOT NULL,
@@ -34,14 +29,13 @@ CREATE TABLE usuario (
     PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 
--- labo
 CREATE TABLE laboratorio (
     id INT NOT NULL AUTO_INCREMENT,
     codigo VARCHAR(20) NOT NULL UNIQUE,
     nombre VARCHAR(150) NOT NULL,
     ubicacion VARCHAR(200),
     capacidad INT,
-    estado VARCHAR(30),
+    estado VARCHAR(30) DEFAULT 'Activo',
     responsable VARCHAR(100),
     observaciones TEXT,
     centro_id INT NOT NULL,
@@ -49,18 +43,6 @@ CREATE TABLE laboratorio (
     FOREIGN KEY (centro_id) REFERENCES centro_educativo(id)
 ) ENGINE=InnoDB;
 
--- sistemas
-CREATE TABLE software (
-    id INT NOT NULL AUTO_INCREMENT,
-    nombre VARCHAR(150) NOT NULL,
-    version VARCHAR(50),
-    tipo ENUM('Sistema','Aplicacion') NOT NULL DEFAULT 'Aplicacion',
-    tipo_licencia VARCHAR(100),
-    estado VARCHAR(30),
-    PRIMARY KEY (id)
-) ENGINE=InnoDB;
-
--- equipo: computadora, monitor, teclado, etc etc
 CREATE TABLE equipo (
     id INT NOT NULL AUTO_INCREMENT,
     codigo_inventario VARCHAR(50) NOT NULL UNIQUE,
@@ -69,14 +51,13 @@ CREATE TABLE equipo (
     marca VARCHAR(100),
     modelo VARCHAR(100),
     fecha_adquisicion DATE,
-    estado VARCHAR(30) NOT NULL DEFAULT 'Activo',
+    estado VARCHAR(30) NOT NULL DEFAULT 'ACTIVO',
     observaciones TEXT,
-    laboratorio_id INT,
+    laboratorio_id INT NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (laboratorio_id) REFERENCES laboratorio(id)
 ) ENGINE=InnoDB;
 
--- compu: hereda
 CREATE TABLE computadora (
     id INT NOT NULL,
     hostname VARCHAR(100),
@@ -88,7 +69,16 @@ CREATE TABLE computadora (
     FOREIGN KEY (id) REFERENCES equipo(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- instalacion de software
+CREATE TABLE software (
+    id INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(150) NOT NULL,
+    version VARCHAR(50),
+    tipo ENUM('Sistema','Aplicacion') NOT NULL DEFAULT 'Aplicacion',
+    tipo_licencia VARCHAR(100),
+    estado VARCHAR(30) DEFAULT 'Activo',
+    PRIMARY KEY (id)
+) ENGINE=InnoDB;
+
 CREATE TABLE instalacion (
     id INT NOT NULL AUTO_INCREMENT,
     equipo_id INT NOT NULL,
@@ -99,8 +89,6 @@ CREATE TABLE instalacion (
     FOREIGN KEY (software_id) REFERENCES software(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- horarios del laboratorio
--- los horarios no deben coincidir, ver bien como adecuarlo
 CREATE TABLE horario (
     id INT NOT NULL AUTO_INCREMENT,
     docente_id INT NOT NULL,
@@ -115,12 +103,11 @@ CREATE TABLE horario (
     FOREIGN KEY (laboratorio_id) REFERENCES laboratorio(id)
 ) ENGINE=InnoDB;
 
--- recepcion del laboratorio
 CREATE TABLE recepcion (
     id INT NOT NULL AUTO_INCREMENT,
     laboratorio_id INT NOT NULL,
     docente_id INT NOT NULL,
-    horario_id INT,
+    horario_id INT NULL,
     fecha_hora DATETIME NOT NULL,
     estado_general VARCHAR(100),
     limpieza VARCHAR(100),
@@ -135,7 +122,6 @@ CREATE TABLE recepcion (
     FOREIGN KEY (horario_id) REFERENCES horario(id)
 ) ENGINE=InnoDB;
 
--- equipos dañados segun reporte cuando se entrega el laboratorio
 CREATE TABLE recepcion_equipo_dano (
     id INT NOT NULL AUTO_INCREMENT,
     recepcion_id INT NOT NULL,
@@ -145,14 +131,12 @@ CREATE TABLE recepcion_equipo_dano (
     FOREIGN KEY (equipo_id) REFERENCES equipo(id)
 ) ENGINE=InnoDB;
 
-
--- reporte de daños
 CREATE TABLE reporte_dano (
     id INT NOT NULL AUTO_INCREMENT,
     laboratorio_id INT NOT NULL,
     equipo_id INT NOT NULL,
     docente_id INT NOT NULL,
-    horario_id INT,
+    horario_id INT NULL,
     tipo_falla VARCHAR(100) NOT NULL,
     descripcion TEXT NOT NULL,
     fecha_hora_reporte DATETIME NOT NULL,
@@ -165,11 +149,10 @@ CREATE TABLE reporte_dano (
     FOREIGN KEY (horario_id) REFERENCES horario(id)
 ) ENGINE=InnoDB;
 
--- fotos de evidencia segun reporte
 CREATE TABLE foto_evidencia (
     id INT NOT NULL AUTO_INCREMENT,
     reporte_dano_id INT NOT NULL,
-    equipo_id INT,
+    equipo_id INT NULL,
     ruta_archivo VARCHAR(255) NOT NULL,
     descripcion VARCHAR(200),
     PRIMARY KEY (id),
@@ -177,16 +160,16 @@ CREATE TABLE foto_evidencia (
     FOREIGN KEY (equipo_id) REFERENCES equipo(id)
 ) ENGINE=InnoDB;
 
--- tipo de mantenimiento
 CREATE TABLE mantenimiento (
     id INT NOT NULL AUTO_INCREMENT,
     numero_servicio VARCHAR(30) NOT NULL UNIQUE,
     equipo_id INT NOT NULL,
-    reporte_dano_id INT,
+    reporte_dano_id INT NULL,
     fecha_inicio DATE NOT NULL,
-    fecha_fin DATE,
+    fecha_fin DATE NULL,
     responsable_id INT NOT NULL,
     tipo ENUM('Preventivo','Correctivo') NOT NULL,
+    estado ENUM('PENDIENTE','EN_PROCESO','FINALIZADO','CANCELADO') NOT NULL DEFAULT 'PENDIENTE',
     falla_reportada VARCHAR(200),
     diagnostico TEXT,
     actividades_realizadas TEXT,
@@ -200,7 +183,6 @@ CREATE TABLE mantenimiento (
     FOREIGN KEY (responsable_id) REFERENCES usuario(id)
 ) ENGINE=InnoDB;
 
--- piezas que fueron reparadas o reeemplazadas
 CREATE TABLE pieza (
     id INT NOT NULL AUTO_INCREMENT,
     mantenimiento_id INT NOT NULL,
@@ -211,5 +193,14 @@ CREATE TABLE pieza (
     observaciones TEXT,
     PRIMARY KEY (id),
     FOREIGN KEY (mantenimiento_id) REFERENCES mantenimiento(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE bitacora_acceso (
+    id INT NOT NULL AUTO_INCREMENT,
+    fecha_hora DATETIME NOT NULL,
+    accion VARCHAR(100),
+    ip VARCHAR(45),
+    dispositivo VARCHAR(100),
+    PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 

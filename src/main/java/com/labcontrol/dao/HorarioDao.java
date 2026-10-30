@@ -1,7 +1,8 @@
 package com.labcontrol.dao;
 
-import com.labcontrol.modelo.Horario;
+import com.labcontrol.modelo.*;
 import com.labcontrol.db.ConexionBD;
+
 import java.sql.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -132,7 +133,6 @@ public class HorarioDao {
     }
 
     public boolean existeSolapamiento(int laboratorioId, String diaSemana, LocalTime inicio, LocalTime fin, int horarioExceptuado) throws SQLException {
-        // Obtener todos los horarios del laboratorio y comparar por día de la semana en Java
         String sql = "SELECT id, hora_inicio, hora_fin, fecha FROM horario WHERE laboratorio_id = ? AND id <> ?";
         try (Connection cn = ConexionBD.abrir();
              PreparedStatement ps = cn.prepareStatement(sql)) {

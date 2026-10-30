@@ -16,60 +16,57 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-        <Group type="102" alignment="0" attributes="0">
-          <EmptySpace max="-2" attributes="0"/>
-          <Component id="lblTitulo" min="-2" max="-2" attributes="0"/>
-        </Group>
-        <Group type="102" alignment="0" attributes="0">
-          <EmptySpace max="-2" attributes="0"/>
-          <Component id="lblFiltroLaboratorio" min="-2" max="-2" attributes="0"/>
-          <EmptySpace max="-2" attributes="0"/>
-          <Component id="cboFiltroLaboratorio" min="-2" pref="270" max="-2" attributes="0"/>
-          <EmptySpace min="16" pref="16" max="16" attributes="0"/>
-          <Component id="lblFiltroDia" min="-2" max="-2" attributes="0"/>
-          <EmptySpace max="-2" attributes="0"/>
-          <Component id="cboFiltroDia" min="-2" pref="110" max="-2" attributes="0"/>
-          <EmptySpace max="32767" attributes="0"/>
-          <Component id="btnNuevo" min="-2" max="-2" attributes="0"/>
-          <EmptySpace max="-2" attributes="0"/>
-          <Component id="btnEditar" min="-2" max="-2" attributes="0"/>
-          <EmptySpace max="-2" attributes="0"/>
-          <Component id="btnEliminar" min="-2" max="-2" attributes="0"/>
-          <EmptySpace max="-2" attributes="0"/>
-        </Group>
-        <Group type="102" alignment="0" attributes="0">
-          <EmptySpace max="-2" attributes="0"/>
-          <Component id="scrHorarios" max="32767" attributes="0"/>
-          <EmptySpace max="-2" attributes="0"/>
-        </Group>
-        <Group type="102" alignment="0" attributes="0">
-          <EmptySpace max="-2" attributes="0"/>
-          <Component id="pnlFormulario" max="32767" attributes="0"/>
-          <EmptySpace max="-2" attributes="0"/>
-        </Group>
+          <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="lblTitulo" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="lblFiltroLaboratorio" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="cboFiltroLaboratorio" min="-2" pref="270" max="-2" attributes="0"/>
+                              <EmptySpace min="16" pref="16" max="16" attributes="0"/>
+                              <Component id="lblFiltroDia" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="cboFiltroDia" min="-2" pref="110" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="btnNuevo" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btnEditar" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btnEliminar" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="scrHorarios" alignment="0" max="32767" attributes="0"/>
+                          <Component id="pnlFormulario" alignment="0" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-        <Group type="102" alignment="0" attributes="0">
-          <EmptySpace max="-2" attributes="0"/>
-          <Component id="lblTitulo" min="-2" max="-2" attributes="0"/>
-          <EmptySpace min="8" pref="8" max="8" attributes="0"/>
-          <Group type="103" groupAlignment="3" attributes="0">
-            <Component id="lblFiltroLaboratorio" alignment="3" min="-2" max="-2" attributes="0"/>
-            <Component id="cboFiltroLaboratorio" alignment="3" min="-2" max="-2" attributes="0"/>
-            <Component id="lblFiltroDia" alignment="3" min="-2" max="-2" attributes="0"/>
-            <Component id="cboFiltroDia" alignment="3" min="-2" max="-2" attributes="0"/>
-            <Component id="btnNuevo" alignment="3" min="-2" max="-2" attributes="0"/>
-            <Component id="btnEditar" alignment="3" min="-2" max="-2" attributes="0"/>
-            <Component id="btnEliminar" alignment="3" min="-2" max="-2" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="lblTitulo" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="8" pref="8" max="8" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblFiltroLaboratorio" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cboFiltroLaboratorio" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblFiltroDia" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cboFiltroDia" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnNuevo" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnEditar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnEliminar" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="scrHorarios" pref="230" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="pnlFormulario" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
-          <EmptySpace max="-2" attributes="0"/>
-          <Component id="scrHorarios" pref="230" max="32767" attributes="0"/>
-          <EmptySpace max="-2" attributes="0"/>
-          <Component id="pnlFormulario" min="-2" max="-2" attributes="0"/>
-          <EmptySpace max="-2" attributes="0"/>
-        </Group>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -94,7 +91,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblFiltroDia">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Día:"/>
+        <Property name="text" type="java.lang.String" value="D&#xed;a:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JComboBox" name="cboFiltroDia">
@@ -104,10 +101,10 @@
             <StringItem index="0" value="Todos"/>
             <StringItem index="1" value="Lunes"/>
             <StringItem index="2" value="Martes"/>
-            <StringItem index="3" value="Miércoles"/>
+            <StringItem index="3" value="Mi&#xe9;rcoles"/>
             <StringItem index="4" value="Jueves"/>
             <StringItem index="5" value="Viernes"/>
-            <StringItem index="6" value="Sábado"/>
+            <StringItem index="6" value="S&#xe1;bado"/>
             <StringItem index="7" value="Domingo"/>
           </StringArray>
         </Property>
@@ -147,15 +144,16 @@
       <AuxValues>
         <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
       </AuxValues>
+
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
         <Component class="javax.swing.JTable" name="tblHorarios">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="7" rowCount="0">
-                <Column editable="false" title="Código" type="java.lang.Object"/>
+                <Column editable="false" title="C&#xf3;digo" type="java.lang.Object"/>
                 <Column editable="false" title="Laboratorio" type="java.lang.Object"/>
-                <Column editable="false" title="Día" type="java.lang.Object"/>
+                <Column editable="false" title="D&#xed;a" type="java.lang.Object"/>
                 <Column editable="false" title="Inicio" type="java.lang.Object"/>
                 <Column editable="false" title="Fin" type="java.lang.Object"/>
                 <Column editable="false" title="Actividad" type="java.lang.Object"/>
@@ -174,72 +172,76 @@
           </Border>
         </Property>
       </Properties>
+
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-            <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                <Component id="lblLaboratorio" alignment="0" min="-2" max="-2" attributes="0"/>
-                <Component id="cboLaboratorio" alignment="0" pref="200" max="32767" attributes="0"/>
+              <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="lblLaboratorio" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="cboLaboratorio" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="lblDia" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="cboDia" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="lblInicio" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtInicio" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="lblFin" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtFin" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="lblActividad" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtActividad" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <Component id="btnGuardar" min="-2" pref="100" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="btnCancelar" min="-2" pref="100" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                <Component id="lblDia" alignment="0" min="-2" max="-2" attributes="0"/>
-                <Component id="cboDia" alignment="0" pref="100" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                <Component id="lblInicio" alignment="0" min="-2" max="-2" attributes="0"/>
-                <Component id="txtInicio" alignment="0" pref="90" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                <Component id="lblFin" alignment="0" min="-2" max="-2" attributes="0"/>
-                <Component id="txtFin" alignment="0" pref="90" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                <Component id="lblActividad" alignment="0" min="-2" max="-2" attributes="0"/>
-                <Component id="txtActividad" alignment="0" pref="170" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-            </Group>
-            <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="32767" attributes="0"/>
-              <Component id="btnGuardar" min="-2" pref="100" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="btnCancelar" min="-2" pref="100" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-            </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-            <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                <Component id="lblLaboratorio" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="lblDia" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="lblInicio" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="lblFin" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="lblActividad" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblLaboratorio" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblDia" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblInicio" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblFin" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblActividad" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="cboLaboratorio" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cboDia" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtInicio" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtFin" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtActividad" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="16" pref="16" max="16" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="btnGuardar" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnCancelar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                <Component id="cboLaboratorio" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="cboDia" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="txtInicio" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="txtFin" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="txtActividad" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="16" pref="16" max="16" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                <Component id="btnGuardar" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="btnCancelar" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-            </Group>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -256,7 +258,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblDia">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Día"/>
+            <Property name="text" type="java.lang.String" value="D&#xed;a"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="cboDia">
@@ -265,10 +267,10 @@
               <StringArray count="7">
                 <StringItem index="0" value="Lunes"/>
                 <StringItem index="1" value="Martes"/>
-                <StringItem index="2" value="Miércoles"/>
+                <StringItem index="2" value="Mi&#xe9;rcoles"/>
                 <StringItem index="3" value="Jueves"/>
                 <StringItem index="4" value="Viernes"/>
-                <StringItem index="5" value="Sábado"/>
+                <StringItem index="5" value="S&#xe1;bado"/>
                 <StringItem index="6" value="Domingo"/>
               </StringArray>
             </Property>

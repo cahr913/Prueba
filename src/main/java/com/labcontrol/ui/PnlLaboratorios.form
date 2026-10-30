@@ -16,60 +16,57 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-        <Group type="102" alignment="0" attributes="0">
-          <EmptySpace max="-2" attributes="0"/>
-          <Component id="lblTitulo" min="-2" max="-2" attributes="0"/>
-        </Group>
-        <Group type="102" alignment="0" attributes="0">
-          <EmptySpace max="-2" attributes="0"/>
-          <Component id="lblFiltroCentro" min="-2" max="-2" attributes="0"/>
-          <EmptySpace max="-2" attributes="0"/>
-          <Component id="cboFiltroCentro" min="-2" pref="230" max="-2" attributes="0"/>
-          <EmptySpace min="16" pref="16" max="16" attributes="0"/>
-          <Component id="lblFiltroEstado" min="-2" max="-2" attributes="0"/>
-          <EmptySpace max="-2" attributes="0"/>
-          <Component id="cboFiltroEstado" min="-2" pref="150" max="-2" attributes="0"/>
-          <EmptySpace max="32767" attributes="0"/>
-          <Component id="btnNuevo" min="-2" max="-2" attributes="0"/>
-          <EmptySpace max="-2" attributes="0"/>
-          <Component id="btnEditar" min="-2" max="-2" attributes="0"/>
-          <EmptySpace max="-2" attributes="0"/>
-          <Component id="btnEliminar" min="-2" max="-2" attributes="0"/>
-          <EmptySpace max="-2" attributes="0"/>
-        </Group>
-        <Group type="102" alignment="0" attributes="0">
-          <EmptySpace max="-2" attributes="0"/>
-          <Component id="scrLaboratorios" max="32767" attributes="0"/>
-          <EmptySpace max="-2" attributes="0"/>
-        </Group>
-        <Group type="102" alignment="0" attributes="0">
-          <EmptySpace max="-2" attributes="0"/>
-          <Component id="pnlFormulario" max="32767" attributes="0"/>
-          <EmptySpace max="-2" attributes="0"/>
-        </Group>
+          <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="lblTitulo" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="lblFiltroCentro" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="cboFiltroCentro" min="-2" pref="230" max="-2" attributes="0"/>
+                              <EmptySpace min="16" pref="16" max="16" attributes="0"/>
+                              <Component id="lblFiltroEstado" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="cboFiltroEstado" min="-2" pref="150" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="btnNuevo" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btnEditar" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btnEliminar" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="scrLaboratorios" alignment="0" max="32767" attributes="0"/>
+                          <Component id="pnlFormulario" alignment="0" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-        <Group type="102" alignment="0" attributes="0">
-          <EmptySpace max="-2" attributes="0"/>
-          <Component id="lblTitulo" min="-2" max="-2" attributes="0"/>
-          <EmptySpace min="8" pref="8" max="8" attributes="0"/>
-          <Group type="103" groupAlignment="3" attributes="0">
-            <Component id="lblFiltroCentro" alignment="3" min="-2" max="-2" attributes="0"/>
-            <Component id="cboFiltroCentro" alignment="3" min="-2" max="-2" attributes="0"/>
-            <Component id="lblFiltroEstado" alignment="3" min="-2" max="-2" attributes="0"/>
-            <Component id="cboFiltroEstado" alignment="3" min="-2" max="-2" attributes="0"/>
-            <Component id="btnNuevo" alignment="3" min="-2" max="-2" attributes="0"/>
-            <Component id="btnEditar" alignment="3" min="-2" max="-2" attributes="0"/>
-            <Component id="btnEliminar" alignment="3" min="-2" max="-2" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="lblTitulo" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="8" pref="8" max="8" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblFiltroCentro" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cboFiltroCentro" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblFiltroEstado" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cboFiltroEstado" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnNuevo" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnEditar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnEliminar" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="scrLaboratorios" pref="230" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="pnlFormulario" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
-          <EmptySpace max="-2" attributes="0"/>
-          <Component id="scrLaboratorios" pref="230" max="32767" attributes="0"/>
-          <EmptySpace max="-2" attributes="0"/>
-          <Component id="pnlFormulario" min="-2" max="-2" attributes="0"/>
-          <EmptySpace max="-2" attributes="0"/>
-        </Group>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -143,16 +140,17 @@
       <AuxValues>
         <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
       </AuxValues>
+
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
         <Component class="javax.swing.JTable" name="tblLaboratorios">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="6" rowCount="0">
-                <Column editable="false" title="Código" type="java.lang.Object"/>
+                <Column editable="false" title="C&#xf3;digo" type="java.lang.Object"/>
                 <Column editable="false" title="Nombre" type="java.lang.Object"/>
                 <Column editable="false" title="Capacidad" type="java.lang.Object"/>
-                <Column editable="false" title="Ubicación" type="java.lang.Object"/>
+                <Column editable="false" title="Ubicaci&#xf3;n" type="java.lang.Object"/>
                 <Column editable="false" title="Estado" type="java.lang.Object"/>
                 <Column editable="false" title="Centro" type="java.lang.Object"/>
               </Table>
@@ -169,72 +167,76 @@
           </Border>
         </Property>
       </Properties>
+
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-            <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                <Component id="lblNombre" alignment="0" min="-2" max="-2" attributes="0"/>
-                <Component id="txtNombre" alignment="0" pref="170" max="32767" attributes="0"/>
+              <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="lblNombre" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtNombre" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="lblCapacidad" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtCapacidad" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="lblUbicacion" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtUbicacion" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="lblEstado" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="cboEstado" alignment="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="lblCentro" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="cboCentro" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <Component id="btnGuardar" min="-2" pref="100" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="btnCancelar" min="-2" pref="100" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                <Component id="lblCapacidad" alignment="0" min="-2" max="-2" attributes="0"/>
-                <Component id="txtCapacidad" alignment="0" pref="80" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                <Component id="lblUbicacion" alignment="0" min="-2" max="-2" attributes="0"/>
-                <Component id="txtUbicacion" alignment="0" pref="170" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                <Component id="lblEstado" alignment="0" min="-2" max="-2" attributes="0"/>
-                <Component id="cboEstado" alignment="0" pref="130" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                <Component id="lblCentro" alignment="0" min="-2" max="-2" attributes="0"/>
-                <Component id="cboCentro" alignment="0" pref="170" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-            </Group>
-            <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="32767" attributes="0"/>
-              <Component id="btnGuardar" min="-2" pref="100" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="btnCancelar" min="-2" pref="100" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-            </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-            <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                <Component id="lblNombre" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="lblCapacidad" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="lblUbicacion" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="lblEstado" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="lblCentro" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblNombre" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblCapacidad" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblUbicacion" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblEstado" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblCentro" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="txtNombre" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtCapacidad" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtUbicacion" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cboEstado" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cboCentro" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="16" pref="16" max="16" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="btnGuardar" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnCancelar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                <Component id="txtNombre" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="txtCapacidad" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="txtUbicacion" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="cboEstado" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="cboCentro" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="16" pref="16" max="16" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                <Component id="btnGuardar" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="btnCancelar" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-            </Group>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -255,7 +257,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblUbicacion">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Ubicación"/>
+            <Property name="text" type="java.lang.String" value="Ubicaci&#xf3;n"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtUbicacion">

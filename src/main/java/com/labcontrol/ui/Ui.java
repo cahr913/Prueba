@@ -1,4 +1,4 @@
-package com.labcontrol.ui.vista;
+package com.labcontrol.UI;
 
 import com.labcontrol.dao.LaboratorioDao;
 import com.labcontrol.modelo.Laboratorio;

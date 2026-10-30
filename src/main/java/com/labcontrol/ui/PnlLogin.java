@@ -1,6 +1,8 @@
-package com.labcontrol.ui.vista;
+package com.labcontrol.UI;
 
+import com.labcontrol.dao.BitacoraAccesoDao;
 import com.labcontrol.dao.UsuarioDao;
+import com.labcontrol.modelo.BitacoraAcceso;
 import com.labcontrol.modelo.Usuario;
 import java.awt.Font;
 import java.util.Arrays;
@@ -45,10 +47,29 @@ public class PnlLogin extends javax.swing.JPanel {
                 lblError.setText("El usuario está inactivo y no puede ingresar.");
                 return;
             }
+            registrarBitacora(usuario);
             alIngresar.accept(usuario);
         } catch (Exception e) {
             lblError.setText("Error al conectar con la base de datos.");
             e.printStackTrace();
+        }
+    }
+
+    private void registrarBitacora(Usuario usuario) {
+        try {
+            BitacoraAcceso registro = new BitacoraAcceso();
+            registro.setFechaHora(java.time.LocalDateTime.now());
+            registro.setAccion("INICIO SESION - " + usuario.getUsuario()
+                    + " (" + usuario.getRol() + ")");
+            try {
+                registro.setIp(java.net.InetAddress.getLocalHost().getHostAddress());
+            } catch (Exception ipError) {
+                registro.setIp("localhost");
+            }
+            registro.setDispositivo("Aplicacion de escritorio");
+            new BitacoraAccesoDao().insertar(registro);
+        } catch (Exception ignorado) {
+            // La bitacora no debe impedir el acceso al sistema.
         }
     }
 
@@ -75,14 +96,14 @@ public class PnlLogin extends javax.swing.JPanel {
         btnIngresar = new javax.swing.JButton();
         lblAyuda = new javax.swing.JLabel();
 
-        lblSistema.setText("Sistema de Laboratorios - Infraestructura y horarios");
         lblSistema.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblSistema.setText("Sistema de Laboratorios - Infraestructura y horarios");
 
-        lblIniciar.setText("Iniciar sesión");
         lblIniciar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblIniciar.setText("Iniciar sesión");
 
-        lblAcceso.setText("Acceso al sistema");
         lblAcceso.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblAcceso.setText("Acceso al sistema");
 
         lblUsuario.setText("Nombre de usuario");
 
@@ -100,9 +121,9 @@ public class PnlLogin extends javax.swing.JPanel {
             }
         });
 
-        lblError.setText(" ");
         lblError.setForeground(new java.awt.Color(180, 30, 30));
         lblError.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblError.setText(" ");
 
         btnIngresar.setText("Ingresar");
         btnIngresar.addActionListener(new java.awt.event.ActionListener() {
@@ -111,8 +132,8 @@ public class PnlLogin extends javax.swing.JPanel {
             }
         });
 
-        lblAyuda.setText("Ingrese con su usuario y contraseña");
         lblAyuda.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblAyuda.setText("Ingrese con su usuario y contraseña");
 
         javax.swing.GroupLayout pnlTarjetaLayout = new javax.swing.GroupLayout(pnlTarjeta);
         pnlTarjeta.setLayout(pnlTarjetaLayout);
@@ -124,35 +145,35 @@ public class PnlLogin extends javax.swing.JPanel {
                     .addComponent(lblIniciar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblAcceso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtUsuario)
                     .addComponent(lblClave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtClave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtClave)
                     .addComponent(lblError, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnIngresar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblAyuda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblAyuda, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE))
                 .addGap(32, 32, 32))
         );
         pnlTarjetaLayout.setVerticalGroup(
             pnlTarjetaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlTarjetaLayout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addComponent(lblIniciar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblIniciar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblAcceso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblAcceso)
                 .addGap(22, 22, 22)
-                .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblUsuario)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
-                .addComponent(lblClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblClave)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
-                .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblError)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnIngresar)
                 .addGap(14, 14, 14)
-                .addComponent(lblAyuda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblAyuda)
                 .addGap(28, 28, 28))
         );
 
@@ -162,18 +183,16 @@ public class PnlLogin extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(lblSistema, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(pnlTarjeta, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblSistema)
+                    .addComponent(pnlTarjeta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(lblSistema, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblSistema)
                 .addGap(24, 24, 24)
                 .addComponent(pnlTarjeta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -193,16 +212,16 @@ public class PnlLogin extends javax.swing.JPanel {
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel lblSistema;
-    private javax.swing.JPanel pnlTarjeta;
-    private javax.swing.JLabel lblIniciar;
-    private javax.swing.JLabel lblAcceso;
-    private javax.swing.JLabel lblUsuario;
-    private javax.swing.JTextField txtUsuario;
-    private javax.swing.JLabel lblClave;
-    private javax.swing.JPasswordField txtClave;
-    private javax.swing.JLabel lblError;
     private javax.swing.JButton btnIngresar;
+    private javax.swing.JLabel lblAcceso;
     private javax.swing.JLabel lblAyuda;
+    private javax.swing.JLabel lblClave;
+    private javax.swing.JLabel lblError;
+    private javax.swing.JLabel lblIniciar;
+    private javax.swing.JLabel lblSistema;
+    private javax.swing.JLabel lblUsuario;
+    private javax.swing.JPanel pnlTarjeta;
+    private javax.swing.JPasswordField txtClave;
+    private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }

@@ -17,7 +17,7 @@ public class CentroEducativoDao {
             ps.setString(4, c.getTelefono());
             ps.setString(5, c.getCorreo());
             ps.setString(6, c.getDirector());
-            ps.setString(7, c.getLogoPath());
+            ps.setString(7, c.getRutaLogo());
             ps.executeUpdate();
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) c.setId(rs.getInt(1));
@@ -39,7 +39,7 @@ public class CentroEducativoDao {
                     c.setTelefono(rs.getString("telefono"));
                     c.setCorreo(rs.getString("correo"));
                     c.setDirector(rs.getString("director"));
-                    c.setLogoPath(rs.getString("logo_path"));
+                    c.setRutaLogo(rs.getString("logo_path"));
                     return c;
                 }
             }
@@ -50,7 +50,7 @@ public class CentroEducativoDao {
     public List<CentroEducativo> listar() throws SQLException {
         List<CentroEducativo> lista = new ArrayList<>();
         String sql = "SELECT * FROM centro_educativo ORDER BY nombre";
-        try (Connection con = ConexionBD.abrir(); Statement st = con.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+        try (Connection con = ConexionBD.abrir(); PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 CentroEducativo c = new CentroEducativo();
                 c.setId(rs.getInt("id"));
@@ -60,7 +60,7 @@ public class CentroEducativoDao {
                 c.setTelefono(rs.getString("telefono"));
                 c.setCorreo(rs.getString("correo"));
                 c.setDirector(rs.getString("director"));
-                c.setLogoPath(rs.getString("logo_path"));
+                c.setRutaLogo(rs.getString("logo_path"));
                 lista.add(c);
             }
         }
@@ -76,7 +76,7 @@ public class CentroEducativoDao {
             ps.setString(4, c.getTelefono());
             ps.setString(5, c.getCorreo());
             ps.setString(6, c.getDirector());
-            ps.setString(7, c.getLogoPath());
+            ps.setString(7, c.getRutaLogo());
             ps.setInt(8, c.getId());
             ps.executeUpdate();
         }

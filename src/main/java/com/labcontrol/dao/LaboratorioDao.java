@@ -1,6 +1,7 @@
 package com.labcontrol.dao;
 
-import com.labcontrol.modelo.Laboratorio;
+import com.labcontrol.modelo.*;
+
 import com.labcontrol.db.ConexionBD;
 import java.sql.*;
 import java.util.ArrayList;

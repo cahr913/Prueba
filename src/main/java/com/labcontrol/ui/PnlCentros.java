@@ -1,10 +1,26 @@
-package com.labcontrol.ui.vista;
+package com.labcontrol.UI;
 
 import com.labcontrol.dao.CentroEducativoDao;
 import com.labcontrol.modelo.CentroEducativo;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 public class PnlCentros extends javax.swing.JPanel implements Refrescable {
@@ -15,16 +31,117 @@ public class PnlCentros extends javax.swing.JPanel implements Refrescable {
     private CentroEducativo editado;
     private String ultimaBusqueda = "";
 
+    private final JLabel lblTitulo = new JLabel("Centros Educativos");
+    private final JLabel lblBuscar = new JLabel("Buscar centro (nombre o código):");
+    private final JTextField txtBusqueda = new JTextField(24);
+    private final JButton btnNuevo = new JButton("Nuevo centro");
+    private final JButton btnEditar = new JButton("Editar");
+    private final JButton btnEliminar = new JButton("Eliminar");
+    private final JTable tblCentros = new JTable();
+    private final JScrollPane scrCentros = new JScrollPane(tblCentros);
+
+    private final JPanel pnlFormulario = new JPanel(new GridBagLayout());
+    private final JTextField txtCodigo = new JTextField(14);
+    private final JTextField txtNombre = new JTextField(22);
+    private final JTextField txtDireccion = new JTextField(22);
+    private final JTextField txtTelefono = new JTextField(16);
+    private final JTextField txtCorreo = new JTextField(22);
+    private final JTextField txtDirector = new JTextField(22);
+    private final JLabel lblLogo = new JLabel("(sin logotipo)");
+    private final JButton btnLogo = new JButton("Seleccionar logotipo...");
+    private final JButton btnGuardar = new JButton("Guardar");
+    private final JButton btnCancelar = new JButton("Cancelar");
+
     public PnlCentros() {
-        initComponents();
+        construir();
         iniciar();
     }
 
-    private void iniciar() {
+    private void construir() {
+        setLayout(new BorderLayout(8, 8));
         Ui.estiloTitulo(lblTitulo);
-        Ui.configurarTabla(tblCentros, 90, 280, 280, 130);
+
+        JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 4));
+        top.add(lblBuscar);
+        top.add(txtBusqueda);
+        top.add(btnNuevo);
+        top.add(btnEditar);
+        top.add(btnEliminar);
+
+        JPanel norte = new JPanel(new BorderLayout(4, 4));
+        norte.add(lblTitulo, BorderLayout.NORTH);
+        norte.add(top, BorderLayout.SOUTH);
+        add(norte, BorderLayout.NORTH);
+
+        tblCentros.setModel(new DefaultTableModel(
+                new Object[]{"Código", "Nombre", "Dirección", "Teléfono", "Correo", "Director"}, 0) {
+            @Override
+            public boolean isCellEditable(int fila, int columna) {
+                return false;
+            }
+        });
+        tblCentros.setRowHeight(24);
+        tblCentros.getTableHeader().setReorderingAllowed(false);
+        Ui.configurarTabla(tblCentros, 100, 230, 230, 130, 200, 200);
+        scrCentros.setPreferredSize(new Dimension(980, 260));
+        add(scrCentros, BorderLayout.CENTER);
+
+        pnlFormulario.setBorder(BorderFactory.createTitledBorder("Datos del Centro Educativo"));
+        add(pnlFormulario, BorderLayout.SOUTH);
+    }
+
+    private void iniciar() {
         modelo = (DefaultTableModel) tblCentros.getModel();
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(6, 8, 6, 8);
+        c.anchor = GridBagConstraints.WEST;
+        c.fill = GridBagConstraints.HORIZONTAL;
+
+        int fila = 0;
+        agregarCampo(pnlFormulario, c, 0, fila, "Código", txtCodigo);
+        agregarCampo(pnlFormulario, c, 2, fila, "Nombre", txtNombre);
+        fila++;
+        agregarCampo(pnlFormulario, c, 0, fila, "Dirección", txtDireccion);
+        agregarCampo(pnlFormulario, c, 2, fila, "Teléfono", txtTelefono);
+        fila++;
+        agregarCampo(pnlFormulario, c, 0, fila, "Correo", txtCorreo);
+        agregarCampo(pnlFormulario, c, 2, fila, "Director(a)", txtDirector);
+        fila++;
+        c.gridx = 0; c.gridy = fila; c.gridwidth = 1;
+        pnlFormulario.add(new JLabel("Logotipo"), c);
+        c.gridx = 1; c.gridwidth = 3;
+        JPanel logoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
+        logoPanel.add(btnLogo);
+        logoPanel.add(lblLogo);
+        pnlFormulario.add(logoPanel, c);
+        c.gridx = 4; c.gridwidth = 1;
+        pnlFormulario.add(btnGuardar, c);
+        c.gridx = 5; c.gridwidth = 1;
+        pnlFormulario.add(btnCancelar, c);
+
+        txtBusqueda.addCaretListener(e -> {
+            if (modelo != null && !txtBusqueda.getText().equals(ultimaBusqueda)) {
+                cargarTabla();
+            }
+        });
+        btnNuevo.addActionListener(e -> nuevo());
+        btnEditar.addActionListener(e -> editar());
+        btnEliminar.addActionListener(e -> eliminar());
+        btnGuardar.addActionListener(e -> guardar());
+        btnCancelar.addActionListener(e -> cancelarEdicion());
+        btnLogo.addActionListener(e -> seleccionarLogo());
         refrescar();
+    }
+
+    private void agregarCampo(JPanel panel, GridBagConstraints c, int columna, int fila,
+                              String etiqueta, JTextField campo) {
+        c.gridx = columna;
+        c.gridy = fila;
+        c.gridwidth = 1;
+        panel.add(new JLabel(etiqueta), c);
+        c.gridx = columna + 1;
+        c.gridwidth = 1;
+        panel.add(campo, c);
     }
 
     @Override
@@ -46,7 +163,7 @@ public class PnlCentros extends javax.swing.JPanel implements Refrescable {
                 if (coincide) {
                     visibles.add(centro);
                     modelo.addRow(new Object[]{centro.getCodigo(), centro.getNombre(), centro.getDireccion(),
-                        centro.getTelefono()});
+                            centro.getTelefono(), centro.getCorreo(), centro.getDirector()});
                 }
             }
         } catch (SQLException e) {
@@ -61,6 +178,9 @@ public class PnlCentros extends javax.swing.JPanel implements Refrescable {
         txtNombre.setText("");
         txtDireccion.setText("");
         txtTelefono.setText("");
+        txtCorreo.setText("");
+        txtDirector.setText("");
+        lblLogo.setText("(sin logotipo)");
     }
 
     private void cancelarEdicion() {
@@ -85,6 +205,9 @@ public class PnlCentros extends javax.swing.JPanel implements Refrescable {
         txtNombre.setText(editado.getNombre());
         txtDireccion.setText(editado.getDireccion());
         txtTelefono.setText(editado.getTelefono());
+        txtCorreo.setText(editado.getCorreo());
+        txtDirector.setText(editado.getDirector());
+        lblLogo.setText(editado.getRutaLogo() == null ? "(sin logotipo)" : new File(editado.getRutaLogo()).getName());
         Ui.habilitar(pnlFormulario, true);
     }
 
@@ -114,6 +237,8 @@ public class PnlCentros extends javax.swing.JPanel implements Refrescable {
         String nombre = txtNombre.getText().trim();
         String direccion = txtDireccion.getText().trim();
         String telefono = txtTelefono.getText().trim();
+        String correo = txtCorreo.getText().trim();
+        String director = txtDirector.getText().trim();
 
         if (codigo.isEmpty()) {
             Ui.aviso(this, "Ingrese el código del centro.");
@@ -147,10 +272,14 @@ public class PnlCentros extends javax.swing.JPanel implements Refrescable {
         c.setNombre(nombre);
         c.setDireccion(direccion);
         c.setTelefono(telefono);
+        c.setCorreo(correo);
+        c.setDirector(director);
+        if (editado != null && editado.getRutaLogo() != null) {
+            c.setRutaLogo(editado.getRutaLogo());
+        }
 
         try {
             if (editado == null) {
-                // Verificar código único
                 for (CentroEducativo existente : dao.listar()) {
                     if (existente.getCodigo().equalsIgnoreCase(codigo)) {
                         Ui.aviso(this, "Ya existe un centro con el código «" + codigo + "».");
@@ -160,7 +289,6 @@ public class PnlCentros extends javax.swing.JPanel implements Refrescable {
                 }
                 dao.insertar(c);
             } else {
-                // Verificar código único (exceptuando el actual)
                 for (CentroEducativo existente : dao.listar()) {
                     if (existente.getId() != editado.getId()
                             && existente.getCodigo().equalsIgnoreCase(codigo)) {
@@ -173,6 +301,8 @@ public class PnlCentros extends javax.swing.JPanel implements Refrescable {
                 editado.setNombre(nombre);
                 editado.setDireccion(direccion);
                 editado.setTelefono(telefono);
+                editado.setCorreo(correo);
+                editado.setDirector(director);
                 dao.actualizar(editado);
             }
             cancelarEdicion();
@@ -183,257 +313,18 @@ public class PnlCentros extends javax.swing.JPanel implements Refrescable {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
-
-        lblTitulo = new javax.swing.JLabel();
-        lblBuscar = new javax.swing.JLabel();
-        txtBusqueda = new javax.swing.JTextField();
-        btnNuevo = new javax.swing.JButton();
-        btnEditar = new javax.swing.JButton();
-        btnEliminar = new javax.swing.JButton();
-        scrCentros = new javax.swing.JScrollPane();
-        tblCentros = new javax.swing.JTable();
-        pnlFormulario = new javax.swing.JPanel();
-        lblCodigo = new javax.swing.JLabel();
-        txtCodigo = new javax.swing.JTextField();
-        lblNombre = new javax.swing.JLabel();
-        txtNombre = new javax.swing.JTextField();
-        lblDireccion = new javax.swing.JLabel();
-        txtDireccion = new javax.swing.JTextField();
-        lblTelefono = new javax.swing.JLabel();
-        txtTelefono = new javax.swing.JTextField();
-        btnGuardar = new javax.swing.JButton();
-        btnCancelar = new javax.swing.JButton();
-
-        lblTitulo.setText("Centros Educativos");
-
-        lblBuscar.setText("Buscar centro (nombre o código):");
-
-        txtBusqueda.addCaretListener(new javax.swing.event.CaretListener() {
-            public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                txtBusquedaCaretUpdate(evt);
-            }
-        });
-
-        btnNuevo.setText("Nuevo centro");
-        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoActionPerformed(evt);
-            }
-        });
-
-        btnEditar.setText("Editar");
-        btnEditar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditarActionPerformed(evt);
-            }
-        });
-
-        btnEliminar.setText("Eliminar");
-        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarActionPerformed(evt);
-            }
-        });
-
-        tblCentros.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Código", "Nombre", "Dirección", "Teléfono"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-
-
-        scrCentros.setViewportView(tblCentros);
-
-        pnlFormulario.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos del Centro Educativo"));
-        lblCodigo.setText("Código");
-
-
-
-        lblNombre.setText("Nombre");
-
-
-
-        lblDireccion.setText("Dirección");
-
-
-
-        lblTelefono.setText("Teléfono");
-
-
-
-        btnGuardar.setText("Guardar");
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
-            }
-        });
-
-        btnCancelar.setText("Cancelar");
-        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarActionPerformed(evt);
-            }
-        });
-
-
-        javax.swing.GroupLayout pnlFormularioLayout = new javax.swing.GroupLayout(pnlFormulario);
-        pnlFormulario.setLayout(pnlFormularioLayout);
-        pnlFormularioLayout.setHorizontalGroup(
-            pnlFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(pnlFormularioLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addGroup(pnlFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(lblCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtCodigo, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(pnlFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(lblNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(pnlFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(lblDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtDireccion, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(pnlFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(lblTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtTelefono, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
-                    .addContainerGap())
-                .addGroup(pnlFormularioLayout.createSequentialGroup()
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap())
-        );
-        pnlFormularioLayout.setVerticalGroup(
-            pnlFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(pnlFormularioLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addGroup(pnlFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(pnlFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(16, 16, 16)
-                    .addGroup(pnlFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addContainerGap())
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(lblBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap())
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(scrCentros, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap())
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(pnlFormulario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(8, 8, 8)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(scrCentros, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(pnlFormulario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap())
-        );
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void txtBusquedaCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtBusquedaCaretUpdate
-        if (modelo != null && !txtBusqueda.getText().equals(ultimaBusqueda)) {
-            cargarTabla();
+    private void seleccionarLogo() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Seleccionar logotipo institucional");
+        chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
+                "Imágenes (jpg, png, gif)", "jpg", "jpeg", "png", "gif", "bmp", "webp"));
+        if (chooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) {
+            return;
         }
-    }//GEN-LAST:event_txtBusquedaCaretUpdate
-
-    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        nuevo();
-    }//GEN-LAST:event_btnNuevoActionPerformed
-
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        editar();
-    }//GEN-LAST:event_btnEditarActionPerformed
-
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        eliminar();
-    }//GEN-LAST:event_btnEliminarActionPerformed
-
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        guardar();
-    }//GEN-LAST:event_btnGuardarActionPerformed
-
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        cancelarEdicion();
-    }//GEN-LAST:event_btnCancelarActionPerformed
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel lblTitulo;
-    private javax.swing.JLabel lblBuscar;
-    private javax.swing.JTextField txtBusqueda;
-    private javax.swing.JButton btnNuevo;
-    private javax.swing.JButton btnEditar;
-    private javax.swing.JButton btnEliminar;
-    private javax.swing.JScrollPane scrCentros;
-    private javax.swing.JTable tblCentros;
-    private javax.swing.JPanel pnlFormulario;
-    private javax.swing.JLabel lblCodigo;
-    private javax.swing.JTextField txtCodigo;
-    private javax.swing.JLabel lblNombre;
-    private javax.swing.JTextField txtNombre;
-    private javax.swing.JLabel lblDireccion;
-    private javax.swing.JTextField txtDireccion;
-    private javax.swing.JLabel lblTelefono;
-    private javax.swing.JTextField txtTelefono;
-    private javax.swing.JButton btnGuardar;
-    private javax.swing.JButton btnCancelar;
-    // End of variables declaration//GEN-END:variables
+        File archivo = chooser.getSelectedFile();
+        if (editado != null) {
+            editado.setRutaLogo(archivo.getAbsolutePath());
+        }
+        lblLogo.setText(archivo.getName());
+    }
 }

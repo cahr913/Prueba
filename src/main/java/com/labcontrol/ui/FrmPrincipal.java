@@ -1,20 +1,22 @@
-package com.labcontrol.ui.vista;
+package com.labcontrol.UI;
 
 import com.labcontrol.modelo.Usuario;
-import com.labcontrol.ui.vista.FrmEquipo;
-import com.labcontrol.ui.vista.FrmComputadora;
-import com.labcontrol.ui.vista.FrmSoftware;
-import com.labcontrol.ui.vista.FrmAsistenteInstalacion;
-import com.labcontrol.ui.vista.FrmRecepcion;
-import com.labcontrol.ui.vista.FrmReporteDano;
-import com.labcontrol.ui.vista.FrmMantenimiento;
-import com.labcontrol.ui.vista.FrmPieza;
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Window;
+import java.awt.GridLayout;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 public class FrmPrincipal extends javax.swing.JFrame {
 
@@ -23,20 +25,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private static final String LABORATORIOS = "laboratorios";
     private static final String HORARIOS = "horarios";
     private static final String USUARIOS = "usuarios";
-    private static final String EQUIPOS = "equipos";
-    private static final String COMPUTADORAS = "computadoras";
-    private static final String SOFTWARE = "software";
-    private static final String INSTALACION = "instalacion";
-    private static final String RECEPCION = "recepcion";
-    private static final String REPORTE_DANO = "reporte_dano";
-    private static final String MANTENIMIENTO = "mantenimiento";
-    private static final String PIEZAS = "piezas";
 
     private PnlLogin pnlLogin;
     private PnlCentros pnlCentros;
     private PnlLaboratorios pnlLaboratorios;
     private PnlHorarios pnlHorarios;
     private PnlUsuarios pnlUsuarios;
+
     private FrmEquipo frmEquipo;
     private FrmComputadora frmComputadora;
     private FrmSoftware frmSoftware;
@@ -45,13 +40,46 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private FrmReporteDano frmReporteDano;
     private FrmMantenimiento frmMantenimiento;
     private FrmPieza frmPieza;
+    private FrmReportes frmReportes;
 
-    private JButton[] botonesSeccion;
+    private JPanel pnlContenido;
+    private JPanel pnlMenu;
     private Usuario usuarioActual;
 
+    private JButton btnCentros, btnLaboratorios, btnHorarios, btnUsuarios;
+    private JButton btnEquipos, btnComputadoras, btnSoftware, btnInstalacion;
+    private JButton btnRecepcion, btnReporteDano, btnMantenimiento, btnPiezas;
+    private JButton btnReportes, btnAyuda, btnCerrarSesion;
+
     public FrmPrincipal() {
-        initComponents();
+        construir();
         iniciar();
+    }
+
+    private void construir() {
+        setTitle("Sistema de Gestion de Laboratorios");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setMinimumSize(new Dimension(1200, 720));
+        setSize(1300, 800);
+        setLocationRelativeTo(null);
+
+        JLabel titulo = new JLabel("  Sistema de Gestion de Laboratorios de Computo", SwingConstants.LEFT);
+        titulo.setFont(titulo.getFont().deriveFont(Font.BOLD, 18f));
+        titulo.setOpaque(true);
+        titulo.setBackground(new Color(31, 78, 121));
+        titulo.setForeground(Color.WHITE);
+        titulo.setPreferredSize(new Dimension(0, 42));
+        add(titulo, BorderLayout.NORTH);
+
+        pnlContenido = new JPanel(new CardLayout());
+        add(pnlContenido, BorderLayout.CENTER);
+
+        pnlMenu = new JPanel();
+        pnlMenu.setLayout(new BoxLayout(pnlMenu, BoxLayout.Y_AXIS));
+        pnlMenu.setBorder(BorderFactory.createEmptyBorder(8, 6, 8, 6));
+        pnlMenu.setPreferredSize(new Dimension(210, 0));
+        pnlMenu.setBackground(new Color(245, 247, 250));
+        add(pnlMenu, BorderLayout.WEST);
     }
 
     private void iniciar() {
@@ -68,6 +96,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         frmReporteDano = new FrmReporteDano();
         frmMantenimiento = new FrmMantenimiento();
         frmPieza = new FrmPieza();
+        frmReportes = new FrmReportes();
 
         pnlContenido.add(pnlLogin, LOGIN);
         pnlContenido.add(pnlCentros, CENTROS);
@@ -75,28 +104,86 @@ public class FrmPrincipal extends javax.swing.JFrame {
         pnlContenido.add(pnlHorarios, HORARIOS);
         pnlContenido.add(pnlUsuarios, USUARIOS);
 
-        botonesSeccion = new JButton[]{btnCentros, btnLaboratorios, btnHorarios, btnUsuarios, btnEquipos, btnComputadoras, btnSoftware, btnInstalacion, btnRecepcion, btnReporteDano, btnMantenimiento, btnPiezas};
+        construirMenu();
 
         pnlMenu.setVisible(false);
-        setMinimumSize(new Dimension(1200, 720));
-        setSize(1300, 800);
-        setLocationRelativeTo(null);
         ((CardLayout) pnlContenido.getLayout()).show(pnlContenido, LOGIN);
     }
 
-    private void mostrarSeccion(String tarjeta, javax.swing.JPanel panel, JButton activo) {
+    private void construirMenu() {
+        btnCentros = boton("Centros Educativos");
+        btnLaboratorios = boton("Laboratorios");
+        btnHorarios = boton("Horarios");
+        btnUsuarios = boton("Usuarios");
+        btnEquipos = boton("Equipos");
+        btnComputadoras = boton("Computadoras");
+        btnSoftware = boton("Software");
+        btnInstalacion = boton("Instalacion de Software");
+        btnRecepcion = boton("Recepcion de Lab");
+        btnReporteDano = boton("Reportes de Daño");
+        btnMantenimiento = boton("Mantenimiento");
+        btnPiezas = boton("Piezas");
+        btnReportes = boton("Consultas y Reportes");
+        btnAyuda = boton("Ayuda");
+        btnCerrarSesion = boton("Cerrar sesion");
+
+        btnCentros.addActionListener(e -> mostrarSeccion(CENTROS, pnlCentros, btnCentros));
+        btnLaboratorios.addActionListener(e -> mostrarSeccion(LABORATORIOS, pnlLaboratorios, btnLaboratorios));
+        btnHorarios.addActionListener(e -> mostrarSeccion(HORARIOS, pnlHorarios, btnHorarios));
+        btnUsuarios.addActionListener(e -> mostrarSeccion(USUARIOS, pnlUsuarios, btnUsuarios));
+        btnEquipos.addActionListener(e -> mostrarVentana(frmEquipo));
+        btnComputadoras.addActionListener(e -> mostrarVentana(frmComputadora));
+        btnSoftware.addActionListener(e -> mostrarVentana(frmSoftware));
+        btnInstalacion.addActionListener(e -> mostrarVentana(frmInstalacion));
+        btnRecepcion.addActionListener(e -> mostrarVentana(frmRecepcion));
+        btnReporteDano.addActionListener(e -> mostrarVentana(frmReporteDano));
+        btnMantenimiento.addActionListener(e -> mostrarVentana(frmMantenimiento));
+        btnPiezas.addActionListener(e -> mostrarVentana(frmPieza));
+        btnReportes.addActionListener(e -> mostrarVentana(frmReportes));
+        btnAyuda.addActionListener(e -> mostrarAyuda());
+        btnCerrarSesion.addActionListener(e -> cerrarSesion());
+
+        pnlMenu.add(new JLabel("  Menu principal", SwingConstants.LEFT));
+        pnlMenu.add(Box.createVerticalStrut(6));
+        agregarBoton(btnCentros);
+        agregarBoton(btnLaboratorios);
+        agregarBoton(btnHorarios);
+        agregarBoton(btnUsuarios);
+        agregarBoton(btnEquipos);
+        agregarBoton(btnComputadoras);
+        agregarBoton(btnSoftware);
+        agregarBoton(btnInstalacion);
+        agregarBoton(btnRecepcion);
+        agregarBoton(btnReporteDano);
+        agregarBoton(btnMantenimiento);
+        agregarBoton(btnPiezas);
+        agregarBoton(btnReportes);
+        pnlMenu.add(Box.createVerticalGlue());
+        agregarBoton(btnAyuda);
+        agregarBoton(btnCerrarSesion);
+    }
+
+    private JButton boton(String texto) {
+        JButton b = new JButton(texto);
+        b.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
+        b.setMaximumSize(new Dimension(Integer.MAX_VALUE, 32));
+        b.setHorizontalAlignment(SwingConstants.LEFT);
+        return b;
+    }
+
+    private void agregarBoton(JButton b) {
+        pnlMenu.add(b);
+        pnlMenu.add(Box.createVerticalStrut(3));
+    }
+
+    private void mostrarSeccion(String tarjeta, JPanel panel, JButton activo) {
         if (panel instanceof Refrescable) {
             ((Refrescable) panel).refrescar();
         }
         ((CardLayout) pnlContenido.getLayout()).show(pnlContenido, tarjeta);
-        for (JButton boton : botonesSeccion) {
-            if (boton != null && boton.isVisible()) {
-                boton.setFont(boton.getFont().deriveFont(boton == activo ? Font.BOLD : Font.PLAIN));
-            }
-        }
     }
 
-    private void mostrarVentanaExterna(java.awt.Window ventana) {
+    private void mostrarVentana(java.awt.Window ventana) {
         ventana.setLocationRelativeTo(this);
         ventana.setVisible(true);
     }
@@ -107,47 +194,23 @@ public class FrmPrincipal extends javax.swing.JFrame {
         pnlMenu.setVisible(true);
 
         String rol = usuario.getRol();
+        btnCentros.setVisible("Administrador".equalsIgnoreCase(rol));
+        btnLaboratorios.setVisible(true);
+        btnHorarios.setVisible(!"Responsable de laboratorio".equalsIgnoreCase(rol));
+        btnUsuarios.setVisible("Administrador".equalsIgnoreCase(rol));
+        btnEquipos.setVisible("Administrador".equalsIgnoreCase(rol) || "Responsable de laboratorio".equalsIgnoreCase(rol));
+        btnComputadoras.setVisible("Administrador".equalsIgnoreCase(rol) || "Responsable de laboratorio".equalsIgnoreCase(rol));
+        btnSoftware.setVisible("Administrador".equalsIgnoreCase(rol) || "Responsable de laboratorio".equalsIgnoreCase(rol));
+        btnInstalacion.setVisible("Administrador".equalsIgnoreCase(rol) || "Responsable de laboratorio".equalsIgnoreCase(rol));
+        btnRecepcion.setVisible(!"Responsable de laboratorio".equalsIgnoreCase(rol));
+        btnReporteDano.setVisible(!"Responsable de laboratorio".equalsIgnoreCase(rol));
+        btnMantenimiento.setVisible("Administrador".equalsIgnoreCase(rol) || "Responsable de laboratorio".equalsIgnoreCase(rol));
+        btnPiezas.setVisible("Administrador".equalsIgnoreCase(rol) || "Responsable de laboratorio".equalsIgnoreCase(rol));
+        btnReportes.setVisible("Administrador".equalsIgnoreCase(rol) || "Responsable de laboratorio".equalsIgnoreCase(rol));
+
         if ("Administrador".equalsIgnoreCase(rol)) {
-            btnCentros.setVisible(true);
-            btnLaboratorios.setVisible(true);
-            btnHorarios.setVisible(true);
-            btnUsuarios.setVisible(true);
-            btnEquipos.setVisible(true);
-            btnComputadoras.setVisible(true);
-            btnSoftware.setVisible(true);
-            btnInstalacion.setVisible(true);
-            btnRecepcion.setVisible(true);
-            btnReporteDano.setVisible(true);
-            btnMantenimiento.setVisible(true);
-            btnPiezas.setVisible(true);
             mostrarSeccion(CENTROS, pnlCentros, btnCentros);
-        } else if ("Docente".equalsIgnoreCase(rol)) {
-            btnCentros.setVisible(false);
-            btnLaboratorios.setVisible(true);
-            btnHorarios.setVisible(true);
-            btnUsuarios.setVisible(false);
-            btnEquipos.setVisible(false);
-            btnComputadoras.setVisible(false);
-            btnSoftware.setVisible(false);
-            btnInstalacion.setVisible(false);
-            btnRecepcion.setVisible(true);
-            btnReporteDano.setVisible(true);
-            btnMantenimiento.setVisible(false);
-            btnPiezas.setVisible(false);
-            mostrarSeccion(LABORATORIOS, pnlLaboratorios, btnLaboratorios);
-        } else if ("Responsable de laboratorio".equalsIgnoreCase(rol)) {
-            btnCentros.setVisible(false);
-            btnLaboratorios.setVisible(true);
-            btnHorarios.setVisible(false);
-            btnUsuarios.setVisible(false);
-            btnEquipos.setVisible(true);
-            btnComputadoras.setVisible(true);
-            btnSoftware.setVisible(true);
-            btnInstalacion.setVisible(true);
-            btnRecepcion.setVisible(false);
-            btnReporteDano.setVisible(false);
-            btnMantenimiento.setVisible(true);
-            btnPiezas.setVisible(true);
+        } else {
             mostrarSeccion(LABORATORIOS, pnlLaboratorios, btnLaboratorios);
         }
     }
@@ -160,235 +223,25 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     private void mostrarAyuda() {
-        javax.swing.JOptionPane.showMessageDialog(this,
-            "Sistema de Gestion de Laboratorios\n" +
-            "Versión 1.0\n" +
-            "Programación II - Universidad Mariano Gálvez de Guatemala\n\n" +
-            "Funcionalidades:\n" +
-            "- Gestión de Centros Educativos\n" +
-            "- Gestión de Laboratorios\n" +
-            "- Programación de Horarios\n" +
-            "- Gestión de Usuarios\n" +
-            "- Gestión de Equipos y Computadoras\n" +
-            "- Gestión de Software\n" +
-            "- Instalación de Software en Equipos\n" +
-            "- Recepción de Laboratorios\n" +
-            "- Reporte de Daños\n" +
-            "- Control de Mantenimiento (Preventivo/Correctivo)\n" +
-            "- Gestión de Piezas de Repuesto",
-            "Ayuda - Sistema de Laboratorios",
-            javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this,
+                "Sistema de Gestion de Laboratorios\n" +
+                        "Version 1.0\n" +
+                        "Programacion II - Universidad Mariano Galvez de Guatemala\n\n" +
+                        "Funcionalidades:\n" +
+                        "- Gestion de Centros Educativos (con logotipo)\n" +
+                        "- Gestion de Laboratorios\n" +
+                        "- Programacion de Horarios (sin solapamiento)\n" +
+                        "- Gestion de Usuarios por rol\n" +
+                        "- Gestion de Equipos y Computadoras\n" +
+                        "- Gestion de Software\n" +
+                        "- Instalacion de Software\n" +
+                        "- Recepcion de Laboratorios\n" +
+                        "- Reporte de Daños (con fotos)\n" +
+                        "- Control de Mantenimiento (Preventivo / Correctivo)\n" +
+                        "- Gestion de Piezas\n" +
+                        "- Consultas y Reportes (11 reportes)\n" +
+                        "- Hoja de Servicio en PDF",
+                "Ayuda - Sistema de Laboratorios",
+                JOptionPane.INFORMATION_MESSAGE);
     }
-
-    private void btnCentrosActionPerformed(java.awt.event.ActionEvent evt) {
-        mostrarSeccion(CENTROS, pnlCentros, btnCentros);
-    }
-
-    private void btnLaboratoriosActionPerformed(java.awt.event.ActionEvent evt) {
-        mostrarSeccion(LABORATORIOS, pnlLaboratorios, btnLaboratorios);
-    }
-
-    private void btnHorariosActionPerformed(java.awt.event.ActionEvent evt) {
-        mostrarSeccion(HORARIOS, pnlHorarios, btnHorarios);
-    }
-
-    private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {
-        mostrarSeccion(USUARIOS, pnlUsuarios, btnUsuarios);
-    }
-
-    private void btnEquiposActionPerformed(java.awt.event.ActionEvent evt) {
-        mostrarVentanaExterna(frmEquipo);
-    }
-
-    private void btnComputadorasActionPerformed(java.awt.event.ActionEvent evt) {
-        mostrarVentanaExterna(frmComputadora);
-    }
-
-    private void btnSoftwareActionPerformed(java.awt.event.ActionEvent evt) {
-        mostrarVentanaExterna(frmSoftware);
-    }
-
-    private void btnInstalacionActionPerformed(java.awt.event.ActionEvent evt) {
-        mostrarVentanaExterna(frmInstalacion);
-    }
-
-    private void btnRecepcionActionPerformed(java.awt.event.ActionEvent evt) {
-        mostrarVentanaExterna(frmRecepcion);
-    }
-
-    private void btnReporteDanoActionPerformed(java.awt.event.ActionEvent evt) {
-        mostrarVentanaExterna(frmReporteDano);
-    }
-
-    private void btnMantenimientoActionPerformed(java.awt.event.ActionEvent evt) {
-        mostrarVentanaExterna(frmMantenimiento);
-    }
-
-    private void btnPiezasActionPerformed(java.awt.event.ActionEvent evt) {
-        mostrarVentanaExterna(frmPieza);
-    }
-
-    private void btnAyudaActionPerformed(java.awt.event.ActionEvent evt) {
-        mostrarAyuda();
-    }
-
-    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {
-        cerrarSesion();
-    }
-
-    @SuppressWarnings("unchecked")
-    private void initComponents() {
-        pnlMenu = new javax.swing.JPanel();
-        btnCentros = new javax.swing.JButton();
-        btnLaboratorios = new javax.swing.JButton();
-        btnHorarios = new javax.swing.JButton();
-        btnUsuarios = new javax.swing.JButton();
-        btnEquipos = new javax.swing.JButton();
-        btnComputadoras = new javax.swing.JButton();
-        btnSoftware = new javax.swing.JButton();
-        btnInstalacion = new javax.swing.JButton();
-        btnRecepcion = new javax.swing.JButton();
-        btnReporteDano = new javax.swing.JButton();
-        btnMantenimiento = new javax.swing.JButton();
-        btnPiezas = new javax.swing.JButton();
-        btnAyuda = new javax.swing.JButton();
-        btnCerrarSesion = new javax.swing.JButton();
-        pnlContenido = new javax.swing.JPanel();
-        pnlContenido.setLayout(new java.awt.CardLayout());
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Sistema de Laboratorios - Infraestructura y Horarios");
-
-        btnCentros.setText("Centros Educativos");
-        btnCentros.addActionListener(this::btnCentrosActionPerformed);
-
-        btnLaboratorios.setText("Laboratorios");
-        btnLaboratorios.addActionListener(this::btnLaboratoriosActionPerformed);
-
-        btnHorarios.setText("Horarios");
-        btnHorarios.addActionListener(this::btnHorariosActionPerformed);
-
-        btnUsuarios.setText("Usuarios");
-        btnUsuarios.addActionListener(this::btnUsuariosActionPerformed);
-
-        btnEquipos.setText("Equipos");
-        btnEquipos.addActionListener(this::btnEquiposActionPerformed);
-
-        btnComputadoras.setText("Computadoras");
-        btnComputadoras.addActionListener(this::btnComputadorasActionPerformed);
-
-        btnSoftware.setText("Software");
-        btnSoftware.addActionListener(this::btnSoftwareActionPerformed);
-
-        btnInstalacion.setText("Instalación Software");
-        btnInstalacion.addActionListener(this::btnInstalacionActionPerformed);
-
-        btnRecepcion.setText("Recepción");
-        btnRecepcion.addActionListener(this::btnRecepcionActionPerformed);
-
-        btnReporteDano.setText("Reportes de Daño");
-        btnReporteDano.addActionListener(this::btnReporteDanoActionPerformed);
-
-        btnMantenimiento.setText("Mantenimiento");
-        btnMantenimiento.addActionListener(this::btnMantenimientoActionPerformed);
-
-        btnPiezas.setText("Piezas");
-        btnPiezas.addActionListener(this::btnPiezasActionPerformed);
-
-        btnAyuda.setText("Ayuda");
-        btnAyuda.addActionListener(this::btnAyudaActionPerformed);
-
-        btnCerrarSesion.setText("Cerrar sesión");
-        btnCerrarSesion.addActionListener(this::btnCerrarSesionActionPerformed);
-
-        javax.swing.GroupLayout pnlMenuLayout = new javax.swing.GroupLayout(pnlMenu);
-        pnlMenu.setLayout(pnlMenuLayout);
-        pnlMenuLayout.setHorizontalGroup(
-            pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlMenuLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnCentros, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnLaboratorios, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnHorarios, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnUsuarios, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnEquipos, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnComputadoras, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSoftware, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnInstalacion, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnRecepcion, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnReporteDano, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnMantenimiento, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnPiezas, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnAyuda, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnCerrarSesion, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        pnlMenuLayout.setVerticalGroup(
-            pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlMenuLayout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(pnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnCentros, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                    .addComponent(btnLaboratorios, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                    .addComponent(btnHorarios, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                    .addComponent(btnUsuarios, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                    .addComponent(btnEquipos, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                    .addComponent(btnComputadoras, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                    .addComponent(btnSoftware, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                    .addComponent(btnInstalacion, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                    .addComponent(btnRecepcion, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                    .addComponent(btnReporteDano, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                    .addComponent(btnMantenimiento, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                    .addComponent(btnPiezas, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                    .addComponent(btnAyuda, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                    .addComponent(btnCerrarSesion, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))
-                .addGap(10, 10, 10))
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(pnlContenido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(pnlMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(pnlContenido, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE))
-        );
-
-        pack();
-    }
-
-    private javax.swing.JPanel pnlMenu;
-    private javax.swing.JPanel pnlContenido;
-    private javax.swing.JButton btnCentros;
-    private javax.swing.JButton btnLaboratorios;
-    private javax.swing.JButton btnHorarios;
-    private javax.swing.JButton btnUsuarios;
-    private javax.swing.JButton btnEquipos;
-    private javax.swing.JButton btnComputadoras;
-    private javax.swing.JButton btnSoftware;
-    private javax.swing.JButton btnInstalacion;
-    private javax.swing.JButton btnRecepcion;
-    private javax.swing.JButton btnReporteDano;
-    private javax.swing.JButton btnMantenimiento;
-    private javax.swing.JButton btnPiezas;
-    private javax.swing.JButton btnAyuda;
-    private javax.swing.JButton btnCerrarSesion;
 }

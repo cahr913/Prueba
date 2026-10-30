@@ -1,7 +1,8 @@
 package com.labcontrol.modelo;
 
 public class Software {
-    public static final String[] TIPOS = { "Aplicación", "Sistema" };
+    
+    public static final String[] TIPOS = { "Sistema", "Aplicacion" };
     public static final String[] LICENCIAS = { "Open Source", "Comercial", "Freeware" };
     public static final String[] ESTADOS = { "Activo", "Inactivo" };
 

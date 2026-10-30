@@ -1,518 +1,501 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
-package com.labcontrol.ui.vista;
-import com.labcontrol.modelo.FotoEvidencia;
-import com.labcontrol.modelo.ReporteDano;
-import com.labcontrol.servicio.ReporteDanoService;
+package com.labcontrol.UI;
 
+import com.labcontrol.dao.EquipoDao;
+import com.labcontrol.dao.LaboratorioDao;
+import com.labcontrol.dao.UsuarioDao;
+import com.labcontrol.modelo.Equipo;
+import com.labcontrol.modelo.FotoEvidencia;
+import com.labcontrol.modelo.Laboratorio;
+import com.labcontrol.modelo.ReporteDano;
+import com.labcontrol.modelo.Usuario;
+import com.labcontrol.servicio.ReporteDanoServicio;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.io.File;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JList;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-/**
- *
- * @author hp
- */
+
 public class FrmReporteDano extends javax.swing.JFrame {
-    private final ReporteDanoService servicio = new ReporteDanoService();
-    private DefaultTableModel modeloTabla;
 
-    // Fotos de evidencia cargadas temporalmente para este reporte.
-    private final DefaultListModel<String> modeloFotos = new DefaultListModel<>();
-    private final List<File> archivosFoto = new ArrayList<>();
-    private JList<String> lstFotos;
-private void configurarTabla() {
-    modeloTabla = new DefaultTableModel(
-        new Object[]{
-            "ID Reporte",
-            "ID Recepción",
-            "ID Equipo",
-            "ID Docente",
-            "Tipo de falla",
-            "Descripción del daño",
-            "Fecha del reporte",
-            "Estado"
-        }, 0
-    ) {
-        @Override
-        public boolean isCellEditable(int fila, int columna) {
-            return false;
-        }
+    private static final String[] TIPOS_FALLA = {
+            "No enciende", "Pantalla dañada", "Teclado defectuoso", "Ratón defectuoso",
+            "No da video", "Sin conexión de red", "Falla de software", "Ruido anormal", "Otra falla"
     };
+    private static final DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    tblReportesDano.setModel(modeloTabla);
-}
-private void limpiarCampos() {
-    txtIDReporte.setText("");
-    txtIDRecepcion.setText("");
-    txtIDEquipo.setText("");
-    txtIDDocente.setText("");
-    txtFalla.setText("");
-    txtDescripcion.setText("");
-    txtEstado.setText("");
-    modeloFotos.clear();
-    archivosFoto.clear();
-    if (lstFotos != null) {
-        lstFotos.clearSelection();
-    }
-    txtIDReporte.requestFocus();
-}
-private void actualizarTabla() {
-    modeloTabla.setRowCount(0);
-    try {
-        for (ReporteDano r : servicio.listar()) {
-            modeloTabla.addRow(new Object[]{
-                r.getIdReporte(),
-                r.getIdRecepcion(),
-                r.getIdEquipo(),
-                r.getIdDocente(),
-                r.getFalla(),
-                r.getDescripcion(),
-                r.getFechaReporte(),
-                r.getEstado()
-            });
-        }
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, "Error de base de datos: " + e.getMessage());
-    }
-}
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmReporteDano.class.getName());
+    private final ReporteDanoServicio servicio = new ReporteDanoServicio();
+    private final EquipoDao equipoDao = new EquipoDao();
+    private final LaboratorioDao laboratorioDao = new LaboratorioDao();
+    private final UsuarioDao usuarioDao = new UsuarioDao();
 
-    /**
-     * Creates new form FrmReporteDano
-     */
+    private final Map<Integer, Equipo> equipos = new HashMap<>();
+    private final Map<Integer, Laboratorio> laboratorios = new HashMap<>();
+    private final Map<Integer, Usuario> docentes = new HashMap<>();
+
+    private ReporteDano editado;
+
+    private final JComboBox<OpcionCombo> cboLaboratorio = new JComboBox<>();
+    private final JComboBox<OpcionCombo> cboEquipo = new JComboBox<>();
+    private final JComboBox<OpcionCombo> cboDocente = new JComboBox<>();
+    private final JComboBox<String> cboTipoFalla = new JComboBox<>(TIPOS_FALLA);
+    private final JTextField txtFechaHora = new JTextField(16);
+    private final JComboBox<String> cboEstadoEncontrado =
+            new JComboBox<>(new String[]{"DAÑADO", "EN MANTENIMIENTO", "FUERA DE SERVICIO"});
+    private final JTextArea txtDescripcion = new JTextArea(3, 30);
+    private final JTextField txtObservaciones = new JTextField(20);
+
+    private final DefaultListModel<String> modeloFotos = new DefaultListModel<>();
+    private final JList<String> lstFotos = new JList<>(modeloFotos);
+    private final JButton btnAgregarFoto = new JButton("Agregar fotografía...");
+    private final JButton btnQuitarFoto = new JButton("Quitar seleccionada");
+
+    private final JButton btnGuardar = new JButton("Guardar nuevo reporte");
+    private final JButton btnActualizar = new JButton("Actualizar");
+    private final JButton btnEliminar = new JButton("Eliminar");
+    private final JButton btnLimpiar = new JButton("Limpiar");
+
+    private DefaultTableModel modeloTabla;
+    private final javax.swing.JTable tblReportes = new javax.swing.JTable();
+
     public FrmReporteDano() {
-        initComponents();
-        configurarTabla();
-        inicializarPanelFotos();
+        super("Reporte de Equipos Dañados");
+        construir();
+        recargarCombos();
+        btnActualizar.setEnabled(false);
     }
 
-    /** Agrega un panel inferior con la lista de fotos de evidencia y el botón para adjuntar. */
-    private void inicializarPanelFotos() {
-        lstFotos = new JList<>(modeloFotos);
-        JScrollPane scrollFotos = new JScrollPane(lstFotos);
-        scrollFotos.setPreferredSize(new java.awt.Dimension(0, 100));
+    // ---------------- Construccion ----------------
 
-        javax.swing.JButton btnAdjuntar = new javax.swing.JButton("Adjuntar foto");
-        btnAdjuntar.addActionListener(e -> adjuntarFoto());
-
-        javax.swing.JPanel panelFotos = new javax.swing.JPanel(new java.awt.BorderLayout());
-        panelFotos.setBorder(javax.swing.BorderFactory.createTitledBorder("Fotos de evidencia (evidencia fotográfica)"));
-        panelFotos.add(scrollFotos, java.awt.BorderLayout.CENTER);
-        panelFotos.add(btnAdjuntar, java.awt.BorderLayout.SOUTH);
-
-        // Apilar el formulario (jPanel1) arriba y el panel de fotos abajo
-        getContentPane().setLayout(new java.awt.BorderLayout());
-        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
-        getContentPane().add(panelFotos, java.awt.BorderLayout.SOUTH);
-        pack();
-    }
-
-    private void adjuntarFoto() {
-        JFileChooser chooser = new JFileChooser();
-        chooser.setMultiSelectionEnabled(true);
-        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        int r = chooser.showOpenDialog(this);
-        if (r == JFileChooser.APPROVE_OPTION) {
-            for (File f : chooser.getSelectedFiles()) {
-                if (!FotoEvidencia.validarFormato(f.getAbsolutePath())) {
-                    JOptionPane.showMessageDialog(this,
-                            "Archivo no válido: " + f.getName(),
-                            "Formato inválido", JOptionPane.WARNING_MESSAGE);
-                    continue;
-                }
-                archivosFoto.add(f);
-                modeloFotos.addElement(f.getAbsolutePath());
-            }
-        }
-    }
-
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
-
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        txtIDReporte = new javax.swing.JTextField();
-        txtIDRecepcion = new javax.swing.JTextField();
-        txtIDEquipo = new javax.swing.JTextField();
-        txtIDDocente = new javax.swing.JTextField();
-        txtEstado = new javax.swing.JTextField();
-        txtDescripcion = new javax.swing.JTextField();
-        txtFalla = new javax.swing.JTextField();
-        btnGuardar = new javax.swing.JButton();
-        btnBuscar = new javax.swing.JButton();
-        btnEliminar = new javax.swing.JButton();
-        btnLimpiar = new javax.swing.JButton();
-        jLabel10 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblReportesDano = new javax.swing.JTable();
-
+    private void construir() {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout(8, 8));
 
-        jLabel1.setText("REPORTE DE DAÑOS");
+        JLabel titulo = new JLabel("  Reporte de Equipos Dañados");
+        titulo.setFont(titulo.getFont().deriveFont(Font.BOLD, 20f));
+        add(titulo, BorderLayout.NORTH);
 
-        jLabel2.setText("Sistema de Gestion de Laboratorios");
+        JPanel centro = new JPanel(new BorderLayout(8, 8));
+        centro.add(panelFormulario(), BorderLayout.NORTH);
+        centro.add(panelFotos(), BorderLayout.CENTER);
+        add(centro, BorderLayout.CENTER);
 
-        jLabel3.setText("ID del reporte");
+        JPanel sur = new JPanel(new BorderLayout(8, 8));
+        JPanel botones = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 4));
+        botones.add(btnGuardar);
+        botones.add(btnActualizar);
+        botones.add(btnEliminar);
+        botones.add(btnLimpiar);
+        sur.add(botones, BorderLayout.NORTH);
 
-        jLabel4.setText("ID de recepcion");
-
-        jLabel5.setText("ID del Equipo");
-
-        jLabel6.setText("ID del docente");
-
-        jLabel7.setText("Tipo de falla");
-
-        jLabel8.setText("Estado");
-
-        jLabel9.setText("Descripcion del daño");
-
-        btnGuardar.setText("Guardar");
-        btnGuardar.addActionListener(this::btnGuardarActionPerformed);
-
-        btnBuscar.setText("Buscar");
-        btnBuscar.addActionListener(this::btnBuscarActionPerformed);
-
-        btnEliminar.setText("Eliminar");
-        btnEliminar.addActionListener(this::btnEliminarActionPerformed);
-
-        btnLimpiar.setText("Limpiar");
-        btnLimpiar.addActionListener(this::btnLimpiarActionPerformed);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(121, 121, 121)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(93, 93, 93)
-                        .addComponent(jLabel2)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel7)
-                            .addComponent(txtIDReporte)
-                            .addComponent(txtIDEquipo)
-                            .addComponent(txtFalla, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel6)
-                                        .addComponent(jLabel8)))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGap(6, 6, 6)
-                                    .addComponent(txtIDRecepcion, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(txtIDDocente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtEstado, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(42, 42, 42))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addComponent(btnGuardar)
-                .addGap(18, 18, 18)
-                .addComponent(btnBuscar)
-                .addGap(18, 18, 18)
-                .addComponent(btnEliminar)
-                .addGap(18, 18, 18)
-                .addComponent(btnLimpiar)
-                .addGap(0, 57, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addGap(45, 45, 45)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtIDReporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtIDRecepcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(17, 17, 17)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6))
-                .addGap(11, 11, 11)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtIDEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtIDDocente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel8))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(txtFalla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnGuardar)
-                    .addComponent(btnBuscar)
-                    .addComponent(btnEliminar)
-                    .addComponent(btnLimpiar))
-                .addContainerGap(24, Short.MAX_VALUE))
-        );
-
-        jLabel10.setText("Tabla de reportes");
-
-        tblReportesDano.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "ID del reporte", "ID de recepcion", "ID del equipo", "ID del docente", "Tipo de falla", "Descripcion del daño", "Fecha del reporte", "Estado"
+        modeloTabla = new DefaultTableModel(new Object[]{
+                "ID", "Fecha del reporte", "Laboratorio", "Equipo", "Docente",
+                "Tipo de falla", "Estado", "Fotos"}, 0) {
+            @Override
+            public boolean isCellEditable(int fila, int columna) {
+                return false;
             }
-        ));
-        jScrollPane1.setViewportView(tblReportesDano);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 9, Short.MAX_VALUE))
-        );
-
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
-        try {
-    int idReporte = Integer.parseInt(txtIDReporte.getText().trim());
-    int idRecepcion = Integer.parseInt(txtIDRecepcion.getText().trim());
-    int idEquipo = Integer.parseInt(txtIDEquipo.getText().trim());
-    int idDocente = Integer.parseInt(txtIDDocente.getText().trim());
-
-    String falla = txtFalla.getText().trim();
-    String descripcion = txtDescripcion.getText().trim();
-    String estado = txtEstado.getText().trim();
-
-    if (falla.isEmpty() || estado.isEmpty()) {
-        JOptionPane.showMessageDialog(this,
-                "Ingrese el tipo de falla y el estado.");
-        return;
-    }
-
-    ReporteDano reporte = new ReporteDano(
-        idReporte,
-        idRecepcion,
-        idEquipo,
-        idDocente,
-        falla,
-        descripcion,
-        LocalDateTime.now(),
-        estado
-    );
-
-    // Agregar las fotos de evidencia seleccionadas.
-    for (File f : archivosFoto) {
-        FotoEvidencia foto = new FotoEvidencia();
-        foto.setEquipoid(idEquipo);
-        foto.setRutaArchivo(f.getAbsolutePath());
-        foto.setDescripcion("Evidencia fotográfica del daño");
-        reporte.agregarFoto(foto);
-    }
-
-    servicio.registrar(reporte);
-    actualizarTabla();
-
-    JOptionPane.showMessageDialog(this,
-            "Reporte de daño guardado correctamente con "
-            + reporte.getFotos().size() + " foto(s) de evidencia.");
-
-    limpiarCampos();
-
-} catch (NumberFormatException e) {
-    JOptionPane.showMessageDialog(this,
-            "Los identificadores deben ser números enteros.");
-} catch (IllegalArgumentException e) {
-    JOptionPane.showMessageDialog(this, e.getMessage());
-} catch (SQLException e) {
-    JOptionPane.showMessageDialog(this, "Error de base de datos: " + e.getMessage());
-}
-    }//GEN-LAST:event_btnGuardarActionPerformed
-
-    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
-       try {
-    int id = Integer.parseInt(txtIDReporte.getText().trim());
-
-    ReporteDano r = servicio.buscarPorId(id).orElse(null);
-
-    if (r == null) {
-        JOptionPane.showMessageDialog(this,
-                "No se encontró el reporte.");
-        return;
-    }
-
-    txtIDRecepcion.setText(String.valueOf(r.getIdRecepcion()));
-    txtIDEquipo.setText(String.valueOf(r.getIdEquipo()));
-    txtIDDocente.setText(String.valueOf(r.getIdDocente()));
-    txtFalla.setText(r.getFalla());
-    txtDescripcion.setText(r.getDescripcion());
-    txtEstado.setText(r.getEstado());
-
-} catch (NumberFormatException e) {
-    JOptionPane.showMessageDialog(this,
-            "Ingrese un ID de reporte válido.");
-} catch (SQLException e) {
-    JOptionPane.showMessageDialog(this, "Error de base de datos: " + e.getMessage());
-} 
-    }//GEN-LAST:event_btnBuscarActionPerformed
-
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:
-        try {
-    int id = Integer.parseInt(txtIDReporte.getText().trim());
-
-    ReporteDano r = servicio.buscarPorId(id).orElse(null);
-
-    if (r == null) {
-        JOptionPane.showMessageDialog(this,
-                "No se encontró el reporte.");
-        return;
-    }
-
-    txtIDRecepcion.setText(String.valueOf(r.getIdRecepcion()));
-    txtIDEquipo.setText(String.valueOf(r.getIdEquipo()));
-    txtIDDocente.setText(String.valueOf(r.getIdDocente()));
-    txtFalla.setText(r.getFalla());
-    txtDescripcion.setText(r.getDescripcion());
-    txtEstado.setText(r.getEstado());
-
-} catch (NumberFormatException e) {
-    JOptionPane.showMessageDialog(this,
-            "Ingrese un ID de reporte válido.");
-} catch (SQLException e) {
-    JOptionPane.showMessageDialog(this, "Error de base de datos: " + e.getMessage());
-}
-    }//GEN-LAST:event_btnEliminarActionPerformed
-
-    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
-        // TODO add your handling code here:
-        limpiarCampos();
-    }//GEN-LAST:event_btnLimpiarActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+        };
+        tblReportes.setModel(modeloTabla);
+        tblReportes.setRowHeight(24);
+        tblReportes.getTableHeader().setReorderingAllowed(false);
+        tblReportes.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                cargarSeleccionado();
             }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
+        });
+        JScrollPane scroll = new JScrollPane(tblReportes);
+        scroll.setPreferredSize(new Dimension(950, 170));
+        sur.add(scroll, BorderLayout.CENTER);
+        add(sur, BorderLayout.SOUTH);
+
+        btnGuardar.addActionListener(e -> guardar());
+        btnActualizar.addActionListener(e -> actualizar());
+        btnEliminar.addActionListener(e -> eliminar());
+        btnLimpiar.addActionListener(e -> limpiar());
+        btnAgregarFoto.addActionListener(e -> agregarFoto());
+        btnQuitarFoto.addActionListener(e -> quitarFoto());
+        cboLaboratorio.addActionListener(e -> cargarEquiposDelLaboratorio());
+
+        setSize(1000, 720);
+        setLocationRelativeTo(null);
+    }
+
+    private JPanel panelFormulario() {
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBorder(BorderFactory.createTitledBorder("Datos del daño encontrado"));
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(4, 6, 4, 6);
+        c.anchor = GridBagConstraints.WEST;
+        c.fill = GridBagConstraints.HORIZONTAL;
+
+        c.gridx = 0; c.gridy = 0; panel.add(new JLabel("Laboratorio:"), c);
+        c.gridx = 1; panel.add(cboLaboratorio, c);
+        c.gridx = 2; panel.add(new JLabel("Equipo dañado:"), c);
+        c.gridx = 3; panel.add(cboEquipo, c);
+
+        c.gridx = 0; c.gridy = 1; panel.add(new JLabel("Docente que reporta:"), c);
+        c.gridx = 1; panel.add(cboDocente, c);
+        c.gridx = 2; panel.add(new JLabel("Fecha y hora:"), c);
+        c.gridx = 3; panel.add(txtFechaHora, c);
+
+        c.gridx = 0; c.gridy = 2; panel.add(new JLabel("Tipo de falla:"), c);
+        c.gridx = 1; panel.add(cboTipoFalla, c);
+        c.gridx = 2; panel.add(new JLabel("Estado en que se encontró:"), c);
+        c.gridx = 3; panel.add(cboEstadoEncontrado, c);
+
+        c.gridx = 0; c.gridy = 3; panel.add(new JLabel("Descripción del problema:"), c);
+        c.gridx = 1; c.gridwidth = 3; panel.add(new JScrollPane(txtDescripcion), c);
+
+        c.gridx = 0; c.gridy = 4; c.gridwidth = 1; panel.add(new JLabel("Observaciones:"), c);
+        c.gridx = 1; c.gridwidth = 3; panel.add(txtObservaciones, c);
+
+        return panel;
+    }
+
+    private JPanel panelFotos() {
+        JPanel panel = new JPanel(new BorderLayout(6, 6));
+        panel.setBorder(BorderFactory.createTitledBorder(
+                "Fotografías de evidencia (opcional, una o varias por reporte)"));
+        JPanel botones = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 4));
+        botones.add(btnAgregarFoto);
+        botones.add(btnQuitarFoto);
+        panel.add(botones, BorderLayout.NORTH);
+        JScrollPane scroll = new JScrollPane(lstFotos);
+        scroll.setPreferredSize(new Dimension(700, 80));
+        panel.add(scroll, BorderLayout.CENTER);
+        return panel;
+    }
+
+    // ---------------- Carga de datos ----------------
+
+    private void recargarCombos() {
+        laboratorios.clear();
+        cboLaboratorio.removeAllItems();
+        try {
+            for (Laboratorio l : laboratorioDao.listar()) {
+                laboratorios.put(l.getId(), l);
+                cboLaboratorio.addItem(new OpcionCombo(l.getId(), l.getCodigo() + " | " + l.getNombre()));
+            }
+        } catch (SQLException e) {
+            Ui.error(this, "No se pudieron cargar los laboratorios: " + e.getMessage());
         }
-        //</editor-fold>
 
-        /* Create and display the form */
+        equipos.clear();
+        try {
+            for (Equipo e : equipoDao.listar()) {
+                equipos.put(e.getId(), e);
+            }
+        } catch (SQLException e) {
+            Ui.error(this, "No se pudieron cargar los equipos: " + e.getMessage());
+        }
+
+        docentes.clear();
+        cboDocente.removeAllItems();
+        try {
+            for (Usuario u : usuarioDao.listarPorRol("Docente")) {
+                docentes.put(u.getIdUsuario(), u);
+                cboDocente.addItem(new OpcionCombo(u.getIdUsuario(),
+                        u.getNombre() + " " + (u.getApellido() == null ? "" : u.getApellido())));
+            }
+        } catch (SQLException e) {
+            Ui.error(this, "No se pudieron cargar los docentes: " + e.getMessage());
+        }
+
+        if (cboLaboratorio.getItemCount() > 0) {
+            cboLaboratorio.setSelectedIndex(0);
+        }
+        if (cboDocente.getItemCount() > 0) {
+            cboDocente.setSelectedIndex(0);
+        }
+        txtFechaHora.setText(LocalDateTime.now().format(FORMATO));
+        actualizarTabla();
+    }
+
+    private void cargarEquiposDelLaboratorio() {
+        cboEquipo.removeAllItems();
+        OpcionCombo lab = (OpcionCombo) cboLaboratorio.getSelectedItem();
+        if (lab == null) {
+            return;
+        }
+        for (Equipo e : equipos.values()) {
+            if (e.getLaboratorioId() == lab.getId()) {
+                cboEquipo.addItem(new OpcionCombo(e.getId(),
+                        e.getCodigoInventario() + " | " + e.getTipo() + " " + e.getMarca()));
+            }
+        }
+    }
+
+    private void actualizarTabla() {
+        modeloTabla.setRowCount(0);
+        try {
+            for (ReporteDano r : servicio.listar()) {
+                Laboratorio lab = laboratorios.get(r.getLaboratorioid());
+                Equipo equipo = equipos.get(r.getEquipoid());
+                Usuario docente = docentes.get(r.getDocenteid());
+                int fotos;
+                try {
+                    fotos = servicio.fotosDeReporte(r.getId()).size();
+                } catch (SQLException e) {
+                    fotos = 0;
+                }
+                modeloTabla.addRow(new Object[]{
+                        r.getId(),
+                        r.getFechaHora() != null ? r.getFechaHora().format(FORMATO) : "-",
+                        lab != null ? lab.getNombre() : "Lab " + r.getLaboratorioid(),
+                        equipo != null ? equipo.getCodigoInventario() : "Equipo " + r.getEquipoid(),
+                        docente != null ? docente.getNombre() : "Docente " + r.getDocenteid(),
+                        r.getTipoFalla(),
+                        r.getEstadoEncontrado(),
+                        fotos
+                });
+            }
+        } catch (SQLException e) {
+            Ui.error(this, "Error de base de datos: " + e.getMessage());
+        }
+    }
+
+    private void cargarSeleccionado() {
+        int fila = tblReportes.getSelectedRow();
+        if (fila < 0) {
+            return;
+        }
+        int id = (int) tblReportes.getValueAt(fila, 0);
+        try {
+            ReporteDano r = servicio.buscarPorId(id).orElse(null);
+            if (r == null) {
+                return;
+            }
+            editado = r;
+            seleccionarPorId(cboLaboratorio, r.getLaboratorioid());
+            cargarEquiposDelLaboratorio();
+            seleccionarPorId(cboEquipo, r.getEquipoid());
+            seleccionarPorId(cboDocente, r.getDocenteid());
+            cboTipoFalla.setSelectedItem(r.getTipoFalla());
+            txtFechaHora.setText(r.getFechaHora() != null ? r.getFechaHora().format(FORMATO) : "");
+            cboEstadoEncontrado.setSelectedItem(r.getEstadoEncontrado());
+            txtDescripcion.setText(r.getDescripcion());
+            txtObservaciones.setText(r.getObservaciones());
+
+            modeloFotos.clear();
+            for (FotoEvidencia f : r.getFotos()) {
+                modeloFotos.addElement(f.getRutaArchivo() + (f.getDescripcion() != null
+                        && !f.getDescripcion().isEmpty() ? "  (" + f.getDescripcion() + ")" : ""));
+            }
+            btnActualizar.setEnabled(true);
+        } catch (SQLException e) {
+            Ui.error(this, "Error al cargar el reporte: " + e.getMessage());
+        }
+    }
+
+    private void seleccionarPorId(JComboBox<OpcionCombo> combo, int id) {
+        for (int i = 0; i < combo.getItemCount(); i++) {
+            if (combo.getItemAt(i).getId() == id) {
+                combo.setSelectedIndex(i);
+                return;
+            }
+        }
+        if (combo.getItemCount() > 0) {
+            combo.setSelectedIndex(0);
+        }
+    }
+
+    // ---------------- Fotos ----------------
+
+    private void agregarFoto() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Seleccionar fotografía de evidencia");
+        if (chooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+        File archivo = chooser.getSelectedFile();
+        if (!FotoEvidencia.validarFormato(archivo.getName())) {
+            Ui.aviso(this, "Seleccione un archivo de imagen válido (.jpg, .jpeg, .png, .gif, .bmp, .webp).");
+            return;
+        }
+        String descripcion = JOptionPane.showInputDialog(this,
+                "Descripción de la fotografía (opcional):", "Descripción", JOptionPane.PLAIN_MESSAGE);
+        if (descripcion == null) {
+            descripcion = "";
+        }
+        FotoEvidencia foto = new FotoEvidencia();
+        foto.setRutaArchivo(archivo.getAbsolutePath());
+        foto.setDescripcion(descripcion.trim());
+        if (editado != null) {
+            editado.agregarFoto(foto);
+        } else {
+            fotosNuevas.add(foto);
+        }
+        modeloFotos.addElement(foto.getRutaArchivo()
+                + (foto.getDescripcion().isEmpty() ? "" : "  (" + foto.getDescripcion() + ")"));
+    }
+
+    
+    private final java.util.List<FotoEvidencia> fotosNuevas = new java.util.ArrayList<>();
+
+    private void quitarFoto() {
+        int indice = lstFotos.getSelectedIndex();
+        if (indice < 0) {
+            Ui.aviso(this, "Seleccione una fotografía de la lista.");
+            return;
+        }
+        if (editado != null && indice < editado.getFotos().size()) {
+            editado.getFotos().remove(indice);
+        } else if (indice < fotosNuevas.size()) {
+            fotosNuevas.remove(indice);
+        }
+        modeloFotos.remove(indice);
+    }
+
+    // ---------------- Acciones CRUD ----------------
+
+    private void guardar() {
+        ReporteDano r = crearObjetoDesdeFormulario(true);
+        if (r == null) {
+            return;
+        }
+        try {
+            adjuntarFotos(r);
+            servicio.registrar(r);
+            fotosNuevas.clear();
+            actualizarTabla();
+            limpiar();
+            Ui.info(this, "Reporte de daño guardado. El estado del equipo fue actualizado a DAÑADO.");
+        } catch (SQLException e) {
+            Ui.error(this, e.getMessage());
+        }
+    }
+
+    private void actualizar() {
+        if (editado == null) {
+            Ui.aviso(this, "Seleccione un reporte de la tabla para actualizarlo.");
+            return;
+        }
+        ReporteDano r = crearObjetoDesdeFormulario(false);
+        if (r == null) {
+            return;
+        }
+        try {
+            adjuntarFotos(r);
+            servicio.actualizar(r);
+            fotosNuevas.clear();
+            actualizarTabla();
+            limpiar();
+            Ui.info(this, "Reporte actualizado correctamente.");
+        } catch (SQLException e) {
+            Ui.error(this, e.getMessage());
+        }
+    }
+
+    
+    private void adjuntarFotos(ReporteDano r) {
+        if (editado != null) {
+            r.getFotos().addAll(editado.getFotos());
+        }
+        r.getFotos().addAll(fotosNuevas);
+    }
+
+    private void eliminar() {
+        int fila = tblReportes.getSelectedRow();
+        if (fila < 0) {
+            Ui.aviso(this, "Seleccione un reporte de la tabla para eliminarlo.");
+            return;
+        }
+        int id = (int) tblReportes.getValueAt(fila, 0);
+        if (!Ui.confirmar(this, "¿Desea eliminar el reporte de daño seleccionado?"
+                + " Las fotografías asociadas también se eliminarán.")) {
+            return;
+        }
+        try {
+            servicio.eliminar(id);
+            actualizarTabla();
+            limpiar();
+            Ui.info(this, "Reporte eliminado correctamente.");
+        } catch (SQLException e) {
+            Ui.error(this, "No se pudo eliminar: " + e.getMessage());
+        }
+    }
+
+    private ReporteDano crearObjetoDesdeFormulario(boolean nuevo) {
+        if (cboEquipo.getItemCount() == 0 || cboEquipo.getSelectedItem() == null) {
+            Ui.aviso(this, "El laboratorio seleccionado no tiene equipos registrados.");
+            return null;
+        }
+        if (cboDocente.getItemCount() == 0 || cboDocente.getSelectedItem() == null) {
+            Ui.aviso(this, "No hay docentes registrados. Registre un usuario con rol Docente.");
+            return null;
+        }
+        LocalDateTime fechaHora;
+        try {
+            fechaHora = LocalDateTime.parse(txtFechaHora.getText().trim(), FORMATO);
+        } catch (Exception e) {
+            Ui.aviso(this, "La fecha y hora debe tener el formato AAAA-MM-DD HH:MM.");
+            return null;
+        }
+        String descripcion = txtDescripcion.getText().trim();
+        if (descripcion.isEmpty()) {
+            Ui.aviso(this, "Describa el problema encontrado.");
+            txtDescripcion.requestFocus();
+            return null;
+        }
+
+        ReporteDano r = new ReporteDano();
+        if (!nuevo && editado != null) {
+            r.setId(editado.getId());
+            r.setHorarioid(editado.getHorarioid());
+        }
+        r.setLaboratorioid(((OpcionCombo) cboLaboratorio.getSelectedItem()).getId());
+        r.setEquipoid(((OpcionCombo) cboEquipo.getSelectedItem()).getId());
+        r.setDocenteid(((OpcionCombo) cboDocente.getSelectedItem()).getId());
+        r.setTipoFalla((String) cboTipoFalla.getSelectedItem());
+        r.setDescripcion(descripcion);
+        r.setFechaHora(fechaHora);
+        r.setEstadoEncontrado((String) cboEstadoEncontrado.getSelectedItem());
+        r.setObservaciones(txtObservaciones.getText().trim());
+        return r;
+    }
+
+    private void limpiar() {
+        editado = null;
+        tblReportes.clearSelection();
+        if (cboLaboratorio.getItemCount() > 0) {
+            cboLaboratorio.setSelectedIndex(0);
+        }
+        cargarEquiposDelLaboratorio();
+        if (cboDocente.getItemCount() > 0) {
+            cboDocente.setSelectedIndex(0);
+        }
+        cboTipoFalla.setSelectedIndex(0);
+        cboEstadoEncontrado.setSelectedIndex(0);
+        txtDescripcion.setText("");
+        txtObservaciones.setText("");
+        txtFechaHora.setText(LocalDateTime.now().format(FORMATO));
+        modeloFotos.clear();
+        fotosNuevas.clear();
+        btnActualizar.setEnabled(false);
+    }
+
+    public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> new FrmReporteDano().setVisible(true));
     }
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBuscar;
-    private javax.swing.JButton btnEliminar;
-    private javax.swing.JButton btnGuardar;
-    private javax.swing.JButton btnLimpiar;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblReportesDano;
-    private javax.swing.JTextField txtDescripcion;
-    private javax.swing.JTextField txtEstado;
-    private javax.swing.JTextField txtFalla;
-    private javax.swing.JTextField txtIDDocente;
-    private javax.swing.JTextField txtIDEquipo;
-    private javax.swing.JTextField txtIDRecepcion;
-    private javax.swing.JTextField txtIDReporte;
-    // End of variables declaration//GEN-END:variables
 }

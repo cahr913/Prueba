@@ -25,34 +25,34 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-        <Component id="pnlEncabezado" alignment="0" max="32767" attributes="0"/>
-        <Group type="102" alignment="0" attributes="0">
-          <EmptySpace max="-2" attributes="0"/>
-          <Component id="pnlDatos" max="32767" attributes="0"/>
-          <EmptySpace max="-2" attributes="0"/>
-        </Group>
-        <Group type="102" alignment="0" attributes="0">
-          <EmptySpace max="32767" attributes="0"/>
-          <Component id="btnGuardar" min="-2" max="-2" attributes="0"/>
-          <EmptySpace max="-2" attributes="0"/>
-          <Component id="btnCancelar" min="-2" max="-2" attributes="0"/>
-          <EmptySpace max="-2" attributes="0"/>
-        </Group>
+          <Component id="pnlEncabezado" alignment="0" max="32767" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="pnlDatos" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="btnGuardar" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="btnCancelar" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-        <Group type="102" alignment="0" attributes="0">
-          <Component id="pnlEncabezado" min="-2" max="-2" attributes="0"/>
-          <EmptySpace min="8" pref="8" max="8" attributes="0"/>
-          <Component id="pnlDatos" min="-2" max="-2" attributes="0"/>
-          <EmptySpace max="-2" attributes="0"/>
-          <Group type="103" groupAlignment="3" attributes="0">
-            <Component id="btnGuardar" alignment="3" min="-2" max="-2" attributes="0"/>
-            <Component id="btnCancelar" alignment="3" min="-2" max="-2" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <Component id="pnlEncabezado" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="8" pref="8" max="8" attributes="0"/>
+              <Component id="pnlDatos" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="btnGuardar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnCancelar" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
-          <EmptySpace max="-2" attributes="0"/>
-        </Group>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -63,33 +63,34 @@
           <Color blue="79" green="4e" red="1f" type="rgb"/>
         </Property>
       </Properties>
+
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-            <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="16" pref="16" max="16" attributes="0"/>
-              <Component id="lblTitulo" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-            </Group>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="16" pref="16" max="16" attributes="0"/>
+                  <Component id="lblTitulo" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-            <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="12" pref="12" max="12" attributes="0"/>
-              <Component id="lblTitulo" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="12" pref="12" max="12" attributes="0"/>
-            </Group>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="12" pref="12" max="12" attributes="0"/>
+                  <Component id="lblTitulo" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="12" pref="12" max="12" attributes="0"/>
+              </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
         <Component class="javax.swing.JLabel" name="lblTitulo">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Registro de Equipos"/>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
+            <Property name="text" type="java.lang.String" value="Registro de Equipos"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -102,88 +103,89 @@
           </Border>
         </Property>
       </Properties>
+
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-            <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                <Component id="lblCodigo" alignment="1" min="-2" max="-2" attributes="0"/>
-                <Component id="lblTipo" alignment="1" min="-2" max="-2" attributes="0"/>
-                <Component id="lblSerie" alignment="1" min="-2" max="-2" attributes="0"/>
-                <Component id="lblMarca" alignment="1" min="-2" max="-2" attributes="0"/>
-                <Component id="lblModelo" alignment="1" min="-2" max="-2" attributes="0"/>
-                <Component id="lblFecha" alignment="1" min="-2" max="-2" attributes="0"/>
-                <Component id="lblEstado" alignment="1" min="-2" max="-2" attributes="0"/>
-                <Component id="lblLab" alignment="1" min="-2" max="-2" attributes="0"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="lblCodigo" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblTipo" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblSerie" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblMarca" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblModelo" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblFecha" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblEstado" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblLab" alignment="1" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="txtCodigo" alignment="0" pref="280" max="32767" attributes="0"/>
+                      <Component id="cboTipo" alignment="0" pref="280" max="32767" attributes="0"/>
+                      <Component id="txtSerie" alignment="0" pref="280" max="32767" attributes="0"/>
+                      <Component id="txtMarca" alignment="0" pref="280" max="32767" attributes="0"/>
+                      <Component id="txtModelo" alignment="0" pref="280" max="32767" attributes="0"/>
+                      <Component id="txtFecha" alignment="0" pref="280" max="32767" attributes="0"/>
+                      <Component id="cboEstado" alignment="0" pref="280" max="32767" attributes="0"/>
+                      <Component id="cboLab" alignment="0" pref="280" max="32767" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                <Component id="txtCodigo" alignment="0" pref="280" max="32767" attributes="0"/>
-                <Component id="cboTipo" alignment="0" pref="280" max="32767" attributes="0"/>
-                <Component id="txtSerie" alignment="0" pref="280" max="32767" attributes="0"/>
-                <Component id="txtMarca" alignment="0" pref="280" max="32767" attributes="0"/>
-                <Component id="txtModelo" alignment="0" pref="280" max="32767" attributes="0"/>
-                <Component id="txtFecha" alignment="0" pref="280" max="32767" attributes="0"/>
-                <Component id="cboEstado" alignment="0" pref="280" max="32767" attributes="0"/>
-                <Component id="cboLab" alignment="0" pref="280" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-            </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-            <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                <Component id="lblCodigo" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="txtCodigo" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblCodigo" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtCodigo" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblTipo" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cboTipo" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblSerie" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtSerie" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblMarca" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtMarca" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblModelo" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtModelo" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblFecha" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtFecha" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblEstado" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cboEstado" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblLab" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cboLab" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                <Component id="lblTipo" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="cboTipo" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                <Component id="lblSerie" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="txtSerie" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                <Component id="lblMarca" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="txtMarca" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                <Component id="lblModelo" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="txtModelo" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                <Component id="lblFecha" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="txtFecha" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                <Component id="lblEstado" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="cboEstado" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                <Component id="lblLab" alignment="3" min="-2" max="-2" attributes="0"/>
-                <Component id="cboLab" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-            </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
         <Component class="javax.swing.JLabel" name="lblCodigo">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Código de Inventario:"/>
+            <Property name="text" type="java.lang.String" value="C&#xf3;digo de Inventario:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtCodigo">
@@ -195,6 +197,7 @@
         </Component>
         <Component class="javax.swing.JComboBox" name="cboTipo">
           <Properties>
+            <Property name="editable" type="boolean" value="true"/>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="5">
                 <StringItem index="0" value="Impresora"/>
@@ -204,7 +207,6 @@
                 <StringItem index="4" value="Otro"/>
               </StringArray>
             </Property>
-            <Property name="editable" type="boolean" value="true"/>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -212,7 +214,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblSerie">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Número de Serie:"/>
+            <Property name="text" type="java.lang.String" value="N&#xfa;mero de Serie:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtSerie">
@@ -233,7 +235,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblFecha">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Fecha de adquisición:"/>
+            <Property name="text" type="java.lang.String" value="Fecha de adquisici&#xf3;n:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtFecha">
@@ -246,10 +248,11 @@
         <Component class="javax.swing.JComboBox" name="cboEstado">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="3">
+              <StringArray count="4">
                 <StringItem index="0" value="ACTIVO"/>
-                <StringItem index="1" value="DAÑADO"/>
+                <StringItem index="1" value="DA&#xd1;ADO"/>
                 <StringItem index="2" value="EN MANTENIMIENTO"/>
+                <StringItem index="3" value="FUERA DE SERVICIO"/>
               </StringArray>
             </Property>
           </Properties>
@@ -264,13 +267,13 @@
         </Component>
         <Component class="javax.swing.JComboBox" name="cboLab">
           <Properties>
+            <Property name="editable" type="boolean" value="true"/>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="2">
                 <StringItem index="0" value="LAB-201"/>
                 <StringItem index="1" value="LAB-204"/>
               </StringArray>
             </Property>
-            <Property name="editable" type="boolean" value="true"/>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>

@@ -1,550 +1,655 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
-package com.labcontrol.ui.vista;
-import com.labcontrol.modelo.Mantenimiento;
-import com.labcontrol.modelo.MantenimientoCorrectivo;
-import com.labcontrol.modelo.MantenimientoPreventivo;
-import com.labcontrol.modelo.Pieza;
-import com.labcontrol.servicio.MantenimientoService;
+package com.labcontrol.UI;
+
+import com.labcontrol.dao.*;
+import com.labcontrol.modelo.*;
+
+import com.labcontrol.reportes.HojaServicioPdf;
+import com.labcontrol.servicio.MantenimientoServicio;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.io.File;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import javax.swing.DefaultComboBoxModel;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
-/**
- *
- * @author hp
- */
+
 public class FrmMantenimiento extends javax.swing.JFrame {
-    private final MantenimientoService servicio = new MantenimientoService();
-private DefaultTableModel modeloTabla;
-private void configurarTabla() {
-    modeloTabla = new DefaultTableModel(
-        new Object[]{
-            "ID", "Número de servicio", "ID Equipo",
-            "ID Técnico", "Tipo", "Estado", "Descripción"
-        }, 0
-    ) {
+
+    private final MantenimientoServicio servicio = new MantenimientoServicio();
+    private final EquipoDao equipoDao = new EquipoDao();
+    private final UsuarioDao usuarioDao = new UsuarioDao();
+    private final LaboratorioDao laboratorioDao = new LaboratorioDao();
+    private final ReporteDanoDao reporteDao = new ReporteDanoDao();
+    private final CentroEducativoDao centroDao = new CentroEducativoDao();
+
+    private final Map<Integer, Equipo> equipos = new HashMap<>();
+    private final Map<Integer, Usuario> responsables = new HashMap<>();
+
+    private Mantenimiento editado;
+
+    private final JTextField txtNumero = new JTextField(12);
+    private final JComboBox<OpcionCombo> cboEquipo = new JComboBox<>();
+    private final JComboBox<OpcionCombo> cboResponsable = new JComboBox<>();
+    private final JComboBox<OpcionCombo> cboReporte = new JComboBox<>();
+    private final JComboBox<String> cboTipo = new JComboBox<>(new String[]{"Preventivo", "Correctivo"});
+    private final JComboBox<String> cboEstado = new JComboBox<>(new String[]{
+            "PENDIENTE", "EN PROCESO", "FINALIZADO", "CANCELADO"});
+    private final JComboBox<String> cboEstadoFinal = new JComboBox<>(Equipo.ESTADOS);
+    private final JTextField txtFechaInicio = new JTextField(10);
+    private final JTextField txtFechaFin = new JTextField(10);
+    private final JTextField txtFalla = new JTextField(18);
+    private final JTextField txtResultado = new JTextField(14);
+    private final JTextArea txtDiagnostico = new JTextArea(3, 30);
+    private final JTextArea txtActividades = new JTextArea(3, 30);
+    private final JTextField txtRecomendaciones = new JTextField(18);
+    private final JTextField txtObservaciones = new JTextField(18);
+
+    private final JSpinner spnCantidad = new JSpinner(new SpinnerNumberModel(1, 1, 1000, 1));
+    private final JTextField txtPiezaNombre = new JTextField(12);
+    private final JTextField txtPiezaDescripcion = new JTextField(12);
+    private final JComboBox<String> cboPiezaAccion = new JComboBox<>(new String[]{"REPARACION", "REEMPLAZO"});
+    private final DefaultTableModel modeloPiezas = new DefaultTableModel(
+            new Object[]{"Pieza", "Descripción", "Cantidad", "Acción"}, 0) {
         @Override
         public boolean isCellEditable(int fila, int columna) {
             return false;
         }
     };
+    private final javax.swing.JTable tblPiezas = new javax.swing.JTable(modeloPiezas);
 
-    tblMantenimientos.setModel(modeloTabla);
-    actualizarTabla();
-}
+    private final JButton btnGuardar = new JButton("Guardar nuevo");
+    private final JButton btnActualizar = new JButton("Actualizar");
+    private final JButton btnEliminar = new JButton("Eliminar");
+    private final JButton btnLimpiar = new JButton("Limpiar");
+    private final JButton btnPdf = new JButton("Generar Hoja de Servicio (PDF)");
 
-private void actualizarTabla() {
-    modeloTabla.setRowCount(0);
+    private DefaultTableModel modeloTabla;
+    private final javax.swing.JTable tblMantenimientos = new javax.swing.JTable();
 
-    try {
-        for (Mantenimiento m : servicio.listar()) {
-            modeloTabla.addRow(new Object[]{
-                m.getIdMantenimiento(),
-                m.getNumeroServicio(),
-                m.getIdEquipo(),
-                m.getIdTecnico(),
-                m.getTipo(),
-                m.getEstado(),
-                m.getDescripcion()
-            });
-        }
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, "Error de base de datos: " + e.getMessage());
-    }
-}
-
-private void limpiarCampos() {
-    txtIDMantenimiento.setText("");
-    txtNumeroServicio.setText("");
-    txtIDEquipo.setText("");
-    txtIDTecnico.setText("");
-    txtTipo.setSelectedIndex(0);
-    txtEstado.setSelectedIndex(0);
-    txtDescripcion.setText("");
-    tblMantenimientos.clearSelection();
-}
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmMantenimiento.class.getName());
-
-    /**
-     * Creates new form FrmMatenimiento
-     */
     public FrmMantenimiento() {
-        initComponents();
-        configurarTabla();
+        super("Control de Mantenimiento");
+        construir();
+        recargarCombos();
+        txtFechaInicio.setText(LocalDate.now().toString());
+        btnActualizar.setEnabled(false);
+        btnPdf.setEnabled(false);
+        sugerirNumeroServicio();
     }
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    // ---------------- Construccion de la ventana ----------------
 
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        txtIDMantenimiento = new javax.swing.JTextField();
-        txtNumeroServicio = new javax.swing.JTextField();
-        txtIDTecnico = new javax.swing.JTextField();
-        txtTipo = new javax.swing.JComboBox<>();
-        txtTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PREVENTIVO", "CORRECTIVO" }));
-        txtEstado = new javax.swing.JComboBox<>();
-        txtEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PENDIENTE", "EN_PROCESO", "FINALIZADO", "CANCELADO" }));
-        txtDescripcion = new javax.swing.JTextField();
-        txtIDEquipo = new javax.swing.JTextField();
-        btnGuardar = new javax.swing.JButton();
-        btnBuscar = new javax.swing.JButton();
-        btnEliminar = new javax.swing.JButton();
-        btnLimpiar = new javax.swing.JButton();
-        jLabel10 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblMantenimientos = new javax.swing.JTable();
-
+    private void construir() {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout(8, 8));
 
-        jLabel1.setText("MODULO DE MANTENIMIETO");
+        JLabel titulo = new JLabel("  Módulo de Mantenimiento de Equipos");
+        titulo.setFont(titulo.getFont().deriveFont(Font.BOLD, 20f));
+        add(titulo, BorderLayout.NORTH);
 
-        jLabel2.setText("Sistema de Gestion de Laboratorios");
+        JPanel centro = new JPanel(new BorderLayout(8, 8));
+        centro.add(panelFormulario(), BorderLayout.NORTH);
+        centro.add(panelPiezas(), BorderLayout.CENTER);
+        add(centro, BorderLayout.CENTER);
 
-        jLabel3.setText("ID mantenimiento");
+        JPanel sur = new JPanel(new BorderLayout(8, 8));
+        JPanel botones = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 4));
+        botones.add(btnGuardar);
+        botones.add(btnActualizar);
+        botones.add(btnEliminar);
+        botones.add(btnLimpiar);
+        botones.add(btnPdf);
+        sur.add(botones, BorderLayout.NORTH);
 
-        jLabel4.setText("Numero de servicio");
-
-        jLabel5.setText("ID equipo");
-
-        jLabel6.setText("ID tecnico");
-
-        jLabel7.setText("Tipo");
-
-        jLabel8.setText("Estado");
-
-        jLabel9.setText("Descipcion del mantenimiento");
-
-        btnGuardar.setText("Guardar");
-        btnGuardar.addActionListener(this::btnGuardarActionPerformed);
-
-        btnBuscar.setText("Buscar");
-        btnBuscar.addActionListener(this::btnBuscarActionPerformed);
-
-        btnEliminar.setText("Eliminar");
-        btnEliminar.addActionListener(this::btnEliminarActionPerformed);
-
-        btnLimpiar.setText("Limpiar");
-        btnLimpiar.addActionListener(this::btnLimpiarActionPerformed);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(46, 46, 46)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(txtIDMantenimiento)
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtTipo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
-                                    .addComponent(txtIDEquipo))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(txtEstado, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
-                                        .addComponent(txtNumeroServicio, javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(txtIDTecnico, javax.swing.GroupLayout.Alignment.TRAILING))
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel8)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(42, 42, 42))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel9))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addComponent(btnGuardar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnBuscar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnEliminar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnLimpiar)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addGap(31, 31, 31)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtIDMantenimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNumeroServicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtIDTecnico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtIDEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnGuardar)
-                    .addComponent(btnBuscar)
-                    .addComponent(btnEliminar)
-                    .addComponent(btnLimpiar))
-                .addContainerGap(21, Short.MAX_VALUE))
-        );
-
-        jLabel10.setText("Tabla de mantenimientos");
-
-        tblMantenimientos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "ID mantenimiento", "Numero de servicio", "ID equipo", "ID tecnico", "Tipo", "Estado", "Descripcion del mantenimiento"
+        modeloTabla = new DefaultTableModel(new Object[]{
+                "ID", "Nº servicio", "Equipo", "Responsable", "Tipo", "Estado",
+                "Inicio", "Fin", "Falla reportada"}, 0) {
+            @Override
+            public boolean isCellEditable(int fila, int columna) {
+                return false;
             }
-        ));
-        jScrollPane1.setViewportView(tblMantenimientos);
+        };
+        tblMantenimientos.setModel(modeloTabla);
+        tblMantenimientos.setRowHeight(24);
+        tblMantenimientos.getTableHeader().setReorderingAllowed(false);
+        tblMantenimientos.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                cargarSeleccionado();
+            }
+        });
+        JScrollPane scroll = new JScrollPane(tblMantenimientos);
+        scroll.setPreferredSize(new Dimension(900, 180));
+        sur.add(scroll, BorderLayout.CENTER);
+        add(sur, BorderLayout.SOUTH);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(44, 44, 44)
-                        .addComponent(jLabel10))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel10)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
+        btnGuardar.addActionListener(e -> guardar());
+        btnActualizar.addActionListener(e -> actualizar());
+        btnEliminar.addActionListener(e -> eliminar());
+        btnLimpiar.addActionListener(e -> limpiar());
+        btnPdf.addActionListener(e -> generarPdf());
+        cboTipo.addActionListener(e -> actualizarVisibilidadPiezas());
 
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
+        setSize(980, 780);
+        setLocationRelativeTo(null);
+    }
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
+    private JPanel panelFormulario() {
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBorder(BorderFactory.createTitledBorder("Datos del servicio de mantenimiento"));
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(4, 6, 4, 6);
+        c.anchor = GridBagConstraints.WEST;
+
+        agregarCampo(panel, c, 0, 0, "Nº de servicio:", txtNumero);
+        agregarCampo(panel, c, 1, 0, "Tipo:", cboTipo);
+        agregarCampo(panel, c, 2, 0, "Estado del servicio:", cboEstado);
+        agregarCampo(panel, c, 0, 1, "Equipo atendido:", cboEquipo);
+        agregarCampo(panel, c, 1, 1, "Responsable:", cboResponsable);
+        agregarCampo(panel, c, 2, 1, "Reporte de daño relacionado:", cboReporte);
+        agregarCampo(panel, c, 0, 2, "Fecha inicio (AAAA-MM-DD):", txtFechaInicio);
+        agregarCampo(panel, c, 1, 2, "Fecha fin (AAAA-MM-DD):", txtFechaFin);
+        agregarCampo(panel, c, 2, 2, "Estado final del equipo:", cboEstadoFinal);
+        agregarCampo(panel, c, 0, 3, "Falla reportada:", txtFalla);
+        agregarCampo(panel, c, 1, 3, "Resultado del servicio:", txtResultado);
+        agregarCampo(panel, c, 2, 3, "Recomendaciones:", txtRecomendaciones);
+
+        c.gridx = 0;
+        c.gridy = 4;
+        panel.add(new JLabel("Diagnóstico técnico:"), c);
+        c.gridx = 1;
+        c.gridwidth = 2;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(new JScrollPane(txtDiagnostico), c);
+
+        c.gridx = 0;
+        c.gridy = 5;
+        c.gridwidth = 1;
+        c.fill = GridBagConstraints.NONE;
+        panel.add(new JLabel("Actividades realizadas:"), c);
+        c.gridx = 1;
+        c.gridwidth = 2;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(new JScrollPane(txtActividades), c);
+
+        c.gridx = 0;
+        c.gridy = 6;
+        c.gridwidth = 1;
+        c.fill = GridBagConstraints.NONE;
+        panel.add(new JLabel("Observaciones:"), c);
+        c.gridx = 1;
+        c.gridwidth = 2;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(txtObservaciones, c);
+
+        return panel;
+    }
+
+    private void agregarCampo(JPanel panel, GridBagConstraints c, int columna, int fila,
+                              String etiqueta, java.awt.Component campo) {
+        c.gridx = columna * 2;
+        c.gridy = fila;
+        c.gridwidth = 1;
+        c.fill = GridBagConstraints.NONE;
+        panel.add(new JLabel(etiqueta), c);
+        c.gridx = columna * 2 + 1;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(campo, c);
+    }
+
+    private JPanel panelPiezas() {
+        JPanel panel = new JPanel(new BorderLayout(8, 8));
+        panel.setBorder(BorderFactory.createTitledBorder(
+                "Piezas reparadas o reemplazadas (obligatorio para finalizar un correctivo)"));
+
+        JPanel captura = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 4));
+        captura.add(new JLabel("Pieza:"));
+        captura.add(txtPiezaNombre);
+        captura.add(new JLabel("Descripción:"));
+        captura.add(txtPiezaDescripcion);
+        captura.add(new JLabel("Cantidad:"));
+        captura.add(spnCantidad);
+        captura.add(new JLabel("Acción:"));
+        captura.add(cboPiezaAccion);
+        JButton btnAgregarPieza = new JButton("Agregar pieza");
+        JButton btnQuitarPieza = new JButton("Quitar seleccionada");
+        captura.add(btnAgregarPieza);
+        captura.add(btnQuitarPieza);
+        panel.add(captura, BorderLayout.NORTH);
+
+        tblPiezas.setRowHeight(22);
+        JScrollPane scroll = new JScrollPane(tblPiezas);
+        scroll.setPreferredSize(new Dimension(600, 90));
+        panel.add(scroll, BorderLayout.CENTER);
+
+        btnAgregarPieza.addActionListener(e -> agregarPieza());
+        btnQuitarPieza.addActionListener(e -> quitarPieza());
+        return panel;
+    }
+
+    // ---------------- Carga de datos ----------------
+
+    private void recargarCombos() {
+        equipos.clear();
+        cboEquipo.removeAllItems();
         try {
-            int id = Integer.parseInt(txtIDMantenimiento.getText().trim());
-            String numeroServicio = txtNumeroServicio.getText().trim();
-            int idEquipo = Integer.parseInt(txtIDEquipo.getText().trim());
-            int idTecnico = Integer.parseInt(txtIDTecnico.getText().trim());
-
-            String tipoStr = (String) txtTipo.getSelectedItem();
-            Mantenimiento.Tipo tipo = Mantenimiento.Tipo.valueOf(tipoStr);
-
-            Mantenimiento.Estado estado = Mantenimiento.Estado.valueOf(
-                (String) txtEstado.getSelectedItem()
-            );
-
-            String descripcion = txtDescripcion.getText().trim();
-
-            if (numeroServicio.isEmpty()) {
-                throw new IllegalArgumentException(
-                    "El número de servicio es obligatorio."
-                );
+            for (Equipo e : equipoDao.listar()) {
+                equipos.put(e.getId(), e);
+                cboEquipo.addItem(new OpcionCombo(e.getId(),
+                        e.getCodigoInventario() + " | " + e.getTipo() + " " + e.getMarca()));
             }
-
-            Mantenimiento mantenimiento;
-
-            if (tipo == Mantenimiento.Tipo.CORRECTIVO) {
-                MantenimientoCorrectivo correctivo = new MantenimientoCorrectivo(
-                    numeroServicio, idEquipo, 0, idTecnico,
-                    tipo.name(), descripcion, estado.name()
-                );
-                correctivo.setId(id);
-                correctivo.setEstado(estado);
-                correctivo.setFechaInicio(LocalDate.now());
-
-                // Capturar piezas del mantenimiento correctivo.
-                boolean seguir = true;
-                while (seguir) {
-                    String nombre = JOptionPane.showInputDialog(
-                        this,
-                        "Nombre de la pieza (dejar vacío para terminar):",
-                        "Agregar pieza - Correctivo",
-                        JOptionPane.PLAIN_MESSAGE
-                    );
-                    if (nombre == null || nombre.trim().isEmpty()) {
-                        seguir = false;
-                        continue;
-                    }
-                    String cantidadStr = JOptionPane.showInputDialog(
-                        this,
-                        "Cantidad:",
-                        "Cantidad de " + nombre.trim(),
-                        JOptionPane.QUESTION_MESSAGE
-                    );
-                    if (cantidadStr == null) {
-                        seguir = false;
-                        continue;
-                    }
-                    int cantidad;
-                    try {
-                        cantidad = Integer.parseInt(cantidadStr.trim());
-                    } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(
-                            this, "Cantidad inválida."
-                        );
-                        continue;
-                    }
-                    String[] acciones = {"REPARACION", "REEMPLAZO"};
-                    String accion = (String) JOptionPane.showInputDialog(
-                        this,
-                        "Tipo de operación:",
-                        "Operación",
-                        JOptionPane.QUESTION_MESSAGE,
-                        null,
-                        acciones,
-                        acciones[0]
-                    );
-                    if (accion == null) {
-                        seguir = false;
-                        continue;
-                    }
-                    Pieza pieza = new Pieza();
-                    pieza.setNombre(nombre.trim());
-                    pieza.setCantidad(cantidad);
-                    pieza.setAccion(com.labcontrol.modelo.Accion.valueOf(accion));
-                    String obs = JOptionPane.showInputDialog(
-                        this,
-                        "Observaciones (opcional):",
-                        "Observaciones",
-                        JOptionPane.PLAIN_MESSAGE
-                    );
-                    if (obs != null) {
-                        pieza.setObservaciones(obs.trim());
-                    }
-                    correctivo.agregarPieza(pieza);
-                }
-
-                mantenimiento = correctivo;
-            } else {
-                MantenimientoPreventivo preventivo = new MantenimientoPreventivo(
-                    null, numeroServicio, idEquipo, 0, idTecnico,
-                    tipo.name(), descripcion, estado.name()
-                );
-                preventivo.setId(id);
-                preventivo.setEstado(estado);
-                preventivo.setFechaInicio(LocalDate.now());
-                mantenimiento = preventivo;
-            }
-
-            servicio.registrar(mantenimiento);
-            actualizarTabla();
-            limpiarCampos();
-
-            JOptionPane.showMessageDialog(
-                this, "Mantenimiento registrado correctamente."
-            );
-
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(
-                this, "Los identificadores deben ser números enteros."
-            );
-        } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error de base de datos: " + e.getMessage());
+            Ui.error(this, "No se pudieron cargar los equipos: " + e.getMessage());
         }
-    }//GEN-LAST:event_btnGuardarActionPerformed
 
-    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
+        responsables.clear();
+        cboResponsable.removeAllItems();
         try {
-    int id = Integer.parseInt(
-        txtIDMantenimiento.getText().trim()
-    );
+            for (Usuario u : usuarioDao.listar()) {
+                responsables.put(u.getIdUsuario(), u);
+                cboResponsable.addItem(new OpcionCombo(u.getIdUsuario(),
+                        u.getNombre() + " " + (u.getApellido() == null ? "" : u.getApellido())
+                                + " (" + u.getRol() + ")"));
+            }
+        } catch (SQLException e) {
+            Ui.error(this, "No se pudieron cargar los usuarios: " + e.getMessage());
+        }
 
-    Mantenimiento m = servicio.buscarPorId(id).orElse(null);
-
-    if (m == null) {
-        JOptionPane.showMessageDialog(
-            this, "No se encontró el mantenimiento."
-        );
-        return;
-    }
-
-    txtNumeroServicio.setText(m.getNumeroServicio());
-    txtIDEquipo.setText(String.valueOf(m.getIdEquipo()));
-    txtIDTecnico.setText(String.valueOf(m.getIdTecnico()));
-    txtTipo.setSelectedItem(m.getTipo().name());
-    txtEstado.setSelectedItem(m.getEstado().name());
-    txtDescripcion.setText(m.getDescripcion());
-
-    JOptionPane.showMessageDialog(
-        this, "Mantenimiento encontrado."
-    );
-
-} catch (NumberFormatException e) {
-    JOptionPane.showMessageDialog(
-        this, "Ingrese un ID de mantenimiento válido."
-    );
-} catch (SQLException e) {
-    JOptionPane.showMessageDialog(this, "Error de base de datos: " + e.getMessage());
-}
-    }//GEN-LAST:event_btnBuscarActionPerformed
-
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:
+        cboReporte.removeAllItems();
+        cboReporte.addItem(new OpcionCombo(0, "(Sin reporte relacionado)"));
         try {
-    int id = Integer.parseInt(
-        txtIDMantenimiento.getText().trim()
-    );
+            for (com.labcontrol.modelo.ReporteDano r : reporteDao.listar()) {
+                Equipo equipo = equipos.get(r.getEquipoid());
+                cboReporte.addItem(new OpcionCombo(r.getId(),
+                        "Reporte #" + r.getId() + " | "
+                                + (equipo != null ? equipo.getCodigoInventario() : "Equipo " + r.getEquipoid())
+                                + " | " + r.getTipoFalla()));
+            }
+        } catch (SQLException e) {
+            Ui.error(this, "No se pudieron cargar los reportes de daño: " + e.getMessage());
+        }
 
-    Mantenimiento m = servicio.buscarPorId(id).orElse(null);
-
-    if (m == null) {
-        JOptionPane.showMessageDialog(
-            this, "No se encontró el mantenimiento."
-        );
-        return;
-    }
-
-    int respuesta = JOptionPane.showConfirmDialog(
-        this,
-        "¿Desea eliminar el mantenimiento " + id + "?",
-        "Confirmar eliminación",
-        JOptionPane.YES_NO_OPTION
-    );
-
-    if (respuesta == JOptionPane.YES_OPTION) {
-        servicio.eliminar(id);
+        if (cboEquipo.getItemCount() > 0) {
+            cboEquipo.setSelectedIndex(0);
+        }
+        if (cboResponsable.getItemCount() > 0) {
+            cboResponsable.setSelectedIndex(0);
+        }
+        cboReporte.setSelectedIndex(0);
         actualizarTabla();
-        limpiarCampos();
-
-        JOptionPane.showMessageDialog(
-            this, "Mantenimiento eliminado correctamente."
-        );
     }
 
-} catch (NumberFormatException e) {
-    JOptionPane.showMessageDialog(
-        this, "Ingrese un ID de mantenimiento válido."
-    );
-} catch (SQLException e) {
-    JOptionPane.showMessageDialog(this, "Error de base de datos: " + e.getMessage());
-}
-    }//GEN-LAST:event_btnEliminarActionPerformed
-
-    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
-        // TODO add your handling code here:
-        limpiarCampos();
-    }//GEN-LAST:event_btnLimpiarActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+    private void actualizarTabla() {
+        modeloTabla.setRowCount(0);
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
+            for (Mantenimiento m : servicio.listar()) {
+                Equipo equipo = equipos.get(m.getEquipoId());
+                Usuario responsable = responsables.get(m.getResponsableId());
+                modeloTabla.addRow(new Object[]{
+                        m.getId(),
+                        m.getNumeroServicio(),
+                        equipo != null ? equipo.getCodigoInventario() : "Equipo " + m.getEquipoId(),
+                        responsable != null ? responsable.getNombre() : "Responsable " + m.getResponsableId(),
+                        m.tipoValorBd(),
+                        m.getEstadoTexto(),
+                        m.getFechaInicio(),
+                        m.getFechaFin(),
+                        m.getFallaReportada()
+                });
+            }
+        } catch (SQLException e) {
+            Ui.error(this, "Error de base de datos: " + e.getMessage());
+        }
+    }
+
+    private void cargarSeleccionado() {
+        int fila = tblMantenimientos.getSelectedRow();
+        if (fila < 0) {
+            return;
+        }
+        int id = (int) tblMantenimientos.getValueAt(fila, 0);
+        try {
+            Mantenimiento m = servicio.buscarPorId(id).orElse(null);
+            if (m == null) {
+                return;
+            }
+            editado = m;
+            txtNumero.setText(m.getNumeroServicio());
+            cboTipo.setSelectedItem(m.tipoValorBd());
+            cboEstado.setSelectedItem(m.getEstadoTexto());
+            seleccionarPorId(cboEquipo, m.getEquipoId());
+            seleccionarPorId(cboResponsable, m.getResponsableId());
+            seleccionarPorId(cboReporte, m.getReporteDanoId());
+            txtFechaInicio.setText(m.getFechaInicio() != null ? m.getFechaInicio().toString() : "");
+            txtFechaFin.setText(m.getFechaFin() != null ? m.getFechaFin().toString() : "");
+            txtFalla.setText(m.getFallaReportada());
+            txtDiagnostico.setText(m.getDiagnostico());
+            txtActividades.setText(m.getActividadesRealizadas());
+            txtResultado.setText(m.getResultado());
+            txtRecomendaciones.setText(m.getRecomendaciones());
+            txtObservaciones.setText(m.getObservaciones());
+            if (m.getEstadoFinalEquipo() != null) {
+                cboEstadoFinal.setSelectedItem(m.getEstadoFinalEquipo());
+            }
+            cargarPiezas(m);
+            actualizarVisibilidadPiezas();
+            btnActualizar.setEnabled(true);
+            btnPdf.setEnabled(true);
+        } catch (SQLException e) {
+            Ui.error(this, "Error al cargar el mantenimiento: " + e.getMessage());
+        }
+    }
+
+    private void cargarPiezas(Mantenimiento m) {
+        modeloPiezas.setRowCount(0);
+        m.getPiezas().forEach(p -> modeloPiezas.addRow(new Object[]{
+                p.getNombre(), p.getDescripcion(), p.getCantidad(),
+                p.getAccion() != null ? p.getAccion().name() : "-"}));
+    }
+
+    private void seleccionarPorId(JComboBox<OpcionCombo> combo, int id) {
+        for (int i = 0; i < combo.getItemCount(); i++) {
+            if (combo.getItemAt(i).getId() == id) {
+                combo.setSelectedIndex(i);
+                return;
+            }
+        }
+        combo.setSelectedIndex(0);
+    }
+
+    // ---------------- Acciones CRUD ----------------
+
+    private void guardar() {
+        Mantenimiento m = crearObjetoDesdeFormulario(true);
+        if (m == null) {
+            return;
+        }
+        try {
+            servicio.registrar(m);
+            recargarCombos();
+            limpiar();
+            Ui.info(this, "Mantenimiento registrado correctamente. El estado del equipo fue actualizado.");
+        } catch (SQLException | IllegalStateException e) {
+            Ui.error(this, e.getMessage());
+        }
+    }
+
+    private void actualizar() {
+        if (editado == null) {
+            Ui.aviso(this, "Seleccione un mantenimiento de la tabla para actualizarlo.");
+            return;
+        }
+        Mantenimiento m = crearObjetoDesdeFormulario(false);
+        if (m == null) {
+            return;
+        }
+        try {
+            servicio.actualizar(m);
+            recargarCombos();
+            limpiar();
+            Ui.info(this, "Mantenimiento actualizado correctamente.");
+        } catch (SQLException | IllegalStateException e) {
+            Ui.error(this, e.getMessage());
+        }
+    }
+
+    private void eliminar() {
+        int fila = tblMantenimientos.getSelectedRow();
+        if (fila < 0) {
+            Ui.aviso(this, "Seleccione un mantenimiento de la tabla para eliminarlo.");
+            return;
+        }
+        int id = (int) tblMantenimientos.getValueAt(fila, 0);
+        if (!Ui.confirmar(this, "¿Desea eliminar el mantenimiento seleccionado? Esta acción no se puede deshacer.")) {
+            return;
+        }
+        try {
+            servicio.eliminar(id);
+            recargarCombos();
+            limpiar();
+            Ui.info(this, "Mantenimiento eliminado correctamente.");
+        } catch (SQLException e) {
+            Ui.error(this, "No se pudo eliminar: " + e.getMessage()
+                    + "\n(Verifique que no tenga registros dependientes.)");
+        }
+    }
+
+    
+    private Mantenimiento crearObjetoDesdeFormulario(boolean nuevo) {
+        try {
+            String numero = txtNumero.getText().trim();
+            if (numero.isEmpty()) {
+                Ui.aviso(this, "Ingrese el número de servicio.");
+                txtNumero.requestFocus();
+                return null;
+            }
+            if (cboEquipo.getItemCount() == 0 || cboEquipo.getSelectedItem() == null) {
+                Ui.aviso(this, "No hay equipos registrados. Registre equipos primero.");
+                return null;
+            }
+            int equipoId = ((OpcionCombo) cboEquipo.getSelectedItem()).getId();
+            int responsableId = cboResponsable.getItemCount() > 0
+                    ? ((OpcionCombo) cboResponsable.getSelectedItem()).getId() : 0;
+            int reporteId = ((OpcionCombo) cboReporte.getSelectedItem()).getId();
+
+            String tipo = (String) cboTipo.getSelectedItem();
+            Mantenimiento.Estado estado = Mantenimiento.Estado.valueOf((String) cboEstado.getSelectedItem());
+
+            LocalDate fechaInicio = leerFecha(txtFechaInicio.getText(), "fecha de inicio");
+            if (fechaInicio == null) {
+                return null;
+            }
+            LocalDate fechaFin = null;
+            if (!txtFechaFin.getText().trim().isEmpty()) {
+                fechaFin = leerFecha(txtFechaFin.getText(), "fecha de finalización");
+                if (fechaFin == null) {
+                    return null;
                 }
             }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
+            // Herencia y polimorfismo: el tipo decidido crea la subclase concreta.
+            Mantenimiento m = "Correctivo".equals(tipo)
+                    ? new MantenimientoCorrectivo()
+                    : new MantenimientoPreventivo();
+            if (!nuevo) {
+                m.setId(editado != null ? editado.getId() : 0);
+            }
+            m.setNumeroServicio(numero);
+            m.setEquipoId(equipoId);
+            m.setReporteDanoId(reporteId);
+            m.setResponsableId(responsableId);
+            m.setTipoTexto(tipo);
+            m.setEstado(estado);
+            m.setFechaInicio(fechaInicio);
+            m.setFechaFin(fechaFin);
+            m.setFallaReportada(txtFalla.getText().trim());
+            m.setDiagnostico(txtDiagnostico.getText().trim());
+            m.setActividadesRealizadas(txtActividades.getText().trim());
+            m.setResultado(txtResultado.getText().trim());
+            m.setEstadoFinalEquipo((String) cboEstadoFinal.getSelectedItem());
+            m.setRecomendaciones(txtRecomendaciones.getText().trim());
+            m.setObservaciones(txtObservaciones.getText().trim());
+
+            // Piezas capturadas en la tabla.
+            for (int i = 0; i < modeloPiezas.getRowCount(); i++) {
+                String nombre = String.valueOf(modeloPiezas.getValueAt(i, 0)).trim();
+                if (nombre.isEmpty()) {
+                    continue;
+                }
+                Pieza p = new Pieza();
+                p.setNombre(nombre);
+                p.setDescripcion(String.valueOf(modeloPiezas.getValueAt(i, 1)));
+                p.setCantidad(Integer.parseInt(String.valueOf(modeloPiezas.getValueAt(i, 2))));
+                p.setAccion(com.labcontrol.modelo.Accion.valueOf(
+                        String.valueOf(modeloPiezas.getValueAt(i, 3))));
+                m.agregarPieza(p);
+            }
+
+            // Regla polimorfica: finalizar un correctivo exige piezas.
+            if (estado == Mantenimiento.Estado.FINALIZADO) {
+                m.finalizar();
+            }
+            return m;
+        } catch (NumberFormatException e) {
+            Ui.error(this, "Cantidad de pieza inválida: " + e.getMessage());
+            return null;
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            Ui.error(this, e.getMessage());
+            return null;
+        }
+    }
+
+    private LocalDate leerFecha(String texto, String nombreCampo) {
+        if (!Ui.fechaValida(texto.trim())) {
+            Ui.aviso(this, "La " + nombreCampo + " debe tener el formato AAAA-MM-DD.");
+            return null;
+        }
+        return LocalDate.parse(texto.trim());
+    }
+
+    // ---------------- Piezas ----------------
+
+    private void agregarPieza() {
+        String nombre = txtPiezaNombre.getText().trim();
+        if (nombre.isEmpty()) {
+            Ui.aviso(this, "Escriba el nombre de la pieza.");
+            txtPiezaNombre.requestFocus();
+            return;
+        }
+        modeloPiezas.addRow(new Object[]{
+                nombre,
+                txtPiezaDescripcion.getText().trim(),
+                spnCantidad.getValue(),
+                cboPiezaAccion.getSelectedItem()
+        });
+        txtPiezaNombre.setText("");
+        txtPiezaDescripcion.setText("");
+        spnCantidad.setValue(1);
+        txtPiezaNombre.requestFocus();
+    }
+
+    private void quitarPieza() {
+        int fila = tblPiezas.getSelectedRow();
+        if (fila < 0) {
+            Ui.aviso(this, "Seleccione la pieza que desea quitar.");
+            return;
+        }
+        modeloPiezas.removeRow(fila);
+    }
+
+    private void actualizarVisibilidadPiezas() {
+        boolean correctivo = "Correctivo".equals(cboTipo.getSelectedItem());
+        tblPiezas.setEnabled(correctivo);
+        tblPiezas.setForeground(correctivo ? java.awt.Color.BLACK : java.awt.Color.GRAY);
+    }
+
+    // ---------------- Hoja de servicio en PDF ----------------
+
+    private void generarPdf() {
+        int fila = tblMantenimientos.getSelectedRow();
+        Mantenimiento m;
+        if (editado != null && (fila < 0 || (int) tblMantenimientos.getValueAt(fila, 0) == editado.getId())) {
+            m = editado;
+        } else {
+            Ui.aviso(this, "Seleccione un mantenimiento de la tabla.");
+            return;
+        }
+        try {
+            Mantenimiento completo = servicio.buscarPorId(m.getId()).orElse(m);
+            Equipo equipo = equipoDao.buscarPorId(completo.getEquipoId());
+            Usuario responsable = usuarioDao.buscarPorId(completo.getResponsableId());
+            com.labcontrol.modelo.Laboratorio laboratorio = equipo != null
+                    ? laboratorioDao.buscarPorId(equipo.getLaboratorioId()) : null;
+            List<CentroEducativo> centros = centroDao.listar();
+            CentroEducativo centro = centros.isEmpty() ? null : centros.get(0);
+
+            JFileChooser chooser = new JFileChooser();
+            chooser.setDialogTitle("Guardar hoja de servicio");
+            chooser.setSelectedFile(new File("HojaServicio_" + completo.getNumeroServicio() + ".pdf"));
+            if (chooser.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) {
+                return;
+            }
+            File archivo = chooser.getSelectedFile();
+            if (!archivo.getName().toLowerCase().endsWith(".pdf")) {
+                archivo = new File(archivo.getParentFile(), archivo.getName() + ".pdf");
+            }
+            HojaServicioPdf.generar(archivo, completo, equipo, laboratorio, responsable,
+                    completo.getPiezas(), centro);
+            Ui.info(this, "Hoja de servicio generada correctamente en:\n" + archivo.getAbsolutePath());
+        } catch (Exception e) {
+            Ui.error(this, "No se pudo generar el PDF: " + e.getMessage());
+        }
+    }
+
+    // ---------------- Limpieza ----------------
+
+    private void limpiar() {
+        editado = null;
+        tblMantenimientos.clearSelection();
+        txtNumero.setText("");
+        cboTipo.setSelectedIndex(0);
+        cboEstado.setSelectedIndex(0);
+        if (cboEquipo.getItemCount() > 0) {
+            cboEquipo.setSelectedIndex(0);
+        }
+        if (cboResponsable.getItemCount() > 0) {
+            cboResponsable.setSelectedIndex(0);
+        }
+        cboReporte.setSelectedIndex(0);
+        txtFechaInicio.setText(LocalDate.now().toString());
+        txtFechaFin.setText("");
+        txtFalla.setText("");
+        txtDiagnostico.setText("");
+        txtActividades.setText("");
+        txtResultado.setText("");
+        cboEstadoFinal.setSelectedIndex(0);
+        txtRecomendaciones.setText("");
+        txtObservaciones.setText("");
+        modeloPiezas.setRowCount(0);
+        btnActualizar.setEnabled(false);
+        btnPdf.setEnabled(false);
+        sugerirNumeroServicio();
+        actualizarVisibilidadPiezas();
+    }
+
+    private void sugerirNumeroServicio() {
+        try {
+            int maximo = 0;
+            for (Mantenimiento m : servicio.listar()) {
+                String numero = m.getNumeroServicio();
+                if (numero != null && numero.startsWith("MS-")) {
+                    try {
+                        maximo = Math.max(maximo, Integer.parseInt(numero.substring(3)));
+                    } catch (NumberFormatException ignorado) {
+                        // numeros de servicio con otro formato no afectan la sugerencia
+                    }
+                }
+            }
+            txtNumero.setText(String.format("MS-%04d", maximo + 1));
+        } catch (SQLException ignorado) {
+            // si falla la consulta, el usuario escribe el numero a mano
+        }
+    }
+
+    public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> new FrmMantenimiento().setVisible(true));
     }
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBuscar;
-    private javax.swing.JButton btnEliminar;
-    private javax.swing.JButton btnGuardar;
-    private javax.swing.JButton btnLimpiar;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblMantenimientos;
-    private javax.swing.JTextField txtDescripcion;
-    private javax.swing.JComboBox<String> txtEstado;
-    private javax.swing.JTextField txtIDEquipo;
-    private javax.swing.JTextField txtIDMantenimiento;
-    private javax.swing.JTextField txtIDTecnico;
-    private javax.swing.JTextField txtNumeroServicio;
-    private javax.swing.JComboBox<String> txtTipo;
-    // End of variables declaration//GEN-END:variables
 }

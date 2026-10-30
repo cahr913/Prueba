@@ -1,6 +1,8 @@
 package com.labcontrol.modelo;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Recepcion {
     private int id;
@@ -17,6 +19,8 @@ public class Recepcion {
     private boolean red;
     private String estadoEquipos;
     private String observaciones;
+    
+    private List<Integer> equiposDanadosIds = new ArrayList<>();
 
     public Recepcion() {
     }
@@ -92,8 +96,24 @@ public class Recepcion {
     public String getObservaciones() { return observaciones; }
     public void setObservaciones(String observaciones) { this.observaciones = observaciones; }
 
+    public List<Integer> getEquiposDanadosIds() { return equiposDanadosIds; }
+    public void setEquiposDanadosIds(List<Integer> equiposDanadosIds) {
+        this.equiposDanadosIds = equiposDanadosIds == null ? new ArrayList<>() : equiposDanadosIds;
+    }
+
+    public void agregarEquipoDanado(int equipoId) {
+        if (equipoId <= 0) {
+            throw new IllegalArgumentException("El identificador del equipo dañado debe ser positivo.");
+        }
+        if (!equiposDanadosIds.contains(equipoId)) {
+            equiposDanadosIds.add(equipoId);
+        }
+    }
+
     @Override
     public String toString() {
-        return "Recepción #" + id + " | Equipo: " + idEquipo + " | Docente: " + docenteId + " | Estado: " + getEstado();
+        return "Recepción #" + id + " | Laboratorio: " + laboratorioId + " | Docente: " + docenteId
+                + " | Estado general: " + getEstadoGeneral()
+                + " | Equipos dañados: " + equiposDanadosIds.size();
     }
 }

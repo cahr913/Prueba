@@ -34,7 +34,11 @@ public class ReporteDanoDao {
             ps.setInt(1, r.getLaboratorioid());
             ps.setInt(2, r.getEquipoid());
             ps.setInt(3, r.getDocenteid());
-            ps.setInt(4, r.getHorarioid());
+            if (r.getHorarioid() > 0) {
+                ps.setInt(4, r.getHorarioid());
+            } else {
+                ps.setNull(4, java.sql.Types.INTEGER);
+            }
             ps.setString(5, r.getTipoFalla());
             ps.setString(6, r.getDescripcion());
             ps.setTimestamp(7, r.getFechaHora() != null ? Timestamp.valueOf(r.getFechaHora()) : null);
@@ -57,7 +61,11 @@ public class ReporteDanoDao {
             ps.setInt(1, r.getLaboratorioid());
             ps.setInt(2, r.getEquipoid());
             ps.setInt(3, r.getDocenteid());
-            ps.setInt(4, r.getHorarioid());
+            if (r.getHorarioid() > 0) {
+                ps.setInt(4, r.getHorarioid());
+            } else {
+                ps.setNull(4, java.sql.Types.INTEGER);
+            }
             ps.setString(5, r.getTipoFalla());
             ps.setString(6, r.getDescripcion());
             ps.setTimestamp(7, r.getFechaHora() != null ? Timestamp.valueOf(r.getFechaHora()) : null);

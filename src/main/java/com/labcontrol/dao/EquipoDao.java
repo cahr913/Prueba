@@ -21,7 +21,11 @@ public class EquipoDao {
             ps.setString(6, e.getFechaAdquisicion());
             ps.setString(7, e.getEstado());
             ps.setString(8, e.getObservaciones());
-            ps.setInt(9, e.getLaboratorioId());
+            if (e.getLaboratorioId() > 0) {
+                ps.setInt(9, e.getLaboratorioId());
+            } else {
+                ps.setNull(9, java.sql.Types.INTEGER);
+            }
             int filas = ps.executeUpdate();
             if (filas == 0) {
                 throw new SQLException("No se almacenó ningún registro");
@@ -44,7 +48,11 @@ public class EquipoDao {
             ps.setString(6, e.getFechaAdquisicion());
             ps.setString(7, e.getEstado());
             ps.setString(8, e.getObservaciones());
-            ps.setInt(9, e.getLaboratorioId());
+            if (e.getLaboratorioId() > 0) {
+                ps.setInt(9, e.getLaboratorioId());
+            } else {
+                ps.setNull(9, java.sql.Types.INTEGER);
+            }
             ps.setInt(10, e.getId());
             int filas = ps.executeUpdate();
             if (filas == 0) {
@@ -158,4 +166,14 @@ public class EquipoDao {
         }
         return lista;
     }
+    public void actualizarEstado(int equipoId, String estado) throws SQLException {
+    String sql = "UPDATE equipo SET estado = ? WHERE id = ?";
+    try (Connection cn = ConexionBD.abrir();
+         PreparedStatement ps = cn.prepareStatement(sql)) {
+        ps.setString(1, estado);
+        ps.setInt(2, equipoId);
+        ps.executeUpdate();
+    }
+}
+    
 }
