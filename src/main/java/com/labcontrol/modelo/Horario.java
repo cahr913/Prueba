@@ -36,14 +36,31 @@ public class Horario {
         this.usuario = usuario;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
 
-    public String getCodigo() { return codigo; }
-    public void setCodigo(String codigo) { this.codigo = codigo; }
+        return id;
 
-    public int getDocenteId() { return docenteId; }
-    public void setDocenteId(int docenteId) { this.docenteId = docenteId; }
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public int getDocenteId() {
+        return docenteId;
+    }
+
+    public void setDocenteId(int docenteId) {
+        this.docenteId = docenteId;
+    }
 
     public int getLaboratorioId() {
         if (laboratorio != null && laboratorio.getId() != 0) {
@@ -52,9 +69,16 @@ public class Horario {
         return laboratorioId;
     }
 
-    public void setLaboratorioId(int laboratorioId) { this.laboratorioId = laboratorioId; }
+    public void setLaboratorioId(int laboratorioId) {
 
-    public String getCurso() { return curso != null ? curso : actividad; }
+        this.laboratorioId = laboratorioId;
+
+    }
+
+    public String getCurso() {
+        return curso != null ? curso : actividad;
+    }
+
     public void setCurso(String curso) {
         this.curso = curso;
         if (this.actividad == null) {
@@ -62,28 +86,63 @@ public class Horario {
         }
     }
 
-    public String getActividad() { return actividad != null ? actividad : curso; }
+    public String getActividad() {
+
+        return actividad != null ? actividad : curso;
+
+    }
+
     public void setActividad(String actividad) {
         this.actividad = actividad;
         this.curso = actividad;
     }
 
-    public String getDia() { return dia; }
-    public void setDia(String dia) { this.dia = dia; }
+    public String getDia() {
 
-    public LocalDate getFecha() { return fecha; }
-    public void setFecha(LocalDate fecha) { this.fecha = fecha; }
+        return dia;
 
-    public LocalTime getHoraInicio() { return horaInicio; }
-    public void setHoraInicio(LocalTime horaInicio) { this.horaInicio = horaInicio; }
+    }
 
-    public LocalTime getHoraFin() { return horaFin; }
-    public void setHoraFin(LocalTime horaFin) { this.horaFin = horaFin; }
+    public void setDia(String dia) {
+        this.dia = dia;
+    }
 
-    public String getObservaciones() { return observaciones; }
-    public void setObservaciones(String observaciones) { this.observaciones = observaciones; }
+    public LocalDate getFecha() {
+        return fecha;
+    }
 
-    public Laboratorio getLaboratorio() { return laboratorio; }
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
+    public LocalTime getHoraInicio() {
+        return horaInicio;
+    }
+
+    public void setHoraInicio(LocalTime horaInicio) {
+        this.horaInicio = horaInicio;
+    }
+
+    public LocalTime getHoraFin() {
+        return horaFin;
+    }
+
+    public void setHoraFin(LocalTime horaFin) {
+        this.horaFin = horaFin;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+
+    public Laboratorio getLaboratorio() {
+        return laboratorio;
+    }
+
     public void setLaboratorio(Laboratorio laboratorio) {
         this.laboratorio = laboratorio;
         if (laboratorio != null && laboratorio.getId() != 0) {
@@ -91,6 +150,13 @@ public class Horario {
         }
     }
 
-    public Usuario getUsuario() { return usuario; }
-    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
+    public Usuario getUsuario() {
+
+        return usuario;
+
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 }

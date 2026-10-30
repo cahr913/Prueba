@@ -144,7 +144,6 @@ public class HorarioDao {
                     java.sql.Time hi = rs.getTime("hora_inicio");
                     java.sql.Time hf = rs.getTime("hora_fin");
                     java.sql.Date f = rs.getDate("fecha");
-                    // Calcular el día de la semana desde la fecha
                     String diaExistente = null;
                     if (f != null) {
                         diaExistente = f.toLocalDate().getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
@@ -153,7 +152,6 @@ public class HorarioDao {
                         LocalTime hiLocal = hi != null ? hi.toLocalTime() : null;
                         LocalTime hfLocal = hf != null ? hf.toLocalTime() : null;
                         if (hiLocal != null && hfLocal != null) {
-                            // Superposición: inicio < hfExistente && hiExistente < fin
                             if (inicio.isBefore(hfLocal) && hiLocal.isBefore(fin)) {
                                 return true;
                             }

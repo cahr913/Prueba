@@ -31,29 +31,71 @@ public class Laboratorio {
         setCentro(centro);
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
 
-    public String getCodigo() { return codigo; }
-    public void setCodigo(String codigo) { this.codigo = codigo; }
+        return id;
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    }
 
-    public String getUbicacion() { return ubicacion; }
-    public void setUbicacion(String ubicacion) { this.ubicacion = ubicacion; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public int getCapacidad() { return capacidad; }
-    public void setCapacidad(int capacidad) { this.capacidad = capacidad; }
+    public String getCodigo() {
+        return codigo;
+    }
 
-    public String getEstado() { return estado; }
-    public void setEstado(String estado) { this.estado = estado; }
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
 
-    public String getResponsable() { return responsable; }
-    public void setResponsable(String responsable) { this.responsable = responsable; }
+    public String getNombre() {
+        return nombre;
+    }
 
-    public String getObservaciones() { return observaciones; }
-    public void setObservaciones(String observaciones) { this.observaciones = observaciones; }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+
+    public int getCapacidad() {
+        return capacidad;
+    }
+
+    public void setCapacidad(int capacidad) {
+        this.capacidad = capacidad;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getResponsable() {
+        return responsable;
+    }
+
+    public void setResponsable(String responsable) {
+        this.responsable = responsable;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
 
     public int getCentroId() {
         if (centro != null && centro.getId() != 0) {
@@ -62,9 +104,15 @@ public class Laboratorio {
         return centroId;
     }
 
-    public void setCentroId(int centroId) { this.centroId = centroId; }
+    public void setCentroId(int centroId) {
 
-    public CentroEducativo getCentro() { return centro; }
+        this.centroId = centroId;
+
+    }
+
+    public CentroEducativo getCentro() {
+        return centro;
+    }
 
     public void setCentro(CentroEducativo centro) {
         this.centro = centro;

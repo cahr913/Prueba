@@ -25,24 +25,61 @@ public class Software {
         this.estado = estado;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+        return id;
 
-    public String getVersion() { return version; }
-    public void setVersion(String version) { this.version = version; }
+    }
 
-    public String getTipo() { return tipo; }
-    public void setTipo(String tipo) { this.tipo = tipo; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getTipoLicencia() { return tipoLicencia; }
-    public void setTipoLicencia(String tipoLicencia) { this.tipoLicencia = tipoLicencia; }
+    public String getNombre() {
+        return nombre;
+    }
 
-    public String getLicencia() { return tipoLicencia; }
-    public void setLicencia(String licencia) { this.tipoLicencia = licencia; }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-    public String getEstado() { return estado; }
-    public void setEstado(String estado) { this.estado = estado; }
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getTipoLicencia() {
+        return tipoLicencia;
+    }
+
+    public void setTipoLicencia(String tipoLicencia) {
+        this.tipoLicencia = tipoLicencia;
+    }
+
+    public String getLicencia() {
+        return tipoLicencia;
+    }
+
+    public void setLicencia(String licencia) {
+        this.tipoLicencia = licencia;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
 }

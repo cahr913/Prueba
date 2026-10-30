@@ -122,7 +122,6 @@ public class MantenimientoDao {
         return lista;
     }
 
-    // Auxiliares
     private Mantenimiento leer(ResultSet rs) throws SQLException {
         Mantenimiento m = new Mantenimiento();
         m.setId(rs.getInt("id"));

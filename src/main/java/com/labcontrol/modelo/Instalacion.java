@@ -23,17 +23,39 @@ public class Instalacion {
                 && !fechaInstalacion.trim().isEmpty();
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
 
-    public int getEquipoId() { return equipoId; }
-    public void setEquipoId(int equipoId) { this.equipoId = equipoId; }
+        return id;
 
-    public int getSoftwareId() { return softwareId; }
-    public void setSoftwareId(int softwareId) { this.softwareId = softwareId; }
+    }
 
-    public String getFechaInstalacion() { return fechaInstalacion; }
-    public void setFechaInstalacion(String fechaInstalacion) { this.fechaInstalacion = fechaInstalacion; }
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getEquipoId() {
+        return equipoId;
+    }
+
+    public void setEquipoId(int equipoId) {
+        this.equipoId = equipoId;
+    }
+
+    public int getSoftwareId() {
+        return softwareId;
+    }
+
+    public void setSoftwareId(int softwareId) {
+        this.softwareId = softwareId;
+    }
+
+    public String getFechaInstalacion() {
+        return fechaInstalacion;
+    }
+
+    public void setFechaInstalacion(String fechaInstalacion) {
+        this.fechaInstalacion = fechaInstalacion;
+    }
 
     @Override
     public String toString() {

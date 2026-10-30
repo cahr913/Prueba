@@ -9,38 +9,46 @@ public class BitacoraAcceso {
     private String ip;
     private String dispositivo;
 
-    public int getIdBitacora() { return idBitacora; }
-    public void setIdBitacora(int idBitacora) { this.idBitacora = idBitacora; }
+    public int getIdBitacora() {
 
-    public LocalDateTime getFechaHora() { 
-        return fechaHora; 
-    }
-    
-    public void setFechaHora(LocalDateTime fechaHora) { 
-        this.fechaHora = fechaHora; 
+        return idBitacora;
+
     }
 
-    public String getAccion() { 
-        return accion; 
-    }
-    
-    public void setAccion(String accion) { 
-        this.accion = accion; 
+    public void setIdBitacora(int idBitacora) {
+        this.idBitacora = idBitacora;
     }
 
-    public String getIp() { 
-        return ip; 
-    }
-    public void setIp(String ip) { 
-        this.ip = ip; 
+    public LocalDateTime getFechaHora() {
+        return fechaHora;
     }
 
-    public String getDispositivo() { 
-        return dispositivo; 
+    public void setFechaHora(LocalDateTime fechaHora) {
+        this.fechaHora = fechaHora;
     }
-    
-    public void setDispositivo(String dispositivo) { 
-        this.dispositivo = dispositivo; 
+
+    public String getAccion() {
+        return accion;
+    }
+
+    public void setAccion(String accion) {
+        this.accion = accion;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public String getDispositivo() {
+        return dispositivo;
+    }
+
+    public void setDispositivo(String dispositivo) {
+        this.dispositivo = dispositivo;
     }
 
     public void registrarAcceso() {}

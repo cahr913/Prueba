@@ -42,35 +42,79 @@ public class Recepcion {
         this.observaciones = observaciones;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
 
-    public int getIdRecepcion() { return id; }
+        return id;
 
-    public int getLaboratorioId() { return laboratorioId; }
-    public void setLaboratorioId(int laboratorioId) { this.laboratorioId = laboratorioId; }
+    }
 
-    public int getDocenteId() { return docenteId; }
-    public void setDocenteId(int docenteId) { this.docenteId = docenteId; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public int getIdDocente() { return docenteId; }
+    public int getIdRecepcion() {
+        return id;
+    }
 
-    public int getHorarioId() { return horarioId; }
-    public void setHorarioId(int horarioId) { this.horarioId = horarioId; }
+    public int getLaboratorioId() {
+        return laboratorioId;
+    }
 
-    public int getIdEquipo() { return idEquipo; }
-    public void setIdEquipo(int idEquipo) { this.idEquipo = idEquipo; }
+    public void setLaboratorioId(int laboratorioId) {
+        this.laboratorioId = laboratorioId;
+    }
 
-    public LocalDateTime getFechaHora() { return fechaHora; }
-    public void setFechaHora(LocalDateTime fechaHora) { this.fechaHora = fechaHora; }
+    public int getDocenteId() {
+        return docenteId;
+    }
 
-    public String getEstado() { return estado != null ? estado : estadoGeneral; }
+    public void setDocenteId(int docenteId) {
+        this.docenteId = docenteId;
+    }
+
+    public int getIdDocente() {
+        return docenteId;
+    }
+
+    public int getHorarioId() {
+        return horarioId;
+    }
+
+    public void setHorarioId(int horarioId) {
+        this.horarioId = horarioId;
+    }
+
+    public int getIdEquipo() {
+        return idEquipo;
+    }
+
+    public void setIdEquipo(int idEquipo) {
+        this.idEquipo = idEquipo;
+    }
+
+    public LocalDateTime getFechaHora() {
+        return fechaHora;
+    }
+
+    public void setFechaHora(LocalDateTime fechaHora) {
+        this.fechaHora = fechaHora;
+    }
+
+    public String getEstado() {
+        return estado != null ? estado : estadoGeneral;
+    }
+
     public void setEstado(String estado) {
         this.estado = estado;
         this.estadoGeneral = estado;
     }
 
-    public String getEstadoGeneral() { return estadoGeneral != null ? estadoGeneral : estado; }
+    public String getEstadoGeneral() {
+
+        return estadoGeneral != null ? estadoGeneral : estado;
+
+    }
+
     public void setEstadoGeneral(String estadoGeneral) {
         this.estadoGeneral = estadoGeneral;
         if (this.estado == null) {
@@ -78,25 +122,60 @@ public class Recepcion {
         }
     }
 
-    public String getLimpieza() { return limpieza; }
-    public void setLimpieza(String limpieza) { this.limpieza = limpieza; }
+    public String getLimpieza() {
 
-    public String getEstadoMobiliario() { return estadoMobiliario; }
-    public void setEstadoMobiliario(String estadoMobiliario) { this.estadoMobiliario = estadoMobiliario; }
+        return limpieza;
 
-    public boolean isEnergiaElectrica() { return energiaElectrica; }
-    public void setEnergiaElectrica(boolean energiaElectrica) { this.energiaElectrica = energiaElectrica; }
+    }
 
-    public boolean isRed() { return red; }
-    public void setRed(boolean red) { this.red = red; }
+    public void setLimpieza(String limpieza) {
+        this.limpieza = limpieza;
+    }
 
-    public String getEstadoEquipos() { return estadoEquipos; }
-    public void setEstadoEquipos(String estadoEquipos) { this.estadoEquipos = estadoEquipos; }
+    public String getEstadoMobiliario() {
+        return estadoMobiliario;
+    }
 
-    public String getObservaciones() { return observaciones; }
-    public void setObservaciones(String observaciones) { this.observaciones = observaciones; }
+    public void setEstadoMobiliario(String estadoMobiliario) {
+        this.estadoMobiliario = estadoMobiliario;
+    }
 
-    public List<Integer> getEquiposDanadosIds() { return equiposDanadosIds; }
+    public boolean isEnergiaElectrica() {
+        return energiaElectrica;
+    }
+
+    public void setEnergiaElectrica(boolean energiaElectrica) {
+        this.energiaElectrica = energiaElectrica;
+    }
+
+    public boolean isRed() {
+        return red;
+    }
+
+    public void setRed(boolean red) {
+        this.red = red;
+    }
+
+    public String getEstadoEquipos() {
+        return estadoEquipos;
+    }
+
+    public void setEstadoEquipos(String estadoEquipos) {
+        this.estadoEquipos = estadoEquipos;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+
+    public List<Integer> getEquiposDanadosIds() {
+        return equiposDanadosIds;
+    }
+
     public void setEquiposDanadosIds(List<Integer> equiposDanadosIds) {
         this.equiposDanadosIds = equiposDanadosIds == null ? new ArrayList<>() : equiposDanadosIds;
     }

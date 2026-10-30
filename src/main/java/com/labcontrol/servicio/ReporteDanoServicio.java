@@ -19,7 +19,6 @@ public class ReporteDanoServicio {
         validar(reporte);
         dao.insertar(reporte);
 
-        // Regla del enunciado: al reportar el daño, el equipo cambia de estado.
         Equipo equipo = equipoDao.buscarPorId(reporte.getEquipoid());
         if (equipo != null) {
             equipo.cambiarEstado(Equipo.DANADO);
@@ -78,7 +77,6 @@ public class ReporteDanoServicio {
         if (equipo == null) {
             throw new IllegalArgumentException("Seleccione un equipo válido.");
         }
-        // El laboratorio del reporte debe coincidir con el del equipo.
         if (r.getLaboratorioid() <= 0) {
             r.setLaboratorioid(equipo.getLaboratorioId());
         }
@@ -91,7 +89,6 @@ public class ReporteDanoServicio {
 
     private void guardarFotos(ReporteDano reporte) throws SQLException {
         if (reporte.getId() > 0) {
-            // Se reemplazan las fotos anteriores para evitar duplicados al actualizar.
             try (java.sql.Connection cn = com.labcontrol.db.ConexionBD.abrir();
                  java.sql.PreparedStatement ps = cn.prepareStatement(
                          "DELETE FROM foto_evidencia WHERE reporte_dano_id = ?")) {

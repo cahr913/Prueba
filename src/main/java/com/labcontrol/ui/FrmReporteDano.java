@@ -85,7 +85,6 @@ public class FrmReporteDano extends javax.swing.JFrame {
         btnActualizar.setEnabled(false);
     }
 
-    // ---------------- Construccion ----------------
 
     private void construir() {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -187,7 +186,6 @@ public class FrmReporteDano extends javax.swing.JFrame {
         return panel;
     }
 
-    // ---------------- Carga de datos ----------------
 
     private void recargarCombos() {
         laboratorios.clear();
@@ -320,7 +318,6 @@ public class FrmReporteDano extends javax.swing.JFrame {
         }
     }
 
-    // ---------------- Fotos ----------------
 
     private void agregarFoto() {
         JFileChooser chooser = new JFileChooser();
@@ -367,7 +364,6 @@ public class FrmReporteDano extends javax.swing.JFrame {
         modeloFotos.remove(indice);
     }
 
-    // ---------------- Acciones CRUD ----------------
 
     private void guardar() {
         ReporteDano r = crearObjetoDesdeFormulario(true);

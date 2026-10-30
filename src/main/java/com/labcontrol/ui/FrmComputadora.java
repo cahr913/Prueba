@@ -7,7 +7,7 @@ import java.time.LocalDate;
 public class FrmComputadora extends javax.swing.JDialog {
 
     private static final String IP_REGEX = 
-            "^((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d)$"; // verifca que sea una direccion ipv4
+            "^((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d)$";
 
     private final ComputadoraDao compuDao = new ComputadoraDao();
     private final EquipoDao equipoDao = new EquipoDao();
@@ -53,7 +53,6 @@ public class FrmComputadora extends javax.swing.JDialog {
             Laboratorio lab = laboratorioDao.buscarPorId(c.getLaboratorioId());
             if (lab != null) cboLab.setSelectedItem(lab.getCodigo());
         } catch (Exception ex) {
-            // ignorar error de laboratorio en cargar
         }
         txtHost.setText(c.getHostname());
         txtIp.setText(c.getIp());
@@ -96,7 +95,6 @@ public class FrmComputadora extends javax.swing.JDialog {
                 return;
             }
 
-            // Validar capacidad del laboratorio (solo computadoras)
             String labCodigo = Ui.texto(cboLab);
             if (!labCodigo.isEmpty()) {
                 Laboratorio labSel = laboratorioDao.buscarPorCodigo(labCodigo);
@@ -107,14 +105,12 @@ public class FrmComputadora extends javax.swing.JDialog {
                             count++;
                         }
                     }
-                    // Si es nuevo registro, validar capacidad
                     if (idActual == 0 && count >= labSel.getCapacidad()) {
                         Ui.error(this, "El laboratorio «" + labSel.getNombre()
                                 + "» ya alcanzó su capacidad máxima de "
                                 + labSel.getCapacidad() + " computadoras.");
                         return;
                     }
-                    // Si es edición y se cambia de laboratorio, validar el nuevo
                     if (idActual > 0 && original != null
                             && original.getLaboratorioId() != labSel.getId()
                             && count >= labSel.getCapacidad()) {
@@ -157,7 +153,6 @@ public class FrmComputadora extends javax.swing.JDialog {
 
     
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         pnlEncabezado = new javax.swing.JPanel();
@@ -422,21 +417,19 @@ public class FrmComputadora extends javax.swing.JDialog {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {
         guardar();
-    }//GEN-LAST:event_btnGuardarActionPerformed
+    }
 
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {
         dispose();
-    }//GEN-LAST:event_btnCancelarActionPerformed
+    }
 
-    private void txtIpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIpActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtIpActionPerformed
+    private void txtIpActionPerformed(java.awt.event.ActionEvent evt) {
+    }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JComboBox<String> cboEstado;
@@ -468,5 +461,4 @@ public class FrmComputadora extends javax.swing.JDialog {
     private javax.swing.JTextField txtMarca;
     private javax.swing.JTextField txtModelo;
     private javax.swing.JTextField txtSerie;
-    // End of variables declaration//GEN-END:variables
 }

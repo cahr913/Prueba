@@ -10,7 +10,6 @@ import java.util.List;
 public class LaboratorioDao {
 
     public void insertar(Laboratorio l) throws SQLException {
-        // Generar código automático si no tiene
         String codigo = l.getCodigo();
         if (codigo == null || codigo.isBlank()) {
             codigo = generarSiguienteCodigo();
@@ -121,7 +120,6 @@ public class LaboratorioDao {
         if (existente != null) {
             return existente;
         }
-        // Crear laboratorio por defecto si no existe
         Laboratorio l = new Laboratorio();
         l.setCodigo(codigo);
         l.setNombre("Laboratorio " + codigo);

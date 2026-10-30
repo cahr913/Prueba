@@ -96,7 +96,6 @@ public class FrmMantenimiento extends javax.swing.JFrame {
         sugerirNumeroServicio();
     }
 
-    // ---------------- Construccion de la ventana ----------------
 
     private void construir() {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -245,7 +244,6 @@ public class FrmMantenimiento extends javax.swing.JFrame {
         return panel;
     }
 
-    // ---------------- Carga de datos ----------------
 
     private void recargarCombos() {
         equipos.clear();
@@ -375,7 +373,6 @@ public class FrmMantenimiento extends javax.swing.JFrame {
         combo.setSelectedIndex(0);
     }
 
-    // ---------------- Acciones CRUD ----------------
 
     private void guardar() {
         Mantenimiento m = crearObjetoDesdeFormulario(true);
@@ -465,7 +462,6 @@ public class FrmMantenimiento extends javax.swing.JFrame {
                 }
             }
 
-            // Herencia y polimorfismo: el tipo decidido crea la subclase concreta.
             Mantenimiento m = "Correctivo".equals(tipo)
                     ? new MantenimientoCorrectivo()
                     : new MantenimientoPreventivo();
@@ -488,7 +484,6 @@ public class FrmMantenimiento extends javax.swing.JFrame {
             m.setRecomendaciones(txtRecomendaciones.getText().trim());
             m.setObservaciones(txtObservaciones.getText().trim());
 
-            // Piezas capturadas en la tabla.
             for (int i = 0; i < modeloPiezas.getRowCount(); i++) {
                 String nombre = String.valueOf(modeloPiezas.getValueAt(i, 0)).trim();
                 if (nombre.isEmpty()) {
@@ -503,7 +498,6 @@ public class FrmMantenimiento extends javax.swing.JFrame {
                 m.agregarPieza(p);
             }
 
-            // Regla polimorfica: finalizar un correctivo exige piezas.
             if (estado == Mantenimiento.Estado.FINALIZADO) {
                 m.finalizar();
             }
@@ -525,7 +519,6 @@ public class FrmMantenimiento extends javax.swing.JFrame {
         return LocalDate.parse(texto.trim());
     }
 
-    // ---------------- Piezas ----------------
 
     private void agregarPieza() {
         String nombre = txtPiezaNombre.getText().trim();
@@ -561,7 +554,6 @@ public class FrmMantenimiento extends javax.swing.JFrame {
         tblPiezas.setForeground(correctivo ? java.awt.Color.BLACK : java.awt.Color.GRAY);
     }
 
-    // ---------------- Hoja de servicio en PDF ----------------
 
     private void generarPdf() {
         int fila = tblMantenimientos.getSelectedRow();
@@ -599,7 +591,6 @@ public class FrmMantenimiento extends javax.swing.JFrame {
         }
     }
 
-    // ---------------- Limpieza ----------------
 
     private void limpiar() {
         editado = null;
@@ -639,13 +630,11 @@ public class FrmMantenimiento extends javax.swing.JFrame {
                     try {
                         maximo = Math.max(maximo, Integer.parseInt(numero.substring(3)));
                     } catch (NumberFormatException ignorado) {
-                        // numeros de servicio con otro formato no afectan la sugerencia
                     }
                 }
             }
             txtNumero.setText(String.format("MS-%04d", maximo + 1));
         } catch (SQLException ignorado) {
-            // si falla la consulta, el usuario escribe el numero a mano
         }
     }
 

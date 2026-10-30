@@ -65,7 +65,6 @@ public class HojaServicioPdf {
         }
     }
 
-    // ---------------- Secciones del documento ----------------
 
     private static void encabezado(Document documento, CentroEducativo centro) throws DocumentException {
         PdfPTable tabla = new PdfPTable(2);
@@ -101,7 +100,6 @@ public class HojaServicioPdf {
                 logo.scaleToFit(90, 60);
                 celdaLogo.addElement(logo);
             } catch (Exception e) {
-                // Si el logotipo no se puede leer, se genera el documento sin el.
             }
         }
         tabla.addCell(celdaLogo);
@@ -207,7 +205,6 @@ public class HojaServicioPdf {
         documento.add(pie);
     }
 
-    // ---------------- Utilidades de formato ----------------
 
     private static PdfPTable nuevaTablaDatos() throws DocumentException {
         PdfPTable tabla = new PdfPTable(2);

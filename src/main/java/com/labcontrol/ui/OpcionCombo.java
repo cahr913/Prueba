@@ -10,8 +10,15 @@ public class OpcionCombo {
         this.etiqueta = etiqueta;
     }
 
-    public int getId() { return id; }
-    public String getEtiqueta() { return etiqueta; }
+    public int getId() {
+
+        return id;
+
+    }
+
+    public String getEtiqueta() {
+        return etiqueta;
+    }
 
     @Override
     public String toString() {

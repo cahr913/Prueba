@@ -77,82 +77,84 @@ public class Mantenimiento {
         this.estadoFinalEquipo = estadoFinal;
     }
 
-    public int getId() { 
-        return id; 
-    }
-    
-    public void setId(int id) { 
-        this.id = id; 
+    public int getId() {
+
+        return id;
+
     }
 
-    public int getIdMantenimiento() { 
-        return id; 
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getNumeroServicio() { 
-        return numeroServicio; 
-    }
-    
-    public void setNumeroServicio(String numeroServicio) { 
-        this.numeroServicio = numeroServicio; 
+    public int getIdMantenimiento() {
+        return id;
     }
 
-    public int getEquipoId() { 
-        return equipoId; 
-    }
-    public void setEquipoId(int equipoId) { 
-        this.equipoId = equipoId; 
+    public String getNumeroServicio() {
+        return numeroServicio;
     }
 
-    public int getIdEquipo() { 
-        return equipoId; 
+    public void setNumeroServicio(String numeroServicio) {
+        this.numeroServicio = numeroServicio;
     }
 
-    public int getReporteDanoId() { 
-        return reporteDanoId; 
-    }
-    
-    public void setReporteDanoId(int reporteDanoId) { 
-        this.reporteDanoId = reporteDanoId; 
+    public int getEquipoId() {
+        return equipoId;
     }
 
-    public LocalDate getFechaInicio() { 
-        return fechaInicio; 
-    }
-    
-    public void setFechaInicio(LocalDate fechaInicio) { 
-        this.fechaInicio = fechaInicio; 
+    public void setEquipoId(int equipoId) {
+        this.equipoId = equipoId;
     }
 
-    public LocalDateTime getFechaInicioCompleta() { 
-        return fechaInicioCompleta; 
+    public int getIdEquipo() {
+        return equipoId;
     }
 
-    public LocalDate getFechaFin() { 
-        return fechaFin; 
-    }
-    
-    public void setFechaFin(LocalDate fechaFin) { 
-        this.fechaFin = fechaFin; 
+    public int getReporteDanoId() {
+        return reporteDanoId;
     }
 
-    public int getResponsableId() { 
-        return responsableId; 
-    }
-    
-    public void setResponsableId(int responsableId) { 
-        this.responsableId = responsableId; 
+    public void setReporteDanoId(int reporteDanoId) {
+        this.reporteDanoId = reporteDanoId;
     }
 
-    public int getIdTecnico() { 
-        return responsableId; 
+    public LocalDate getFechaInicio() {
+        return fechaInicio;
     }
 
-    public Tipo getTipo() { 
-        return tipo; 
+    public void setFechaInicio(LocalDate fechaInicio) {
+        this.fechaInicio = fechaInicio;
     }
-    
-    
+
+    public LocalDateTime getFechaInicioCompleta() {
+        return fechaInicioCompleta;
+    }
+
+    public LocalDate getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(LocalDate fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    public int getResponsableId() {
+        return responsableId;
+    }
+
+    public void setResponsableId(int responsableId) {
+        this.responsableId = responsableId;
+    }
+
+    public int getIdTecnico() {
+        return responsableId;
+    }
+
+    public Tipo getTipo() {
+        return tipo;
+    }
+
     public void setTipo(Tipo tipo) {
         this.tipo = tipo;
         if (tipo != null) {
@@ -160,19 +162,26 @@ public class Mantenimiento {
         }
     }
 
-    public String getTipoTexto() { return tipoTexto; }
+    public String getTipoTexto() {
+
+        return tipoTexto;
+
+    }
 
     public void setTipoTexto(String tipoTexto) {
         this.tipoTexto = tipoTexto;
         this.tipo = parseTipo(tipoTexto);
     }
 
-    // valor que se guarda en la base de datos: 'Preventivo' o 'Correctivo'
     public String tipoValorBd() {
         return tipo == Tipo.CORRECTIVO ? "Correctivo" : "Preventivo";
     }
 
-    public Estado getEstado() { return estado; }
+    public Estado getEstado() {
+
+        return estado;
+
+    }
 
     public void setEstado(Estado estado) {
         if (estado == null) {
@@ -181,7 +190,11 @@ public class Mantenimiento {
         this.estado = estado;
     }
 
-    public String getEstadoTexto() { return estado != null ? estado.name() : null; }
+    public String getEstadoTexto() {
+
+        return estado != null ? estado.name() : null;
+
+    }
 
     public void setEstadoTexto(String estadoTexto) {
         if (estadoTexto == null || estadoTexto.isBlank()) {
@@ -206,33 +219,79 @@ public class Mantenimiento {
         return 0.0;
     }
 
-    public String getFallaReportada() { return fallaReportada; }
-    public void setFallaReportada(String fallaReportada) { this.fallaReportada = fallaReportada; }
+    public String getFallaReportada() {
 
-    public String getDiagnostico() { return diagnostico; }
-    public void setDiagnostico(String diagnostico) { this.diagnostico = diagnostico; }
+        return fallaReportada;
 
-    public String getActividadesRealizadas() { return actividadesRealizadas; }
-    public void setActividadesRealizadas(String actividadesRealizadas) { this.actividadesRealizadas = actividadesRealizadas; }
+    }
 
-    public String getResultado() { return resultado; }
-    public void setResultado(String resultado) { this.resultado = resultado; }
+    public void setFallaReportada(String fallaReportada) {
+        this.fallaReportada = fallaReportada;
+    }
 
-    public String getEstadoFinalEquipo() { return estadoFinalEquipo; }
-    public void setEstadoFinalEquipo(String estadoFinalEquipo) { this.estadoFinalEquipo = estadoFinalEquipo; }
+    public String getDiagnostico() {
+        return diagnostico;
+    }
 
-    public String getRecomendaciones() { return recomendaciones; }
-    public void setRecomendaciones(String recomendaciones) { this.recomendaciones = recomendaciones; }
+    public void setDiagnostico(String diagnostico) {
+        this.diagnostico = diagnostico;
+    }
 
-    public String getObservaciones() { return observaciones; }
-    public void setObservaciones(String observaciones) { this.observaciones = observaciones; }
+    public String getActividadesRealizadas() {
+        return actividadesRealizadas;
+    }
 
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    public void setActividadesRealizadas(String actividadesRealizadas) {
+        this.actividadesRealizadas = actividadesRealizadas;
+    }
 
-    public List<Pieza> getPiezas() { return piezas; }
+    public String getResultado() {
+        return resultado;
+    }
 
-    public Pieza getPieza() { return piezas.isEmpty() ? null : piezas.get(0); }
+    public void setResultado(String resultado) {
+        this.resultado = resultado;
+    }
+
+    public String getEstadoFinalEquipo() {
+        return estadoFinalEquipo;
+    }
+
+    public void setEstadoFinalEquipo(String estadoFinalEquipo) {
+        this.estadoFinalEquipo = estadoFinalEquipo;
+    }
+
+    public String getRecomendaciones() {
+        return recomendaciones;
+    }
+
+    public void setRecomendaciones(String recomendaciones) {
+        this.recomendaciones = recomendaciones;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public List<Pieza> getPiezas() {
+        return piezas;
+    }
+
+    public Pieza getPieza() {
+        return piezas.isEmpty() ? null : piezas.get(0);
+    }
 
     public void agregarPieza(Pieza pieza) {
         if (pieza == null) {

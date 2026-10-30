@@ -26,35 +26,87 @@ public class Usuario {
         this.estado = estado;
     }
 
-    public int getIdUsuario() { return idUsuario; }
-    public void setIdUsuario(int idUsuario) { this.idUsuario = idUsuario; }
+    public int getIdUsuario() {
 
-    public String getCodigo() { return codigo; }
-    public void setCodigo(String codigo) { this.codigo = codigo; }
+        return idUsuario;
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    }
 
-    public String getApellido() { return apellido; }
-    public void setApellido(String apellido) { this.apellido = apellido; }
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
 
-    public String getUsuario() { return usuario; }
-    public void setUsuario(String usuario) { this.usuario = usuario; }
+    public String getCodigo() {
+        return codigo;
+    }
 
-    public String getContrasena() { return contrasena; }
-    public void setContrasena(String contrasena) { this.contrasena = contrasena; }
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
 
-    public String getClave() { return contrasena; }
-    public void setClave(String clave) { this.contrasena = clave; }
+    public String getNombre() {
+        return nombre;
+    }
 
-    public String getCorreo() { return correo; }
-    public void setCorreo(String correo) { this.correo = correo; }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-    public String getRol() { return rol; }
-    public void setRol(String rol) { this.rol = rol; }
+    public String getApellido() {
+        return apellido;
+    }
 
-    public String getEstado() { return estado; }
-    public void setEstado(String estado) { this.estado = estado; }
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+
+    public String getClave() {
+        return contrasena;
+    }
+
+    public void setClave(String clave) {
+        this.contrasena = clave;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
 
     public void setEstado(boolean activo) {
         this.estado = activo ? "Activo" : "Inactivo";
@@ -64,8 +116,13 @@ public class Usuario {
         return "Activo".equalsIgnoreCase(estado);
     }
 
-    public LocalDate getFechaCreacion() { return fechaCreacion; }
-    public void setFechaCreacion(LocalDate fechaCreacion) { this.fechaCreacion = fechaCreacion; }
+    public LocalDate getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(LocalDate fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
 
     public boolean autenticar() { return true; }
     public void cambiarContrasena() {}

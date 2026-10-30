@@ -6,7 +6,7 @@ import com.labcontrol.modelo.Software;
 public class FrmSoftware extends javax.swing.JDialog {
 
     private final SoftwareDao softwareDao = new SoftwareDao();
-    private Software original;   // null = registro nuevo
+    private Software original;
 
     public FrmSoftware(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -74,7 +74,6 @@ public class FrmSoftware extends javax.swing.JDialog {
 
     
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         pnlEncabezado = new javax.swing.JPanel();
@@ -228,17 +227,16 @@ public class FrmSoftware extends javax.swing.JDialog {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {
         guardar();
-    }//GEN-LAST:event_btnGuardarActionPerformed
+    }
 
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {
         dispose();
-    }//GEN-LAST:event_btnCancelarActionPerformed
+    }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JComboBox<String> cboEstado;
@@ -254,5 +252,4 @@ public class FrmSoftware extends javax.swing.JDialog {
     private javax.swing.JPanel pnlEncabezado;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtVersion;
-    // End of variables declaration//GEN-END:variables
 }

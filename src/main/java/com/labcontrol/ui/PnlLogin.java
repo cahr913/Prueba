@@ -69,7 +69,6 @@ public class PnlLogin extends javax.swing.JPanel {
             registro.setDispositivo("Aplicacion de escritorio");
             new BitacoraAccesoDao().insertar(registro);
         } catch (Exception ignorado) {
-            // La bitacora no debe impedir el acceso al sistema.
         }
     }
 
@@ -81,7 +80,6 @@ public class PnlLogin extends javax.swing.JPanel {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         lblSistema = new javax.swing.JLabel();
@@ -197,21 +195,20 @@ public class PnlLogin extends javax.swing.JPanel {
                 .addComponent(pnlTarjeta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
-    private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
+    private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {
         txtClave.requestFocusInWindow();
-    }//GEN-LAST:event_txtUsuarioActionPerformed
+    }
 
-    private void txtClaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClaveActionPerformed
+    private void txtClaveActionPerformed(java.awt.event.ActionEvent evt) {
         ingresar();
-    }//GEN-LAST:event_txtClaveActionPerformed
+    }
 
-    private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
+    private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {
         ingresar();
-    }//GEN-LAST:event_btnIngresarActionPerformed
+    }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIngresar;
     private javax.swing.JLabel lblAcceso;
     private javax.swing.JLabel lblAyuda;
@@ -223,5 +220,4 @@ public class PnlLogin extends javax.swing.JPanel {
     private javax.swing.JPanel pnlTarjeta;
     private javax.swing.JPasswordField txtClave;
     private javax.swing.JTextField txtUsuario;
-    // End of variables declaration//GEN-END:variables
 }

@@ -149,7 +149,6 @@ public class PnlUsuarios extends javax.swing.JPanel implements Refrescable {
             return;
         }
 
-        // Verificar nombre de usuario único
         try {
             Usuario existente = dao.buscarPorNombreUsuario(nombreUsuario);
             if (existente != null && (editado == null || existente.getIdUsuario() != editado.getIdUsuario())) {
@@ -189,7 +188,6 @@ public class PnlUsuarios extends javax.swing.JPanel implements Refrescable {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         lblTitulo = new javax.swing.JLabel();
@@ -269,7 +267,9 @@ public class PnlUsuarios extends javax.swing.JPanel implements Refrescable {
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
+
                 return canEdit [columnIndex];
+
             }
         });
         scrUsuarios.setViewportView(tblUsuarios);
@@ -413,41 +413,40 @@ public class PnlUsuarios extends javax.swing.JPanel implements Refrescable {
                 .addComponent(pnlFormulario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
-    private void txtBusquedaCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtBusquedaCaretUpdate
+    private void txtBusquedaCaretUpdate(javax.swing.event.CaretEvent evt) {
         if (modelo != null && !txtBusqueda.getText().equals(ultimaBusqueda)) {
             cargarTabla();
         }
-    }//GEN-LAST:event_txtBusquedaCaretUpdate
+    }
 
-    private void cboFiltroEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboFiltroEstadoActionPerformed
+    private void cboFiltroEstadoActionPerformed(java.awt.event.ActionEvent evt) {
         if (!cargando) {
             cargarTabla();
         }
-    }//GEN-LAST:event_cboFiltroEstadoActionPerformed
+    }
 
-    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {
         nuevo();
-    }//GEN-LAST:event_btnNuevoActionPerformed
+    }
 
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {
         editar();
-    }//GEN-LAST:event_btnEditarActionPerformed
+    }
 
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {
         eliminar();
-    }//GEN-LAST:event_btnEliminarActionPerformed
+    }
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {
         guardar();
-    }//GEN-LAST:event_btnGuardarActionPerformed
+    }
 
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {
         cancelarEdicion();
-    }//GEN-LAST:event_btnCancelarActionPerformed
+    }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
@@ -471,5 +470,4 @@ public class PnlUsuarios extends javax.swing.JPanel implements Refrescable {
     private javax.swing.JPasswordField txtClave;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtUsuario;
-    // End of variables declaration//GEN-END:variables
 }

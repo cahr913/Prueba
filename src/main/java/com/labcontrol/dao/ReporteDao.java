@@ -17,9 +17,9 @@ public class ReporteDao {
         public int equipoId;
         public int docenteId;
         public int responsableId;
-        public String estadoEquipo;   // ACTIVO, DAÑADO, EN MANTENIMIENTO, FUERA DE SERVICIO
-        public String tipoMantenimiento; // Preventivo / Correctivo
-        public String accionPieza;    // REPARACION / REEMPLAZO
+        public String estadoEquipo;
+        public String tipoMantenimiento;
+        public String accionPieza;
         public LocalDate desde;
         public LocalDate hasta;
 
@@ -31,7 +31,6 @@ public class ReporteDao {
     private final StringBuilder sql = new StringBuilder();
     private final List<Object> parametros = new ArrayList<>();
 
-    // 1 ---------------------------------------------------------------
     
     public ResultadoReporte inventarioPorLaboratorio(Filtros f) throws SQLException {
         sql.setLength(0);
@@ -49,7 +48,6 @@ public class ReporteDao {
         return r;
     }
 
-    // 2 ---------------------------------------------------------------
     
     public ResultadoReporte equiposPorEstado(Filtros f) throws SQLException {
         sql.setLength(0);
@@ -66,7 +64,6 @@ public class ReporteDao {
         return r;
     }
 
-    // 3 ---------------------------------------------------------------
     
     public ResultadoReporte historialMantenimiento(Filtros f) throws SQLException {
         sql.setLength(0);
@@ -91,7 +88,6 @@ public class ReporteDao {
         return r;
     }
 
-    // 4 ---------------------------------------------------------------
     
     public ResultadoReporte cantidadMantenimientos(Filtros f) throws SQLException {
         sql.setLength(0);
@@ -117,7 +113,6 @@ public class ReporteDao {
         return r;
     }
 
-    // 5 ---------------------------------------------------------------
     
     public ResultadoReporte mantenimientosPorTipo(Filtros f) throws SQLException {
         sql.setLength(0);
@@ -137,7 +132,6 @@ public class ReporteDao {
         return r;
     }
 
-    // 6 ---------------------------------------------------------------
     
     public ResultadoReporte mantenimientosPorResponsable(Filtros f) throws SQLException {
         sql.setLength(0);
@@ -160,7 +154,6 @@ public class ReporteDao {
         return r;
     }
 
-    // 7 ---------------------------------------------------------------
     
     public ResultadoReporte equiposConMasFallas(Filtros f) throws SQLException {
         sql.setLength(0);
@@ -182,7 +175,6 @@ public class ReporteDao {
         return r;
     }
 
-    // 8 ---------------------------------------------------------------
     
     public ResultadoReporte piezasReparadas(Filtros f) throws SQLException {
         sql.setLength(0);
@@ -208,7 +200,6 @@ public class ReporteDao {
         return r;
     }
 
-    // 9 ---------------------------------------------------------------
     
     public ResultadoReporte recepcionesPorDocente(Filtros f) throws SQLException {
         sql.setLength(0);
@@ -233,7 +224,6 @@ public class ReporteDao {
         return r;
     }
 
-    // 10 --------------------------------------------------------------
     
     public ResultadoReporte equiposDanadosPorLaboratorio(Filtros f) throws SQLException {
         sql.setLength(0);
@@ -259,7 +249,6 @@ public class ReporteDao {
         return r;
     }
 
-    // 11 --------------------------------------------------------------
     
     public ResultadoReporte programacionLaboratorios(Filtros f) throws SQLException {
         sql.setLength(0);
@@ -283,7 +272,6 @@ public class ReporteDao {
         return r;
     }
 
-    // ---------------- Metodos auxiliares ----------------
 
     
     private void si(boolean condicion, String fragmento, Object valor) {

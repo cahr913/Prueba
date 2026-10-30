@@ -30,7 +30,7 @@ public class MantenimientoCorrectivo extends Mantenimiento {
     public double calcularCostoEstimado() {
         double total = 0.0;
         for (Pieza p : getPiezas()) {
-            total += p.getCantidad() * 50.0; // valor unitario ejemplo
+            total += p.getCantidad() * 50.0;
         }
         return total;
     }

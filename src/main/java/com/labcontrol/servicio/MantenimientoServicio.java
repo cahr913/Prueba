@@ -26,7 +26,6 @@ public class MantenimientoServicio {
             throw new IllegalArgumentException("La fecha de inicio es obligatoria.");
         }
 
-        // verifica si existen
         Equipo equipo = equipoDao.buscarPorId(m.getEquipoId());
         if (equipo == null) {
             throw new IllegalArgumentException("El equipo no existe.");
@@ -40,7 +39,6 @@ public class MantenimientoServicio {
             throw new IllegalArgumentException("El numero de servicio ya esta registrado.");
         }
 
-        // correctivo requiere piezas
         if (m instanceof MantenimientoCorrectivo && m.getEstado() == Mantenimiento.Estado.FINALIZADO && m.getPiezas().isEmpty()) {
             throw new IllegalStateException("No se puede finalizar un correctivo sin piezas.");
         }
@@ -101,7 +99,6 @@ public class MantenimientoServicio {
 
         dao.actualizar(m);
 
-        // sincronizar piezas: borrar las anteriores y guardar las actuales
         try (java.sql.Connection cn = com.labcontrol.db.ConexionBD.abrir();
              java.sql.PreparedStatement ps = cn.prepareStatement("DELETE FROM pieza WHERE mantenimiento_id = ?")) {
             ps.setInt(1, m.getId());

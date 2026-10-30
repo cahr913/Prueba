@@ -48,7 +48,6 @@ public class FrmAsistenteInstalacion extends javax.swing.JDialog {
         pnlSoftware.setLayout(new BoxLayout(pnlSoftware, BoxLayout.Y_AXIS));
         txtFecha.setText(LocalDate.now().toString());
 
-        // 1. Equipo destino: solo computadoras disponibles (estado ACTIVO)
         cboEquipo.removeAllItems();
         try {
             List<Computadora> todas = equipoDao.listarComputadoras();
@@ -65,7 +64,6 @@ public class FrmAsistenteInstalacion extends javax.swing.JDialog {
             Ui.fallo(this, "Error al cargar computadoras: " + ex.getMessage());
         }
 
-        // 2. Software a vincular: solo el que está Activo en el catálogo
         try {
             for (Software s : softwareDao.listar()) {
                 if (!"Activo".equalsIgnoreCase(s.getEstado())) continue;
@@ -148,7 +146,6 @@ public class FrmAsistenteInstalacion extends javax.swing.JDialog {
 
     
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         pnlEncabezado = new javax.swing.JPanel();
@@ -353,23 +350,22 @@ public class FrmAsistenteInstalacion extends javax.swing.JDialog {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
-    private void cboEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboEquipoActionPerformed
+    private void cboEquipoActionPerformed(java.awt.event.ActionEvent evt) {
         if (!cargando) {
             actualizarChecks();
         }
-    }//GEN-LAST:event_cboEquipoActionPerformed
+    }
 
-    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {
         registrar();
-    }//GEN-LAST:event_btnRegistrarActionPerformed
+    }
 
-    private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
+    private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {
         dispose();
-    }//GEN-LAST:event_btnCerrarActionPerformed
+    }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JComboBox<String> cboEquipo;
@@ -385,5 +381,4 @@ public class FrmAsistenteInstalacion extends javax.swing.JDialog {
     private javax.swing.JPanel pnlSoftware;
     private javax.swing.JScrollPane scrSoftware;
     private javax.swing.JTextField txtFecha;
-    // End of variables declaration//GEN-END:variables
 }

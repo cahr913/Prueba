@@ -258,7 +258,6 @@ public class PnlHorarios extends javax.swing.JPanel implements Refrescable {
         h.setDocenteId(docente.getIdUsuario());
         h.setCurso(actividad);
         h.setDia(dia);
-        // Calcular la fecha DATE del próximo día de la semana seleccionado
         LocalDate fechaDia = LocalDate.now();
         while (!fechaDia.getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("es", "ES")).equalsIgnoreCase(dia)) {
             fechaDia = fechaDia.plusDays(1);
@@ -305,7 +304,6 @@ public class PnlHorarios extends javax.swing.JPanel implements Refrescable {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         lblTitulo = new javax.swing.JLabel();
@@ -387,7 +385,9 @@ public class PnlHorarios extends javax.swing.JPanel implements Refrescable {
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
+
                 return canEdit [columnIndex];
+
             }
         });
 
@@ -549,41 +549,40 @@ public class PnlHorarios extends javax.swing.JPanel implements Refrescable {
                     .addComponent(pnlFormulario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap())
         );
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
-    private void cboFiltroLaboratorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboFiltroLaboratorioActionPerformed
+    private void cboFiltroLaboratorioActionPerformed(java.awt.event.ActionEvent evt) {
         if (!cargando) {
             cargarTabla();
         }
-    }//GEN-LAST:event_cboFiltroLaboratorioActionPerformed
+    }
 
-    private void cboFiltroDiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboFiltroDiaActionPerformed
+    private void cboFiltroDiaActionPerformed(java.awt.event.ActionEvent evt) {
         if (!cargando) {
             cargarTabla();
         }
-    }//GEN-LAST:event_cboFiltroDiaActionPerformed
+    }
 
-    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {
         nuevo();
-    }//GEN-LAST:event_btnNuevoActionPerformed
+    }
 
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {
         editar();
-    }//GEN-LAST:event_btnEditarActionPerformed
+    }
 
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {
         eliminar();
-    }//GEN-LAST:event_btnEliminarActionPerformed
+    }
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {
         guardar();
-    }//GEN-LAST:event_btnGuardarActionPerformed
+    }
 
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {
         cancelarEdicion();
-    }//GEN-LAST:event_btnCancelarActionPerformed
+    }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblFiltroLaboratorio;
     private javax.swing.JComboBox<Object> cboFiltroLaboratorio;
@@ -609,5 +608,4 @@ public class PnlHorarios extends javax.swing.JPanel implements Refrescable {
     private javax.swing.JTextField txtActividad;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnCancelar;
-    // End of variables declaration//GEN-END:variables
 }

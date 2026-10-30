@@ -30,7 +30,6 @@ public class PnlLaboratorios extends javax.swing.JPanel implements Refrescable {
     private Laboratorio editado;
     private boolean cargando = true;
 
-    // Tablas de equipos y computadoras del laboratorio seleccionado
     private DefaultTableModel modeloEquipos;
     private DefaultTableModel modeloComputadoras;
     private JTable tblEquipos;
@@ -49,7 +48,6 @@ public class PnlLaboratorios extends javax.swing.JPanel implements Refrescable {
         modelo = (DefaultTableModel) tblLaboratorios.getModel();
         refrescar();
 
-        // Al seleccionar un laboratorio de la tabla, cargar sus equipos y computadoras
         tblLaboratorios.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 int fila = tblLaboratorios.getSelectedRow();
@@ -66,28 +64,30 @@ public class PnlLaboratorios extends javax.swing.JPanel implements Refrescable {
     private void crearPanelesEquipos() {
         pnlTabsEquipos = new JTabbedPane();
 
-        // Panel Equipos
         JPanel pnlEquipos = new JPanel(new java.awt.BorderLayout());
         tblEquipos = new JTable();
         modeloEquipos = new DefaultTableModel(
             new Object[]{"Código", "Tipo", "Marca", "Modelo", "Serie", "Estado"}, 0
         ) {
             @Override
-            public boolean isCellEditable(int row, int col) { return false; }
+            public boolean isCellEditable(int row, int col) {
+                return false;
+            }
         };
         tblEquipos.setModel(modeloEquipos);
         Ui.configurarTabla(tblEquipos, 100, 100, 120, 120, 120, 100);
         pnlEquipos.add(new JScrollPane(tblEquipos), java.awt.BorderLayout.CENTER);
         pnlTabsEquipos.addTab("Equipos", pnlEquipos);
 
-        // Panel Computadoras
         JPanel pnlComputadoras = new JPanel(new java.awt.BorderLayout());
         tblComputadoras = new JTable();
         modeloComputadoras = new DefaultTableModel(
             new Object[]{"Código", "Host Name", "IP", "Sistema Operativo", "Arquitectura", "Estado"}, 0
         ) {
             @Override
-            public boolean isCellEditable(int row, int col) { return false; }
+            public boolean isCellEditable(int row, int col) {
+                return false;
+            }
         };
         tblComputadoras.setModel(modeloComputadoras);
         Ui.configurarTabla(tblComputadoras, 100, 120, 100, 150, 80, 100);
@@ -96,16 +96,13 @@ public class PnlLaboratorios extends javax.swing.JPanel implements Refrescable {
 
         pnlTabsEquipos.setVisible(false);
 
-        // Reconstruir el GroupLayout para incluir pnlTabsEquipos debajo del formulario
         javax.swing.GroupLayout layout = (javax.swing.GroupLayout) getLayout();
 
-        // Horizontal group: agregar pnlTabsEquipos al final del grupo paralelo existente
         javax.swing.GroupLayout.SequentialGroup hSeq = layout.createSequentialGroup()
             .addContainerGap()
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addContainerGap();
-        // Reconstruimos todo el horizontal
         javax.swing.GroupLayout.ParallelGroup hPar = layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING);
         hPar.addGroup(layout.createSequentialGroup()
             .addContainerGap()
@@ -140,7 +137,6 @@ public class PnlLaboratorios extends javax.swing.JPanel implements Refrescable {
             .addContainerGap());
         layout.setHorizontalGroup(hPar);
 
-        // Vertical group: agregar pnlTabsEquipos después de pnlFormulario
         javax.swing.GroupLayout.SequentialGroup vSeq = layout.createSequentialGroup()
             .addContainerGap()
             .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -405,7 +401,6 @@ public class PnlLaboratorios extends javax.swing.JPanel implements Refrescable {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         lblTitulo = new javax.swing.JLabel();
@@ -485,7 +480,9 @@ public class PnlLaboratorios extends javax.swing.JPanel implements Refrescable {
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
+
                 return canEdit [columnIndex];
+
             }
         });
         scrLaboratorios.setViewportView(tblLaboratorios);
@@ -624,41 +621,40 @@ public class PnlLaboratorios extends javax.swing.JPanel implements Refrescable {
                 .addComponent(pnlFormulario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
-    private void cboFiltroCentroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboFiltroCentroActionPerformed
+    private void cboFiltroCentroActionPerformed(java.awt.event.ActionEvent evt) {
         if (!cargando) {
             cargarTabla();
         }
-    }//GEN-LAST:event_cboFiltroCentroActionPerformed
+    }
 
-    private void cboFiltroEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboFiltroEstadoActionPerformed
+    private void cboFiltroEstadoActionPerformed(java.awt.event.ActionEvent evt) {
         if (!cargando) {
             cargarTabla();
         }
-    }//GEN-LAST:event_cboFiltroEstadoActionPerformed
+    }
 
-    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {
         nuevo();
-    }//GEN-LAST:event_btnNuevoActionPerformed
+    }
 
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {
         editar();
-    }//GEN-LAST:event_btnEditarActionPerformed
+    }
 
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {
         eliminar();
-    }//GEN-LAST:event_btnEliminarActionPerformed
+    }
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {
         guardar();
-    }//GEN-LAST:event_btnGuardarActionPerformed
+    }
 
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {
         cancelarEdicion();
-    }//GEN-LAST:event_btnCancelarActionPerformed
+    }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
@@ -682,5 +678,4 @@ public class PnlLaboratorios extends javax.swing.JPanel implements Refrescable {
     private javax.swing.JTextField txtCapacidad;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtUbicacion;
-    // End of variables declaration//GEN-END:variables
 }

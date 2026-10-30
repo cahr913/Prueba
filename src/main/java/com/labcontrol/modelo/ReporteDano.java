@@ -47,132 +47,143 @@ public class ReporteDano {
 
     
     
-    public int getId() { 
-        return id; 
-    }
+    public int getId() {
+
     
-    public void setId(int id) { 
-        this.id = id; 
-    }
-
-    public int getIdReporte() { 
-        return id; 
-    }
-
-    public int getLaboratorioid() { 
-        return laboratorioid; 
-    }
     
-    public void setLaboratorioid(int laboratorioid) { 
-        this.laboratorioid = laboratorioid; 
-    }
+        return id;
 
-    public int getEquipoid() { 
-        return equipoid; 
-    }
     
-    public void setEquipoid(int equipoid) { 
-        this.equipoid = equipoid; 
-    }
-
-    public int getIdEquipo() { 
-        return equipoid; 
-    }
-
-    public int getDocenteid() { 
-        return docenteid; 
-    }
     
-    public void setDocenteid(int docenteid) { 
-        this.docenteid = docenteid; 
     }
 
-    public int getIdDocente() { 
-        return docenteid; 
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public int getHorarioid() { 
-        return horarioid; 
-    }
-    
-    public void setHorarioid(int horarioid) { 
-        this.horarioid = horarioid; 
+    public int getIdReporte() {
+        return id;
     }
 
-    public int getIdRecepcion() { 
-        return idRecepcion; 
-    }
-    
-    public void setIdRecepcion(int idRecepcion) { 
-        this.idRecepcion = idRecepcion; 
-    }
-    
-    public String getTipoFalla() { 
-        return tipoFalla; 
-    }
-    
-    public void setTipoFalla(String tipoFalla) { 
-        this.tipoFalla = tipoFalla; 
+    public int getLaboratorioid() {
+        return laboratorioid;
     }
 
-    public String getFalla() { 
-        return tipoFalla; 
+    public void setLaboratorioid(int laboratorioid) {
+        this.laboratorioid = laboratorioid;
     }
 
-    public String getDescripcion() { 
-        return descripcion; 
+    public int getEquipoid() {
+        return equipoid;
     }
-    
-    public void setDescripcion(String descripcion) { 
-        this.descripcion = descripcion; 
+
+    public void setEquipoid(int equipoid) {
+        this.equipoid = equipoid;
+    }
+
+    public int getIdEquipo() {
+        return equipoid;
+    }
+
+    public int getDocenteid() {
+        return docenteid;
+    }
+
+    public void setDocenteid(int docenteid) {
+        this.docenteid = docenteid;
+    }
+
+    public int getIdDocente() {
+        return docenteid;
+    }
+
+    public int getHorarioid() {
+        return horarioid;
+    }
+
+    public void setHorarioid(int horarioid) {
+        this.horarioid = horarioid;
+    }
+
+    public int getIdRecepcion() {
+        return idRecepcion;
+    }
+
+    public void setIdRecepcion(int idRecepcion) {
+        this.idRecepcion = idRecepcion;
+    }
+
+    public String getTipoFalla() {
+        return tipoFalla;
+    }
+
+    public void setTipoFalla(String tipoFalla) {
+        this.tipoFalla = tipoFalla;
+    }
+
+    public String getFalla() {
+        return tipoFalla;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public void actualizarDescripcion(String descripcion) { 
         this.descripcion = descripcion; 
     }
 
-    public LocalDateTime getFechaHora() { 
-        return fechaHora; 
+    public LocalDateTime getFechaHora() {
+
+        return fechaHora;
+
     }
-    
-    public void setFechaHora(LocalDateTime fechaHora) { 
-        this.fechaHora = fechaHora; 
+
+    public void setFechaHora(LocalDateTime fechaHora) {
+        this.fechaHora = fechaHora;
     }
 
     public void setFechaHora(String fechaHora) {
         this.fechaHora = fechaHora == null || fechaHora.isBlank() ? null : LocalDateTime.parse(fechaHora);
     }
 
-    public LocalDateTime getFechaReporte() { 
-        return fechaHora; 
+    public LocalDateTime getFechaReporte() {
+        return fechaHora;
     }
 
-    public String getEstado() { 
-        return estado != null ? estado : estadoEncontrado; 
+    public String getEstado() {
+        return estado != null ? estado : estadoEncontrado;
     }
-    
+
     public void setEstado(String estado) {
         this.estado = estado;
         this.estadoEncontrado = estado;
     }
 
-    public String getEstadoEncontrado() { 
-        return estadoEncontrado != null ? estadoEncontrado : estado; 
-    }
-    
-    public void setEstadoEncontrado(String estadoEncontrado) { 
-        this.estadoEncontrado = estadoEncontrado; 
+    public String getEstadoEncontrado() {
+
+        return estadoEncontrado != null ? estadoEncontrado : estado;
+
     }
 
-    public String getObservaciones() { 
+    public void setEstadoEncontrado(String estadoEncontrado) {
+        this.estadoEncontrado = estadoEncontrado;
+    }
+
+    public String getObservaciones() {
         return observaciones;
     }
-    public void setObservaciones(String observaciones) { 
-        this.observaciones = observaciones; 
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
     }
 
-    public List<FotoEvidencia> getFotos() { 
-        return fotos; 
+    public List<FotoEvidencia> getFotos() {
+        return fotos;
     }
 
     public void agregarFoto(FotoEvidencia foto) {

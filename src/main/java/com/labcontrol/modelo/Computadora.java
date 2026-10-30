@@ -30,18 +30,45 @@ public class Computadora extends Equipo {
         }
     }
 
-    public String getHostname() { return hostname; }
-    public void setHostname(String hostname) { this.hostname = hostname; }
+    public String getHostname() {
 
-    public String getIp() { return ip; }
-    public void setIp(String ip) { this.ip = ip; }
+        return hostname;
 
-    public String getSistemaOperativo() { return sistemaOperativo; }
-    public void setSistemaOperativo(String sistemaOperativo) { this.sistemaOperativo = sistemaOperativo; }
+    }
 
-    public String getArquitectura() { return arquitectura; }
-    public void setArquitectura(String arquitectura) { this.arquitectura = arquitectura; }
+    public void setHostname(String hostname) {
+        this.hostname = hostname;
+    }
 
-    public String getCaracteristicas() { return caracteristicas; }
-    public void setCaracteristicas(String caracteristicas) { this.caracteristicas = caracteristicas; }
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public String getSistemaOperativo() {
+        return sistemaOperativo;
+    }
+
+    public void setSistemaOperativo(String sistemaOperativo) {
+        this.sistemaOperativo = sistemaOperativo;
+    }
+
+    public String getArquitectura() {
+        return arquitectura;
+    }
+
+    public void setArquitectura(String arquitectura) {
+        this.arquitectura = arquitectura;
+    }
+
+    public String getCaracteristicas() {
+        return caracteristicas;
+    }
+
+    public void setCaracteristicas(String caracteristicas) {
+        this.caracteristicas = caracteristicas;
+    }
 }

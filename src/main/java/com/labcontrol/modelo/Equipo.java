@@ -2,7 +2,6 @@ package com.labcontrol.modelo;
 
 public class Equipo {
     
-    // estados del equipo
     public static final String ACTIVO = "ACTIVO";
     public static final String DANADO = "DAÑADO";
     public static final String MANTENIMIENTO = "EN MANTENIMIENTO";
@@ -57,33 +56,85 @@ public class Equipo {
         return ACTIVO.equalsIgnoreCase(estado) || "Activo".equalsIgnoreCase(estado);
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
 
-    public String getCodigoInventario() { return codigoInventario; }
-    public void setCodigoInventario(String codigoInventario) { this.codigoInventario = codigoInventario; }
+        return id;
 
-    public String getTipo() { return tipo; }
-    public void setTipo(String tipo) { this.tipo = tipo; }
+    }
 
-    public String getNumSerie() { return numSerie; }
-    public void setNumSerie(String numSerie) { this.numSerie = numSerie; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getMarca() { return marca; }
-    public void setMarca(String marca) { this.marca = marca; }
+    public String getCodigoInventario() {
+        return codigoInventario;
+    }
 
-    public String getModelo() { return modelo; }
-    public void setModelo(String modelo) { this.modelo = modelo; }
+    public void setCodigoInventario(String codigoInventario) {
+        this.codigoInventario = codigoInventario;
+    }
 
-    public String getFechaAdquisicion() { return fechaAdquisicion; }
-    public void setFechaAdquisicion(String fechaAdquisicion) { this.fechaAdquisicion = fechaAdquisicion; }
+    public String getTipo() {
+        return tipo;
+    }
 
-    public String getEstado() { return estado; }
-    public void setEstado(String estado) { this.estado = estado; }
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 
-    public int getLaboratorioId() { return laboratorioId; }
-    public void setLaboratorioId(int laboratorioId) { this.laboratorioId = laboratorioId; }
+    public String getNumSerie() {
+        return numSerie;
+    }
 
-    public String getObservaciones() { return observaciones; }
-    public void setObservaciones(String observaciones) { this.observaciones = observaciones; }
+    public void setNumSerie(String numSerie) {
+        this.numSerie = numSerie;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public String getFechaAdquisicion() {
+        return fechaAdquisicion;
+    }
+
+    public void setFechaAdquisicion(String fechaAdquisicion) {
+        this.fechaAdquisicion = fechaAdquisicion;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public int getLaboratorioId() {
+        return laboratorioId;
+    }
+
+    public void setLaboratorioId(int laboratorioId) {
+        this.laboratorioId = laboratorioId;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
 }

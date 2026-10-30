@@ -10,7 +10,7 @@ public class FrmEquipo extends javax.swing.JDialog {
 
     private final EquipoDao equipoDao = new EquipoDao();
     private final LaboratorioDao laboratorioDao = new LaboratorioDao();
-    private Equipo original;   // null = registro nuevo
+    private Equipo original;
 
     public FrmEquipo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -52,7 +52,6 @@ public class FrmEquipo extends javax.swing.JDialog {
             Laboratorio lab = laboratorioDao.buscarPorId(e.getLaboratorioId());
             if (lab != null) cboLab.setSelectedItem(lab.getCodigo());
         } catch (Exception ex) {
-            // ignorar error de laboratorio en cargar
         }
     }
 
@@ -114,7 +113,6 @@ public class FrmEquipo extends javax.swing.JDialog {
 
     
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         pnlEncabezado = new javax.swing.JPanel();
@@ -300,17 +298,16 @@ public class FrmEquipo extends javax.swing.JDialog {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {
         guardar();
-    }//GEN-LAST:event_btnGuardarActionPerformed
+    }
 
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {
         dispose();
-    }//GEN-LAST:event_btnCancelarActionPerformed
+    }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JComboBox<String> cboEstado;
@@ -332,5 +329,4 @@ public class FrmEquipo extends javax.swing.JDialog {
     private javax.swing.JTextField txtMarca;
     private javax.swing.JTextField txtModelo;
     private javax.swing.JTextField txtSerie;
-    // End of variables declaration//GEN-END:variables
 }

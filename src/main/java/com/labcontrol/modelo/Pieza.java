@@ -36,27 +36,59 @@ public class Pieza {
         this.accion = Accion.valueOf(tipoOperacion.name());
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
 
-    public int getIdPieza() { return id; }
+        return id;
 
-    public int getMantenimientoId() { return mantenimientoId; }
-    public void setMantenimientoId(int mantenimientoId) { this.mantenimientoId = mantenimientoId; }
+    }
 
-    public String getNombre() { return nombre; }
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getIdPieza() {
+        return id;
+    }
+
+    public int getMantenimientoId() {
+        return mantenimientoId;
+    }
+
+    public void setMantenimientoId(int mantenimientoId) {
+        this.mantenimientoId = mantenimientoId;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
     public void setNombre(String nombre) {
         this.nombre = nombre == null ? null : nombre.trim();
     }
 
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    public String getDescripcion() {
+        return descripcion;
+    }
 
-    public int getCantidad() { return cantidad; }
-    public void setCantidad(int cantidad) { this.cantidad = cantidad; }
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
-    public Accion getAccion() { return accion; }
-    public void setAccion(Accion accion) { this.accion = accion; }
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public Accion getAccion() {
+        return accion;
+    }
+
+    public void setAccion(Accion accion) {
+        this.accion = accion;
+    }
 
     public TipoOperacion getTipoOperacion() {
         return accion == null ? null : TipoOperacion.valueOf(accion.name());
@@ -69,8 +101,15 @@ public class Pieza {
         this.accion = Accion.valueOf(tipoOperacion.name());
     }
 
-    public String getObservaciones() { return observaciones; }
-    public void setObservaciones(String observaciones) { this.observaciones = observaciones; }
+    public String getObservaciones() {
+
+        return observaciones;
+
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
 
     @Override
     public String toString() {

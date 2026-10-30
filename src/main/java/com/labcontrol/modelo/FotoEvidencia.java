@@ -20,20 +20,47 @@ public class FotoEvidencia {
         this.descripcion = descripcion;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
 
-    public int getReporteid() { return reporteid; }
-    public void setReporteid(int reporteid) { this.reporteid = reporteid; }
+        return id;
 
-    public int getEquipoid() { return equipoid; }
-    public void setEquipoid(int equipoid) { this.equipoid = equipoid; }
+    }
 
-    public String getRutaArchivo() { return rutaArchivo; }
-    public void setRutaArchivo(String rutaArchivo) { this.rutaArchivo = rutaArchivo; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    public int getReporteid() {
+        return reporteid;
+    }
+
+    public void setReporteid(int reporteid) {
+        this.reporteid = reporteid;
+    }
+
+    public int getEquipoid() {
+        return equipoid;
+    }
+
+    public void setEquipoid(int equipoid) {
+        this.equipoid = equipoid;
+    }
+
+    public String getRutaArchivo() {
+        return rutaArchivo;
+    }
+
+    public void setRutaArchivo(String rutaArchivo) {
+        this.rutaArchivo = rutaArchivo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
     public static final String[] EXTENSIONES_VALIDAS = { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp" };
 

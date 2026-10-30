@@ -12,10 +12,16 @@ public class MantenimientoPreventivo extends Mantenimiento {
         this.listaChequeo = listaChequeo;
     }
 
-    public String getListaChequeo() { return listaChequeo; }
-    public void setListaChequeo(String listaChequeo) { this.listaChequeo = listaChequeo; }
+    public String getListaChequeo() {
 
-    
+        return listaChequeo;
+
+    }
+
+    public void setListaChequeo(String listaChequeo) {
+        this.listaChequeo = listaChequeo;
+    }
+
     @Override
     public void finalizar() {
         super.finalizar();

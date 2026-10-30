@@ -87,7 +87,6 @@ public class FrmRecepcion extends javax.swing.JFrame {
         btnActualizar.setEnabled(false);
     }
 
-    // ---------------- Construccion ----------------
 
     private void construir() {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -185,7 +184,6 @@ public class FrmRecepcion extends javax.swing.JFrame {
         return panel;
     }
 
-    // ---------------- Carga de datos ----------------
 
     private void recargarCombos() {
         laboratorios.clear();
@@ -287,11 +285,9 @@ public class FrmRecepcion extends javax.swing.JFrame {
             chkRed.setSelected(r.isRed());
             txtObservaciones.setText(r.getObservaciones());
 
-            // Marcar los equipos dañados ya registrados en esa recepcion.
             cargarEquiposDelLaboratorio();
             for (int i = 0; i < modeloEquipos.getRowCount(); i++) {
                 String codigo = String.valueOf(modeloEquipos.getValueAt(i, 1));
-                // Buscar el id del equipo por codigo usando el DAO.
                 int equipoId = buscarIdEquipoPorCodigo(codigo);
                 if (equipoId > 0 && r.getEquiposDanadosIds().contains(equipoId)) {
                     modeloEquipos.setValueAt(true, i, 0);
@@ -311,7 +307,6 @@ public class FrmRecepcion extends javax.swing.JFrame {
                 }
             }
         } catch (SQLException ignorado) {
-            // Si falla la busqueda, simplemente no se marca la casilla.
         }
         return 0;
     }
@@ -328,7 +323,6 @@ public class FrmRecepcion extends javax.swing.JFrame {
         }
     }
 
-    // ---------------- Acciones CRUD ----------------
 
     private void guardar() {
         Recepcion r = crearObjetoDesdeFormulario(true);
@@ -420,7 +414,6 @@ public class FrmRecepcion extends javax.swing.JFrame {
         r.setEstadoEquipos((String) cboEstadoEquipos.getSelectedItem());
         r.setObservaciones(txtObservaciones.getText().trim());
 
-        // Equipos marcados como dañados en la tabla.
         List<Integer> danados = new ArrayList<>();
         for (int i = 0; i < modeloEquipos.getRowCount(); i++) {
             boolean marcado = Boolean.TRUE.equals(modeloEquipos.getValueAt(i, 0));

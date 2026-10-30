@@ -166,6 +166,7 @@ public class EquipoDao {
         }
         return lista;
     }
+
     public void actualizarEstado(int equipoId, String estado) throws SQLException {
     String sql = "UPDATE equipo SET estado = ? WHERE id = ?";
     try (Connection cn = ConexionBD.abrir();

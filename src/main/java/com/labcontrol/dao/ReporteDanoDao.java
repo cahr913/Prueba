@@ -11,8 +11,6 @@ import java.sql.Timestamp;
 public class ReporteDanoDao {
 
     public void insertar(ReporteDano r) throws SQLException {
-        // Si no se especificó laboratorio, obtenerlo automáticamente del equipo
-        // (cada equipo pertenece a un laboratorio, así evitamos el error de FK)
         if (r.getLaboratorioid() <= 0 && r.getEquipoid() > 0) {
             String sqlLab = "SELECT laboratorio_id FROM equipo WHERE id = (?)";
             try (Connection cn = ConexionBD.abrir();

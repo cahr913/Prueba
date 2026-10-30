@@ -43,7 +43,6 @@ public class RecepcionDao {
     }
 
     public void eliminar(int id) throws SQLException {
-        // Las filas de recepcion_equipo_dano se eliminan por ON DELETE CASCADE.
         String sql = "DELETE FROM recepcion WHERE id = (?)";
         try (Connection cn = ConexionBD.abrir();
              PreparedStatement ps = cn.prepareStatement(sql)) {
@@ -98,7 +97,6 @@ public class RecepcionDao {
         return ids;
     }
 
-    // ---------------- Metodos auxiliares ----------------
 
     private int llenar(PreparedStatement ps, Recepcion r, int desde) throws SQLException {
         ps.setInt(desde, r.getLaboratorioId());
