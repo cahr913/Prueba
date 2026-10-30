@@ -1,6 +1,6 @@
 package com.labcontrol.dao;
 
-import com.labcontrol.modelo.*;
+import com.labcontrol.modelo.Mantenimiento;
 import com.labcontrol.db.ConexionBD;
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,14 +9,16 @@ import java.util.List;
 public class MantenimientoDao {
 
     public void insertar(Mantenimiento m) throws SQLException {
-        String sql = "INSERT INTO mantenimiento(numero_servicio, equipo_id, reporte_dano_id, fecha_inicio, fecha_fin, "
-                + "responsable_id, tipo, estado, falla_reportada, diagnostico, actividades_realizadas, resultado, "
-                + "estado_final_equipo, recomendaciones, observaciones) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO mantenimiento(numero_servicio, equipo_id, reporte_dano_id, fecha_inicio, fecha_fin, responsable_id, tipo, estado, falla_reportada, diagnostico, actividades_realizadas, resultado, estado_final_equipo, recomendaciones, observaciones) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try (Connection cn = ConexionBD.abrir();
              PreparedStatement ps = cn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, m.getNumeroServicio());
             ps.setInt(2, m.getEquipoId());
-            setNullableInt(ps, 3, m.getReporteDanoId());
+            if (m.getReporteDanoId() > 0) {
+                ps.setInt(3, m.getReporteDanoId());
+            } else {
+                ps.setNull(3, java.sql.Types.INTEGER);
+            }
             ps.setDate(4, m.getFechaInicio() != null ? java.sql.Date.valueOf(m.getFechaInicio()) : null);
             ps.setDate(5, m.getFechaFin() != null ? java.sql.Date.valueOf(m.getFechaFin()) : null);
             ps.setInt(6, m.getResponsableId());
@@ -40,15 +42,16 @@ public class MantenimientoDao {
     }
 
     public void actualizar(Mantenimiento m) throws SQLException {
-        String sql = "UPDATE mantenimiento SET numero_servicio=?, equipo_id=?, reporte_dano_id=?, fecha_inicio=?, "
-                + "fecha_fin=?, responsable_id=?, tipo=?, estado=?, falla_reportada=?, diagnostico=?, "
-                + "actividades_realizadas=?, resultado=?, estado_final_equipo=?, recomendaciones=?, observaciones=? "
-                + "WHERE id=?";
+        String sql = "UPDATE mantenimiento SET numero_servicio=?, equipo_id=?, reporte_dano_id=?, fecha_inicio=?, fecha_fin=?, responsable_id=?, tipo=?, estado=?, falla_reportada=?, diagnostico=?, actividades_realizadas=?, resultado=?, estado_final_equipo=?, recomendaciones=?, observaciones=? WHERE id=?";
         try (Connection cn = ConexionBD.abrir();
              PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setString(1, m.getNumeroServicio());
             ps.setInt(2, m.getEquipoId());
-            setNullableInt(ps, 3, m.getReporteDanoId());
+            if (m.getReporteDanoId() > 0) {
+                ps.setInt(3, m.getReporteDanoId());
+            } else {
+                ps.setNull(3, java.sql.Types.INTEGER);
+            }
             ps.setDate(4, m.getFechaInicio() != null ? java.sql.Date.valueOf(m.getFechaInicio()) : null);
             ps.setDate(5, m.getFechaFin() != null ? java.sql.Date.valueOf(m.getFechaFin()) : null);
             ps.setInt(6, m.getResponsableId());
@@ -70,7 +73,7 @@ public class MantenimientoDao {
     }
 
     public void eliminar(int id) throws SQLException {
-        String sql = "DELETE FROM mantenimiento WHERE id = (?)";
+        String sql = "DELETE FROM mantenimiento WHERE id = ?";
         try (Connection cn = ConexionBD.abrir();
              PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setInt(1, id);
@@ -82,13 +85,33 @@ public class MantenimientoDao {
     }
 
     public Mantenimiento buscarPorId(int id) throws SQLException {
-        String sql = "SELECT * FROM mantenimiento WHERE id = (?)";
+        String sql = "SELECT * FROM mantenimiento WHERE id = ?";
         try (Connection cn = ConexionBD.abrir();
              PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return leer(rs);
+                    Mantenimiento m = new Mantenimiento();
+                    m.setId(rs.getInt("id"));
+                    m.setNumeroServicio(rs.getString("numero_servicio"));
+                    m.setEquipoId(rs.getInt("equipo_id"));
+                    int reporte = rs.getInt("reporte_dano_id");
+                    m.setReporteDanoId(rs.wasNull() ? 0 : reporte);
+                    java.sql.Date fi = rs.getDate("fecha_inicio");
+                    m.setFechaInicio(fi != null ? fi.toLocalDate() : null);
+                    java.sql.Date ff = rs.getDate("fecha_fin");
+                    m.setFechaFin(ff != null ? ff.toLocalDate() : null);
+                    m.setResponsableId(rs.getInt("responsable_id"));
+                    m.setTipoTexto(rs.getString("tipo"));
+                    m.setEstadoTexto(rs.getString("estado"));
+                    m.setFallaReportada(rs.getString("falla_reportada"));
+                    m.setDiagnostico(rs.getString("diagnostico"));
+                    m.setActividadesRealizadas(rs.getString("actividades_realizadas"));
+                    m.setResultado(rs.getString("resultado"));
+                    m.setEstadoFinalEquipo(rs.getString("estado_final_equipo"));
+                    m.setRecomendaciones(rs.getString("recomendaciones"));
+                    m.setObservaciones(rs.getString("observaciones"));
+                    return m;
                 }
             }
         }
@@ -96,13 +119,33 @@ public class MantenimientoDao {
     }
 
     public Mantenimiento buscarPorNumeroServicio(String numeroServicio) throws SQLException {
-        String sql = "SELECT * FROM mantenimiento WHERE numero_servicio = (?)";
+        String sql = "SELECT * FROM mantenimiento WHERE numero_servicio = ?";
         try (Connection cn = ConexionBD.abrir();
              PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setString(1, numeroServicio);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return leer(rs);
+                    Mantenimiento m = new Mantenimiento();
+                    m.setId(rs.getInt("id"));
+                    m.setNumeroServicio(rs.getString("numero_servicio"));
+                    m.setEquipoId(rs.getInt("equipo_id"));
+                    int reporte = rs.getInt("reporte_dano_id");
+                    m.setReporteDanoId(rs.wasNull() ? 0 : reporte);
+                    java.sql.Date fi = rs.getDate("fecha_inicio");
+                    m.setFechaInicio(fi != null ? fi.toLocalDate() : null);
+                    java.sql.Date ff = rs.getDate("fecha_fin");
+                    m.setFechaFin(ff != null ? ff.toLocalDate() : null);
+                    m.setResponsableId(rs.getInt("responsable_id"));
+                    m.setTipoTexto(rs.getString("tipo"));
+                    m.setEstadoTexto(rs.getString("estado"));
+                    m.setFallaReportada(rs.getString("falla_reportada"));
+                    m.setDiagnostico(rs.getString("diagnostico"));
+                    m.setActividadesRealizadas(rs.getString("actividades_realizadas"));
+                    m.setResultado(rs.getString("resultado"));
+                    m.setEstadoFinalEquipo(rs.getString("estado_final_equipo"));
+                    m.setRecomendaciones(rs.getString("recomendaciones"));
+                    m.setObservaciones(rs.getString("observaciones"));
+                    return m;
                 }
             }
         }
@@ -111,47 +154,34 @@ public class MantenimientoDao {
 
     public List<Mantenimiento> listar() throws SQLException {
         List<Mantenimiento> lista = new ArrayList<>();
-        String sql = "SELECT * FROM mantenimiento ORDER BY fecha_inicio DESC, id DESC";
+        String sql = "SELECT * FROM mantenimiento ORDER BY fecha_inicio DESC";
         try (Connection cn = ConexionBD.abrir();
              PreparedStatement ps = cn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                lista.add(leer(rs));
+                Mantenimiento m = new Mantenimiento();
+                m.setId(rs.getInt("id"));
+                m.setNumeroServicio(rs.getString("numero_servicio"));
+                m.setEquipoId(rs.getInt("equipo_id"));
+                int reporte = rs.getInt("reporte_dano_id");
+                m.setReporteDanoId(rs.wasNull() ? 0 : reporte);
+                java.sql.Date fi = rs.getDate("fecha_inicio");
+                m.setFechaInicio(fi != null ? fi.toLocalDate() : null);
+                java.sql.Date ff = rs.getDate("fecha_fin");
+                m.setFechaFin(ff != null ? ff.toLocalDate() : null);
+                m.setResponsableId(rs.getInt("responsable_id"));
+                m.setTipoTexto(rs.getString("tipo"));
+                m.setEstadoTexto(rs.getString("estado"));
+                m.setFallaReportada(rs.getString("falla_reportada"));
+                m.setDiagnostico(rs.getString("diagnostico"));
+                m.setActividadesRealizadas(rs.getString("actividades_realizadas"));
+                m.setResultado(rs.getString("resultado"));
+                m.setEstadoFinalEquipo(rs.getString("estado_final_equipo"));
+                m.setRecomendaciones(rs.getString("recomendaciones"));
+                m.setObservaciones(rs.getString("observaciones"));
+                lista.add(m);
             }
         }
         return lista;
-    }
-
-    private Mantenimiento leer(ResultSet rs) throws SQLException {
-        Mantenimiento m = new Mantenimiento();
-        m.setId(rs.getInt("id"));
-        m.setNumeroServicio(rs.getString("numero_servicio"));
-        m.setEquipoId(rs.getInt("equipo_id"));
-        int reporte = rs.getInt("reporte_dano_id");
-        m.setReporteDanoId(rs.wasNull() ? 0 : reporte);
-        java.sql.Date fi = rs.getDate("fecha_inicio");
-        m.setFechaInicio(fi != null ? fi.toLocalDate() : null);
-        java.sql.Date ff = rs.getDate("fecha_fin");
-        m.setFechaFin(ff != null ? ff.toLocalDate() : null);
-        m.setResponsableId(rs.getInt("responsable_id"));
-        m.setTipoTexto(rs.getString("tipo"));
-        m.setEstadoTexto(rs.getString("estado"));
-        m.setFallaReportada(rs.getString("falla_reportada"));
-        m.setDiagnostico(rs.getString("diagnostico"));
-        m.setActividadesRealizadas(rs.getString("actividades_realizadas"));
-        m.setResultado(rs.getString("resultado"));
-        m.setEstadoFinalEquipo(rs.getString("estado_final_equipo"));
-        m.setRecomendaciones(rs.getString("recomendaciones"));
-        m.setObservaciones(rs.getString("observaciones"));
-        return m;
-    }
-
-    
-    private void setNullableInt(PreparedStatement ps, int indice, int valor) throws SQLException {
-        if (valor > 0) {
-            ps.setInt(indice, valor);
-        } else {
-            ps.setNull(indice, java.sql.Types.INTEGER);
-        }
     }
 }

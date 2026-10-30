@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 import java.time.LocalDateTime;
 import java.net.InetAddress;
+import javax.swing.JOptionPane;
 
 public class PnlLogin extends javax.swing.JPanel {
 
@@ -62,14 +63,17 @@ public class PnlLogin extends javax.swing.JPanel {
             registro.setFechaHora(LocalDateTime.now());
             registro.setAccion("INICIO SESION - " + usuario.getUsuario()
                     + " (" + usuario.getRol() + ")");
+            
             try {
                 registro.setIp(InetAddress.getLocalHost().getHostAddress()); // obtiene la ipv4 para la bitacora
             } catch (Exception ipError) {
                 registro.setIp("localhost");
             }
+            
             registro.setDispositivo("Aplicacion de escritorio");
             new BitacoraAccesoDao().insertar(registro);
         } catch (Exception ignorado) {
+            JOptionPane.showMessageDialog(this, "error: " + ignorado);
         }
     }
 

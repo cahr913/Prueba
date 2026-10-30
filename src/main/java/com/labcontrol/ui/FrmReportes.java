@@ -68,8 +68,8 @@ public class FrmReportes extends javax.swing.JFrame {
     private final JComboBox<OpcionCombo> cboEquipo = new JComboBox<>();
     private final JComboBox<OpcionCombo> cboUsuario = new JComboBox<>();
     private final JComboBox<String> cboEstadoEquipo = new JComboBox<>();
-    private final JComboBox<String> cboTipoMantenimiento = new JComboBox<>(new String[]{"Todos", "Preventivo", "Correctivo"});
-    private final JComboBox<String> cboAccionPieza = new JComboBox<>(new String[]{"Todos", "REPARACION", "REEMPLAZO"});
+    private final JComboBox<String> cboTipoMantenimiento = new JComboBox<>(new String[]{"- todos -", "Preventivo", "Correctivo"});
+    private final JComboBox<String> cboAccionPieza = new JComboBox<>(new String[]{"- todos -", "REPARACION", "REEMPLAZO"});
     private final JTextField txtDesde = new JTextField(10);
     private final JTextField txtHasta = new JTextField(10);
 
@@ -159,7 +159,7 @@ public class FrmReportes extends javax.swing.JFrame {
     private void recargarCombos() {
         laboratorios.clear();
         cboLaboratorio.removeAllItems();
-        cboLaboratorio.addItem(new OpcionCombo(0, "Todos"));
+        cboLaboratorio.addItem(new OpcionCombo(0, "- todos -"));
         try {
             for (Laboratorio l : laboratorioDao.listar()) {
                 laboratorios.put(l.getId(), l);
@@ -171,7 +171,7 @@ public class FrmReportes extends javax.swing.JFrame {
 
         equipos.clear();
         cboEquipo.removeAllItems();
-        cboEquipo.addItem(new OpcionCombo(0, "Todos"));
+        cboEquipo.addItem(new OpcionCombo(0, "- todos -"));
         try {
             for (Equipo e : equipoDao.listar()) {
                 equipos.put(e.getId(), e);
@@ -183,7 +183,7 @@ public class FrmReportes extends javax.swing.JFrame {
 
         usuarios.clear();
         cboUsuario.removeAllItems();
-        cboUsuario.addItem(new OpcionCombo(0, "Todos"));
+        cboUsuario.addItem(new OpcionCombo(0, "- todos -"));
         try {
             for (Usuario u : usuarioDao.listar()) {
                 usuarios.put(u.getIdUsuario(), u);
@@ -196,7 +196,7 @@ public class FrmReportes extends javax.swing.JFrame {
         }
 
         DefaultComboBoxModel<String> modeloEstado = new DefaultComboBoxModel<>();
-        modeloEstado.addElement("Todos");
+        modeloEstado.addElement("- todos -");
         for (String e : Equipo.ESTADOS) {
             modeloEstado.addElement(e);
         }
@@ -236,11 +236,11 @@ public class FrmReportes extends javax.swing.JFrame {
         f.docenteId = ((OpcionCombo) cboUsuario.getSelectedItem()).getId();
         f.responsableId = ((OpcionCombo) cboUsuario.getSelectedItem()).getId();
         String estado = (String) cboEstadoEquipo.getSelectedItem();
-        f.estadoEquipo = "Todos".equals(estado) ? null : estado;
+        f.estadoEquipo = "- todos -".equals(estado) ? null : estado;
         String tipo = (String) cboTipoMantenimiento.getSelectedItem();
-        f.tipoMantenimiento = "Todos".equals(tipo) ? null : tipo;
+        f.tipoMantenimiento = "- todos -".equals(tipo) ? null : tipo;
         String accion = (String) cboAccionPieza.getSelectedItem();
-        f.accionPieza = "Todos".equals(accion) ? null : accion;
+        f.accionPieza = "- todos -".equals(accion) ? null : accion;
 
         String desde = txtDesde.getText().trim();
         String hasta = txtHasta.getText().trim();

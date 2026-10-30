@@ -16,7 +16,6 @@ com\labcontrol\dao\RecepcionDao.class
 com\labcontrol\reportes\HojaServicioPdf.class
 com\labcontrol\dao\ReporteDanoDao.class
 com\labcontrol\UI\PnlLaboratorios$6.class
-com\labcontrol\dao\UsuarioDao$3.class
 com\labcontrol\modelo\Recepcion.class
 com\labcontrol\UI\FrmComputadora$1.class
 com\labcontrol\UI\FrmMantenimiento$2.class
@@ -34,7 +33,6 @@ com\labcontrol\UI\FrmRecepcion$1.class
 com\labcontrol\dao\BitacoraAccesoDao.class
 com\labcontrol\UI\FrmSoftware$1.class
 com\labcontrol\modelo\CentroEducativo.class
-com\labcontrol\dao\UsuarioDao$4.class
 com\labcontrol\modelo\Pieza$TipoOperacion.class
 com\labcontrol\UI\PnlHorarios$1.class
 com\labcontrol\UI\FrmAsistenteInstalacion.class
@@ -68,7 +66,6 @@ com\labcontrol\UI\PnlHorarios.class
 com\labcontrol\UI\FrmComputadora.class
 com\labcontrol\UI\PnlCentros.class
 com\labcontrol\UI\PnlLaboratorios$8.class
-com\labcontrol\dao\UsuarioDao$2.class
 com\labcontrol\modelo\Accion.class
 com\labcontrol\dao\ReporteDao$Filtros.class
 com\labcontrol\modelo\Laboratorio.class
@@ -112,6 +109,5 @@ com\labcontrol\UI\PnlHorarios$4.class
 com\labcontrol\UI\FrmAsistenteInstalacion$3.class
 com\labcontrol\UI\PnlUsuarios$1.class
 com\labcontrol\app\TestPieza2.class
-com\labcontrol\dao\UsuarioDao$1.class
 com\labcontrol\UI\PnlUsuarios$7.class
 com\labcontrol\UI\PnlLaboratorios$7.class

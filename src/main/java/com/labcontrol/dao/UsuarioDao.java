@@ -72,7 +72,7 @@ public class UsuarioDao {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    Usuario u = new Usuario() {};
+                    Usuario u = new Usuario();
                     u.setIdUsuario(rs.getInt("id"));
                     u.setNombre(rs.getString("nombre"));
                     u.setApellido(rs.getString("apellido"));
@@ -97,7 +97,7 @@ public class UsuarioDao {
             ps.setString(1, nombreUsuario);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    Usuario u = new Usuario() {};
+                    Usuario u = new Usuario();
                     u.setIdUsuario(rs.getInt("id"));
                     u.setNombre(rs.getString("nombre"));
                     u.setApellido(rs.getString("apellido"));
@@ -122,7 +122,7 @@ public class UsuarioDao {
              PreparedStatement ps = cn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                Usuario u = new Usuario() {};
+                Usuario u = new Usuario();
                 u.setIdUsuario(rs.getInt("id"));
                 u.setNombre(rs.getString("nombre"));
                 u.setApellido(rs.getString("apellido"));
@@ -147,7 +147,7 @@ public class UsuarioDao {
             ps.setString(1, rol);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    Usuario u = new Usuario() {};
+                    Usuario u = new Usuario();
                     u.setIdUsuario(rs.getInt("id"));
                     u.setNombre(rs.getString("nombre"));
                     u.setApellido(rs.getString("apellido"));

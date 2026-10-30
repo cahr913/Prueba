@@ -68,7 +68,7 @@ public class PnlHorarios extends javax.swing.JPanel implements Refrescable {
 
         cboFiltroLaboratorio.removeAllItems();
         cboLaboratorio.removeAllItems();
-        cboFiltroLaboratorio.addItem("<Todos>");
+        cboFiltroLaboratorio.addItem("- todos -");
         cboLaboratorio.addItem("<Seleccione>");
         for (Laboratorio l : laboratorios) {
             cboFiltroLaboratorio.addItem(l);
@@ -94,7 +94,7 @@ public class PnlHorarios extends javax.swing.JPanel implements Refrescable {
             for (Horario horario : dao.listar()) {
                 boolean coincideLaboratorio = !(laboratorioFiltro instanceof Laboratorio)
                         || horario.getLaboratorioId() == ((Laboratorio) laboratorioFiltro).getId();
-                boolean coincideDia = "Todos".equals(diaFiltro) || (horario.getDia() != null && horario.getDia().equalsIgnoreCase(String.valueOf(diaFiltro)));
+                boolean coincideDia = "- todos -".equals(diaFiltro) || (horario.getDia() != null && horario.getDia().equalsIgnoreCase(String.valueOf(diaFiltro)));
                 if (coincideLaboratorio && coincideDia) {
                     visibles.add(horario);
                 }
@@ -346,7 +346,7 @@ public class PnlHorarios extends javax.swing.JPanel implements Refrescable {
 
         lblFiltroDia.setText("Día:");
 
-        cboFiltroDia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" }));
+        cboFiltroDia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- todos -", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" }));
         cboFiltroDia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboFiltroDiaActionPerformed(evt);

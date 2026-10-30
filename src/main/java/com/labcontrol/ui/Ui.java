@@ -21,7 +21,7 @@ import javax.swing.UIManager;
 
 public final class Ui {
 
-    public static final String TODOS = "Todos";
+    public static final String TODOS = "- todos -";
 
     private Ui() {
     }

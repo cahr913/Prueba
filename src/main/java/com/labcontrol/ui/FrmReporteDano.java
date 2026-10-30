@@ -69,9 +69,9 @@ public class FrmReporteDano extends javax.swing.JFrame {
     private final JList<String> lstFotos = new JList<>(modeloFotos);
     private final JButton btnAgregarFoto = new JButton("Agregar fotografía...");
     private final JButton btnQuitarFoto = new JButton("Quitar seleccionada");
-    /** Rutas de las fotos en el mismo orden que modeloFotos. */
+    
     private final java.util.List<String> rutasFotos = new java.util.ArrayList<>();
-    /** Vista previa de la foto seleccionada. */
+    
     private final JLabel lblPreview = new JLabel("Seleccione una foto para ver la vista previa", javax.swing.SwingConstants.CENTER);
 
     private final JButton btnGuardar = new JButton("Guardar nuevo reporte");
@@ -88,7 +88,6 @@ public class FrmReporteDano extends javax.swing.JFrame {
         recargarCombos();
         btnActualizar.setEnabled(false);
     }
-
 
     private void construir() {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -197,7 +196,6 @@ public class FrmReporteDano extends javax.swing.JFrame {
         panel.add(lblPreview, BorderLayout.CENTER);
         return panel;
     }
-
 
     private void recargarCombos() {
         laboratorios.clear();
@@ -332,7 +330,6 @@ public class FrmReporteDano extends javax.swing.JFrame {
         }
     }
 
-
     private void agregarFoto() {
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Seleccionar fotografía de evidencia");
@@ -383,7 +380,7 @@ public class FrmReporteDano extends javax.swing.JFrame {
         mostrarVistaPrevia();
     }
 
-    /** Muestra la vista previa de la foto seleccionada en la lista. */
+    
     private void mostrarVistaPrevia() {
         int indice = lstFotos.getSelectedIndex();
         if (indice < 0 || indice >= rutasFotos.size()) {

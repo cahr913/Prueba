@@ -49,7 +49,7 @@ public class PnlUsuarios extends javax.swing.JPanel implements Refrescable {
                 boolean coincideTexto = texto.isEmpty()
                         || usuario.getNombre().toLowerCase().contains(texto)
                         || usuario.getUsuario().toLowerCase().contains(texto);
-                boolean coincideEstado = "Todos".equals(estadoFiltro) || usuario.isEstado()
+                boolean coincideEstado = "- todos -".equals(estadoFiltro) || usuario.isEstado()
                         && "Activo".equals(estadoFiltro)
                         || !usuario.isEstado() && "Inactivo".equals(estadoFiltro);
                 if (coincideTexto && coincideEstado) {
@@ -180,7 +180,7 @@ public class PnlUsuarios extends javax.swing.JPanel implements Refrescable {
                 dao.actualizar(u);
             }
             cancelarEdicion();
-            cboFiltroEstado.setSelectedItem("Todos");
+            cboFiltroEstado.setSelectedItem("- todos -");
             txtBusqueda.setText("");
             cargarTabla();
         } catch (SQLException e) {
@@ -228,7 +228,7 @@ public class PnlUsuarios extends javax.swing.JPanel implements Refrescable {
 
         lblFiltroEstado.setText("Estado:");
 
-        cboFiltroEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Activo", "Inactivo" }));
+        cboFiltroEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- todos -", "Activo", "Inactivo" }));
         cboFiltroEstado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboFiltroEstadoActionPerformed(evt);
@@ -286,7 +286,7 @@ public class PnlUsuarios extends javax.swing.JPanel implements Refrescable {
 
         lblRol.setText("Rol");
 
-        cboRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador", "Docente", "Encargado de laboratorio" }));
+        cboRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador", "Docente", "Responsable de laboratorio" }));
 
         lblEstado.setText("Estado");
 

@@ -232,7 +232,7 @@ public class PnlLaboratorios extends javax.swing.JPanel implements Refrescable {
         centros.addAll(centroDao.listar());
         cboFiltroCentro.removeAllItems();
         cboCentro.removeAllItems();
-        cboFiltroCentro.addItem("<Todos>");
+        cboFiltroCentro.addItem("- todos -");
         cboCentro.addItem("<Seleccione>");
         for (CentroEducativo c : centros) {
             cboFiltroCentro.addItem(c);
@@ -249,7 +249,7 @@ public class PnlLaboratorios extends javax.swing.JPanel implements Refrescable {
             for (Laboratorio laboratorio : dao.listar()) {
                 boolean coincideCentro = !(centroFiltro instanceof CentroEducativo)
                         || laboratorio.getCentroId() == ((CentroEducativo) centroFiltro).getId();
-                boolean coincideEstado = "Todos".equals(estadoFiltro) || laboratorio.getEstado().equals(estadoFiltro);
+                boolean coincideEstado = "- todos -".equals(estadoFiltro) || laboratorio.getEstado().equals(estadoFiltro);
                 if (coincideCentro && coincideEstado) {
                     visibles.add(laboratorio);
                     String centroNombre = "";
@@ -385,7 +385,7 @@ public class PnlLaboratorios extends javax.swing.JPanel implements Refrescable {
                 dao.actualizar(l);
             }
             cancelarEdicion();
-            cboFiltroEstado.setSelectedItem("Todos");
+            cboFiltroEstado.setSelectedItem("- todos -");
             cboFiltroCentro.setSelectedIndex(0);
             cargarTabla();
         } catch (SQLException e) {
@@ -441,7 +441,7 @@ public class PnlLaboratorios extends javax.swing.JPanel implements Refrescable {
 
         lblFiltroEstado.setText("Estado:");
 
-        cboFiltroEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Activo", "Inactivo", "En mantenimiento" }));
+        cboFiltroEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- todos -", "Activo", "Inactivo", "En mantenimiento" }));
         cboFiltroEstado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboFiltroEstadoActionPerformed(evt);
