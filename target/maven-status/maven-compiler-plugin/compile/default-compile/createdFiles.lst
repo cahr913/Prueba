@@ -19,7 +19,6 @@ com\labcontrol\UI\PnlLaboratorios$6.class
 com\labcontrol\modelo\Recepcion.class
 com\labcontrol\UI\FrmComputadora$1.class
 com\labcontrol\UI\FrmMantenimiento$2.class
-com\labcontrol\app\TestEstado.class
 com\labcontrol\UI\PnlLaboratorios$9.class
 com\labcontrol\UI\PnlUsuarios$2.class
 com\labcontrol\modelo\ReporteDano.class
@@ -61,7 +60,6 @@ com\labcontrol\UI\FrmReporteDano$1.class
 com\labcontrol\modelo\Equipo.class
 com\labcontrol\UI\PnlLaboratorios$5.class
 com\labcontrol\UI\FrmSoftware.class
-com\labcontrol\app\TestPieza.class
 com\labcontrol\UI\PnlHorarios.class
 com\labcontrol\UI\FrmComputadora.class
 com\labcontrol\UI\PnlCentros.class
@@ -97,7 +95,6 @@ com\labcontrol\dao\MantenimientoDao.class
 com\labcontrol\UI\FrmComputadora$2.class
 com\labcontrol\modelo\Software.class
 com\labcontrol\app\Main.class
-com\labcontrol\app\TestPieza3.class
 com\labcontrol\modelo\MantenimientoPreventivo.class
 com\labcontrol\UI\FrmEquipo$2.class
 com\labcontrol\UI\PnlCentros$1.class
@@ -108,6 +105,5 @@ com\labcontrol\dao\HorarioDao.class
 com\labcontrol\UI\PnlHorarios$4.class
 com\labcontrol\UI\FrmAsistenteInstalacion$3.class
 com\labcontrol\UI\PnlUsuarios$1.class
-com\labcontrol\app\TestPieza2.class
 com\labcontrol\UI\PnlUsuarios$7.class
 com\labcontrol\UI\PnlLaboratorios$7.class

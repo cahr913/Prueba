@@ -369,6 +369,9 @@ public class PnlLaboratorios extends javax.swing.JPanel implements Refrescable {
         }
 
         Laboratorio l = new Laboratorio();
+        if (editado != null) {
+            l.setCodigo(editado.getCodigo());
+        }
         l.setNombre(nombre);
         l.setUbicacion(ubicacion);
         l.setCapacidad(capacidad);
