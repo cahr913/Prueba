@@ -1,13 +1,17 @@
 package com.labcontrol.servicio;
 
+import com.labcontrol.dao.EquipoDao;
 import com.labcontrol.dao.LaboratorioDao;
 import com.labcontrol.dao.RecepcionDao;
 import com.labcontrol.dao.UsuarioDao;
+import com.labcontrol.modelo.Equipo;
 import com.labcontrol.modelo.Laboratorio;
 import com.labcontrol.modelo.Recepcion;
 import com.labcontrol.modelo.Usuario;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public class RecepcionServicio {
@@ -15,10 +19,19 @@ public class RecepcionServicio {
     private final RecepcionDao dao = new RecepcionDao();
     private final LaboratorioDao laboratorioDao = new LaboratorioDao();
     private final UsuarioDao usuarioDao = new UsuarioDao();
+    private final EquipoDao equipoDao = new EquipoDao();
 
     public void registrar(Recepcion recepcion) throws SQLException {
         validar(recepcion);
         dao.insertar(recepcion);
+        // Marcar los equipos dañados como DAÑADO
+        for (int equipoId : recepcion.getEquiposDanadosIds()) {
+            Equipo equipo = equipoDao.buscarPorId(equipoId);
+            if (equipo != null) {
+                equipo.cambiarEstado(Equipo.DANADO);
+                equipoDao.actualizar(equipo);
+            }
+        }
     }
 
     public void actualizar(Recepcion recepcion) throws SQLException {
@@ -27,6 +40,15 @@ public class RecepcionServicio {
             throw new IllegalArgumentException("Seleccione la recepción que desea actualizar.");
         }
         dao.actualizar(recepcion);
+        // Marcar los equipos dañados como DAÑADO (no se revierte automáticamente
+        // para evitar perder el estado si los checkboxes no se cargaron bien)
+        for (int equipoId : recepcion.getEquiposDanadosIds()) {
+            Equipo equipo = equipoDao.buscarPorId(equipoId);
+            if (equipo != null) {
+                equipo.cambiarEstado(Equipo.DANADO);
+                equipoDao.actualizar(equipo);
+            }
+        }
     }
 
     public Optional<Recepcion> buscarPorId(int id) throws SQLException {

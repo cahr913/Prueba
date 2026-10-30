@@ -33,8 +33,27 @@ public class ReporteDanoServicio {
         if (reporte.getId() <= 0) {
             throw new IllegalArgumentException("Seleccione el reporte que desea actualizar.");
         }
+        // Equipo anterior (para revertir si cambió)
+        ReporteDano anterior = dao.buscarPorId(reporte.getId());
+        int equipoAnterior = (anterior != null) ? anterior.getEquipoid() : 0;
+
         dao.actualizar(reporte);
         guardarFotos(reporte);
+
+        // Actualizar estado del equipo nuevo → DAÑADO
+        Equipo equipoNuevo = equipoDao.buscarPorId(reporte.getEquipoid());
+        if (equipoNuevo != null) {
+            equipoNuevo.cambiarEstado(Equipo.DANADO);
+            equipoDao.actualizar(equipoNuevo);
+        }
+        // Revertir equipo anterior si cambió (solo si no tiene otro reporte activo)
+        if (equipoAnterior > 0 && equipoAnterior != reporte.getEquipoid()) {
+            Equipo eqAnt = equipoDao.buscarPorId(equipoAnterior);
+            if (eqAnt != null && Equipo.DANADO.equalsIgnoreCase(eqAnt.getEstado())) {
+                eqAnt.cambiarEstado(Equipo.ACTIVO);
+                equipoDao.actualizar(eqAnt);
+            }
+        }
     }
 
     public Optional<ReporteDano> buscarPorId(int id) throws SQLException {
@@ -51,7 +70,20 @@ public class ReporteDanoServicio {
 
     
     public void eliminar(int id) throws SQLException {
+        // Obtener el reporte antes de eliminarlo (para saber qué equipo revertir)
+        ReporteDano reporte = dao.buscarPorId(id);
+        int equipoId = (reporte != null) ? reporte.getEquipoid() : 0;
+
         dao.eliminar(id);
+
+        // Revertir el estado del equipo a ACTIVO (si no tiene otro reporte activo)
+        if (equipoId > 0) {
+            Equipo equipo = equipoDao.buscarPorId(equipoId);
+            if (equipo != null && Equipo.DANADO.equalsIgnoreCase(equipo.getEstado())) {
+                equipo.cambiarEstado(Equipo.ACTIVO);
+                equipoDao.actualizar(equipo);
+            }
+        }
     }
 
     

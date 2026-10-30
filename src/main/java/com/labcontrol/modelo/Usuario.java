@@ -27,9 +27,7 @@ public class Usuario {
     }
 
     public int getIdUsuario() {
-
         return idUsuario;
-
     }
 
     public void setIdUsuario(int idUsuario) {

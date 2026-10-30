@@ -385,6 +385,8 @@ public class PnlLaboratorios extends javax.swing.JPanel implements Refrescable {
                 dao.actualizar(l);
             }
             cancelarEdicion();
+            cboFiltroEstado.setSelectedItem("Todos");
+            cboFiltroCentro.setSelectedIndex(0);
             cargarTabla();
         } catch (SQLException e) {
             Ui.fallo(this, "Error al guardar: " + e.getMessage());

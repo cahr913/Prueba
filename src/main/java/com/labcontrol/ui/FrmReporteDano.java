@@ -69,6 +69,10 @@ public class FrmReporteDano extends javax.swing.JFrame {
     private final JList<String> lstFotos = new JList<>(modeloFotos);
     private final JButton btnAgregarFoto = new JButton("Agregar fotografía...");
     private final JButton btnQuitarFoto = new JButton("Quitar seleccionada");
+    /** Rutas de las fotos en el mismo orden que modeloFotos. */
+    private final java.util.List<String> rutasFotos = new java.util.ArrayList<>();
+    /** Vista previa de la foto seleccionada. */
+    private final JLabel lblPreview = new JLabel("Seleccione una foto para ver la vista previa", javax.swing.SwingConstants.CENTER);
 
     private final JButton btnGuardar = new JButton("Guardar nuevo reporte");
     private final JButton btnActualizar = new JButton("Actualizar");
@@ -135,6 +139,11 @@ public class FrmReporteDano extends javax.swing.JFrame {
         btnAgregarFoto.addActionListener(e -> agregarFoto());
         btnQuitarFoto.addActionListener(e -> quitarFoto());
         cboLaboratorio.addActionListener(e -> cargarEquiposDelLaboratorio());
+        lstFotos.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                mostrarVistaPrevia();
+            }
+        });
 
         setSize(1000, 720);
         setLocationRelativeTo(null);
@@ -181,8 +190,11 @@ public class FrmReporteDano extends javax.swing.JFrame {
         botones.add(btnQuitarFoto);
         panel.add(botones, BorderLayout.NORTH);
         JScrollPane scroll = new JScrollPane(lstFotos);
-        scroll.setPreferredSize(new Dimension(700, 80));
-        panel.add(scroll, BorderLayout.CENTER);
+        scroll.setPreferredSize(new Dimension(350, 100));
+        panel.add(scroll, BorderLayout.WEST);
+        lblPreview.setPreferredSize(new Dimension(200, 100));
+        lblPreview.setBorder(BorderFactory.createLineBorder(java.awt.Color.GRAY));
+        panel.add(lblPreview, BorderLayout.CENTER);
         return panel;
     }
 
@@ -296,7 +308,9 @@ public class FrmReporteDano extends javax.swing.JFrame {
             txtObservaciones.setText(r.getObservaciones());
 
             modeloFotos.clear();
+            rutasFotos.clear();
             for (FotoEvidencia f : r.getFotos()) {
+                rutasFotos.add(f.getRutaArchivo());
                 modeloFotos.addElement(f.getRutaArchivo() + (f.getDescripcion() != null
                         && !f.getDescripcion().isEmpty() ? "  (" + f.getDescripcion() + ")" : ""));
             }
@@ -343,6 +357,7 @@ public class FrmReporteDano extends javax.swing.JFrame {
         } else {
             fotosNuevas.add(foto);
         }
+        rutasFotos.add(foto.getRutaArchivo());
         modeloFotos.addElement(foto.getRutaArchivo()
                 + (foto.getDescripcion().isEmpty() ? "" : "  (" + foto.getDescripcion() + ")"));
     }
@@ -361,9 +376,52 @@ public class FrmReporteDano extends javax.swing.JFrame {
         } else if (indice < fotosNuevas.size()) {
             fotosNuevas.remove(indice);
         }
+        if (indice < rutasFotos.size()) {
+            rutasFotos.remove(indice);
+        }
         modeloFotos.remove(indice);
+        mostrarVistaPrevia();
     }
 
+    /** Muestra la vista previa de la foto seleccionada en la lista. */
+    private void mostrarVistaPrevia() {
+        int indice = lstFotos.getSelectedIndex();
+        if (indice < 0 || indice >= rutasFotos.size()) {
+            lblPreview.setIcon(null);
+            lblPreview.setText("Seleccione una foto para ver la vista previa");
+            return;
+        }
+        String ruta = rutasFotos.get(indice);
+        java.io.File archivo = new java.io.File(ruta);
+        if (!archivo.isFile()) {
+            lblPreview.setIcon(null);
+            lblPreview.setText("Imagen no encontrada: " + archivo.getName());
+            return;
+        }
+        try {
+            javax.swing.ImageIcon icono = new javax.swing.ImageIcon(ruta);
+            java.awt.Image img = icono.getImage();
+            // Escalar a máximo 180x90 manteniendo proporción
+            int maxAncho = 180;
+            int maxAlto = 90;
+            int ancho = icono.getIconWidth();
+            int alto = icono.getIconHeight();
+            if (ancho <= 0 || alto <= 0) {
+                lblPreview.setText("No se pudo cargar la imagen");
+                lblPreview.setIcon(null);
+                return;
+            }
+            double escala = Math.min((double) maxAncho / ancho, (double) maxAlto / alto);
+            int nuevoAncho = (int) (ancho * escala);
+            int nuevoAlto = (int) (alto * escala);
+            java.awt.Image escalada = img.getScaledInstance(nuevoAncho, nuevoAlto, java.awt.Image.SCALE_SMOOTH);
+            lblPreview.setIcon(new javax.swing.ImageIcon(escalada));
+            lblPreview.setText("");
+        } catch (Exception e) {
+            lblPreview.setIcon(null);
+            lblPreview.setText("Error al cargar la imagen");
+        }
+    }
 
     private void guardar() {
         ReporteDano r = crearObjetoDesdeFormulario(true);
@@ -487,6 +545,7 @@ public class FrmReporteDano extends javax.swing.JFrame {
         txtObservaciones.setText("");
         txtFechaHora.setText(LocalDateTime.now().format(FORMATO));
         modeloFotos.clear();
+        rutasFotos.clear();
         fotosNuevas.clear();
         btnActualizar.setEnabled(false);
     }

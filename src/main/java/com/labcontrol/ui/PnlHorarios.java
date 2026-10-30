@@ -283,6 +283,8 @@ public class PnlHorarios extends javax.swing.JPanel implements Refrescable {
                 dao.actualizar(h);
             }
             cancelarEdicion();
+            cboFiltroLaboratorio.setSelectedIndex(0);
+            cboFiltroDia.setSelectedIndex(0);
             cargarTabla();
         } catch (SQLException e) {
             Ui.fallo(this, "Error al guardar: " + e.getMessage());

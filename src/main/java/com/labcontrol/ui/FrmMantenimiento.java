@@ -236,7 +236,7 @@ public class FrmMantenimiento extends javax.swing.JFrame {
 
         tblPiezas.setRowHeight(22);
         JScrollPane scroll = new JScrollPane(tblPiezas);
-        scroll.setPreferredSize(new Dimension(600, 90));
+        scroll.setPreferredSize(new Dimension(600, 130));
         panel.add(scroll, BorderLayout.CENTER);
 
         btnAgregarPieza.addActionListener(e -> agregarPieza());
@@ -332,7 +332,7 @@ public class FrmMantenimiento extends javax.swing.JFrame {
             editado = m;
             txtNumero.setText(m.getNumeroServicio());
             cboTipo.setSelectedItem(m.tipoValorBd());
-            cboEstado.setSelectedItem(m.getEstadoTexto());
+            cboEstado.setSelectedItem(m.getEstadoTexto() != null ? m.getEstadoTexto().replace("_", " ") : null);
             seleccionarPorId(cboEquipo, m.getEquipoId());
             seleccionarPorId(cboResponsable, m.getResponsableId());
             seleccionarPorId(cboReporte, m.getReporteDanoId());
@@ -448,7 +448,8 @@ public class FrmMantenimiento extends javax.swing.JFrame {
             int reporteId = ((OpcionCombo) cboReporte.getSelectedItem()).getId();
 
             String tipo = (String) cboTipo.getSelectedItem();
-            Mantenimiento.Estado estado = Mantenimiento.Estado.valueOf((String) cboEstado.getSelectedItem());
+            Mantenimiento.Estado estado = Mantenimiento.Estado.valueOf(
+        ((String) cboEstado.getSelectedItem()).replace(" ", "_"));
 
             LocalDate fechaInicio = leerFecha(txtFechaInicio.getText(), "fecha de inicio");
             if (fechaInicio == null) {
@@ -498,8 +499,12 @@ public class FrmMantenimiento extends javax.swing.JFrame {
                 m.agregarPieza(p);
             }
 
-            if (estado == Mantenimiento.Estado.FINALIZADO) {
-                m.finalizar();
+            // Regla: un correctivo no puede finalizarse sin piezas.
+            if (estado == Mantenimiento.Estado.FINALIZADO
+                    && "Correctivo".equals(tipo)
+                    && m.getPiezas().isEmpty()) {
+                Ui.error(this, "No se puede finalizar un correctivo sin piezas asignadas.");
+                return null;
             }
             return m;
         } catch (NumberFormatException e) {

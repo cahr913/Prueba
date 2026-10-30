@@ -1,6 +1,6 @@
 CREATE DATABASE IF NOT EXISTS gestion_laboratorio
-  CHARACTER SET utf8mb4
-  COLLATE utf8mb4_unicode_ci;
+	CHARACTER SET utf8mb4
+	COLLATE utf8mb4_unicode_ci;
 
 USE gestion_laboratorio;
 
@@ -179,7 +179,7 @@ CREATE TABLE mantenimiento (
     observaciones TEXT,
     PRIMARY KEY (id),
     FOREIGN KEY (equipo_id) REFERENCES equipo(id),
-    FOREIGN KEY (reporte_dano_id) REFERENCES reporte_dano(id),
+    FOREIGN KEY (reporte_dano_id) REFERENCES reporte_dano(id) ON DELETE SET NULL,
     FOREIGN KEY (responsable_id) REFERENCES usuario(id)
 ) ENGINE=InnoDB;
 
@@ -203,4 +203,10 @@ CREATE TABLE bitacora_acceso (
     dispositivo VARCHAR(100),
     PRIMARY KEY (id)
 ) ENGINE=InnoDB;
+
+-- usuarios prueba
+INSERT INTO usuario (nombre, apellido, nombre_usuario, contrasena, correo, rol, estado, fecha_creacion) VALUES
+('Administrador', 'Sistema', 'admin', 'admin123', 'admin@admin', 'Administrador', 1, CURDATE()),
+('Docente', 'Prueba', 'docente', '123', 'docente@docente', 'Docente', 1, CURDATE()),
+('Tecnico', 'Prueba', 'tecnico', '123', 'tecnico@docente', 'Responsable de laboratorio', 1, CURDATE());
 

@@ -180,6 +180,8 @@ public class PnlUsuarios extends javax.swing.JPanel implements Refrescable {
                 dao.actualizar(u);
             }
             cancelarEdicion();
+            cboFiltroEstado.setSelectedItem("Todos");
+            txtBusqueda.setText("");
             cargarTabla();
         } catch (SQLException e) {
             Ui.fallo(this, "Error al guardar: " + e.getMessage());

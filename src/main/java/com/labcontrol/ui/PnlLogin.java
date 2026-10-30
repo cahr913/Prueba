@@ -1,12 +1,13 @@
 package com.labcontrol.UI;
 
-import com.labcontrol.dao.BitacoraAccesoDao;
-import com.labcontrol.dao.UsuarioDao;
-import com.labcontrol.modelo.BitacoraAcceso;
-import com.labcontrol.modelo.Usuario;
+import com.labcontrol.dao.*;
+import com.labcontrol.modelo.*;
+
 import java.awt.Font;
 import java.util.Arrays;
 import java.util.function.Consumer;
+import java.time.LocalDateTime;
+import java.net.InetAddress;
 
 public class PnlLogin extends javax.swing.JPanel {
 
@@ -58,11 +59,11 @@ public class PnlLogin extends javax.swing.JPanel {
     private void registrarBitacora(Usuario usuario) {
         try {
             BitacoraAcceso registro = new BitacoraAcceso();
-            registro.setFechaHora(java.time.LocalDateTime.now());
+            registro.setFechaHora(LocalDateTime.now());
             registro.setAccion("INICIO SESION - " + usuario.getUsuario()
                     + " (" + usuario.getRol() + ")");
             try {
-                registro.setIp(java.net.InetAddress.getLocalHost().getHostAddress());
+                registro.setIp(InetAddress.getLocalHost().getHostAddress()); // obtiene la ipv4 para la bitacora
             } catch (Exception ipError) {
                 registro.setIp("localhost");
             }
@@ -94,8 +95,8 @@ public class PnlLogin extends javax.swing.JPanel {
         btnIngresar = new javax.swing.JButton();
         lblAyuda = new javax.swing.JLabel();
 
-        lblSistema.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblSistema.setText("Sistema de Laboratorios - Infraestructura y horarios");
+//        lblSistema.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+//        lblSistema.setText("     Sistema GEST-LAB");
 
         lblIniciar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblIniciar.setText("Iniciar sesión");

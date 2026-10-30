@@ -10,9 +10,7 @@ public class BitacoraAcceso {
     private String dispositivo;
 
     public int getIdBitacora() {
-
         return idBitacora;
-
     }
 
     public void setIdBitacora(int idBitacora) {
@@ -50,7 +48,8 @@ public class BitacoraAcceso {
     public void setDispositivo(String dispositivo) {
         this.dispositivo = dispositivo;
     }
-
+    
+    
     public void registrarAcceso() {}
     public void consultarBitacora() {}
     public void eliminarRegistro() {}

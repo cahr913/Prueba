@@ -306,6 +306,7 @@ public class PnlCentros extends javax.swing.JPanel implements Refrescable {
                 dao.actualizar(editado);
             }
             cancelarEdicion();
+            txtBusqueda.setText("");
             cargarTabla();
         } catch (SQLException e) {
             Ui.fallo(this, "Error al guardar: " + e.getMessage());

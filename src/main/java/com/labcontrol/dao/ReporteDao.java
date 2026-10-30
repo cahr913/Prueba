@@ -77,8 +77,8 @@ public class ReporteDao {
         si(f.laboratorioId > 0, " AND e.laboratorio_id = ?", f.laboratorioId);
         si(f.responsableId > 0, " AND m.responsable_id = ?", f.responsableId);
         si(f.tipoMantenimiento != null, " AND m.tipo = ?", f.tipoMantenimiento);
-        si(f.desde != null, " AND m.fecha_inicio >= ?", java.sql.Date.valueOf(f.desde));
-        si(f.hasta != null, " AND m.fecha_inicio <= ?", java.sql.Date.valueOf(f.hasta));
+        si(f.desde != null, " AND m.fecha_inicio >= ?", f.desde != null ? java.sql.Date.valueOf(f.desde) : null);
+        si(f.hasta != null, " AND m.fecha_inicio <= ?", f.hasta != null ? java.sql.Date.valueOf(f.hasta) : null);
         sql.append(" ORDER BY e.codigo_inventario, m.fecha_inicio DESC");
 
         ResultadoReporte r = new ResultadoReporte("Historial de mantenimiento por equipo",
@@ -101,8 +101,8 @@ public class ReporteDao {
            .append("LEFT JOIN mantenimiento m ON m.equipo_id = e.id WHERE 1=1");
         si(f.laboratorioId > 0, " AND e.laboratorio_id = ?", f.laboratorioId);
         si(f.equipoId > 0, " AND e.id = ?", f.equipoId);
-        si(f.desde != null, " AND m.fecha_inicio >= ?", java.sql.Date.valueOf(f.desde));
-        si(f.hasta != null, " AND m.fecha_inicio <= ?", java.sql.Date.valueOf(f.hasta));
+        si(f.desde != null, " AND m.fecha_inicio >= ?", f.desde != null ? java.sql.Date.valueOf(f.desde) : null);
+        si(f.hasta != null, " AND m.fecha_inicio <= ?", f.hasta != null ? java.sql.Date.valueOf(f.hasta) : null);
         sql.append(" GROUP BY e.id, e.codigo_inventario, e.tipo, l.nombre ")
            .append("ORDER BY total DESC, e.codigo_inventario");
 
@@ -122,8 +122,8 @@ public class ReporteDao {
         si(f.tipoMantenimiento != null, " AND m.tipo = ?", f.tipoMantenimiento);
         si(f.laboratorioId > 0, " AND e.laboratorio_id = ?", f.laboratorioId);
         si(f.responsableId > 0, " AND m.responsable_id = ?", f.responsableId);
-        si(f.desde != null, " AND m.fecha_inicio >= ?", java.sql.Date.valueOf(f.desde));
-        si(f.hasta != null, " AND m.fecha_inicio <= ?", java.sql.Date.valueOf(f.hasta));
+        si(f.desde != null, " AND m.fecha_inicio >= ?", f.desde != null ? java.sql.Date.valueOf(f.desde) : null);
+        si(f.hasta != null, " AND m.fecha_inicio <= ?", f.hasta != null ? java.sql.Date.valueOf(f.hasta) : null);
         sql.append(" GROUP BY m.tipo, m.estado ORDER BY m.tipo, m.estado");
 
         ResultadoReporte r = new ResultadoReporte("Mantenimientos preventivos y correctivos",
@@ -144,8 +144,8 @@ public class ReporteDao {
            .append("JOIN equipo e ON e.id = m.equipo_id WHERE 1=1");
         si(f.responsableId > 0, " AND m.responsable_id = ?", f.responsableId);
         si(f.laboratorioId > 0, " AND e.laboratorio_id = ?", f.laboratorioId);
-        si(f.desde != null, " AND m.fecha_inicio >= ?", java.sql.Date.valueOf(f.desde));
-        si(f.hasta != null, " AND m.fecha_inicio <= ?", java.sql.Date.valueOf(f.hasta));
+        si(f.desde != null, " AND m.fecha_inicio >= ?", f.desde != null ? java.sql.Date.valueOf(f.desde) : null);
+        si(f.hasta != null, " AND m.fecha_inicio <= ?", f.hasta != null ? java.sql.Date.valueOf(f.hasta) : null);
         sql.append(" GROUP BY u.id, u.nombre, u.apellido, u.rol ORDER BY total DESC");
 
         ResultadoReporte r = new ResultadoReporte("Mantenimientos realizados por responsable",
@@ -189,8 +189,8 @@ public class ReporteDao {
         si(f.laboratorioId > 0, " AND e.laboratorio_id = ?", f.laboratorioId);
         si(f.equipoId > 0, " AND e.id = ?", f.equipoId);
         si(f.responsableId > 0, " AND m.responsable_id = ?", f.responsableId);
-        si(f.desde != null, " AND m.fecha_inicio >= ?", java.sql.Date.valueOf(f.desde));
-        si(f.hasta != null, " AND m.fecha_inicio <= ?", java.sql.Date.valueOf(f.hasta));
+        si(f.desde != null, " AND m.fecha_inicio >= ?", f.desde != null ? java.sql.Date.valueOf(f.desde) : null);
+        si(f.hasta != null, " AND m.fecha_inicio <= ?", f.hasta != null ? java.sql.Date.valueOf(f.hasta) : null);
         sql.append(" ORDER BY m.fecha_inicio DESC, p.id");
 
         ResultadoReporte r = new ResultadoReporte("Piezas reparadas o reemplazadas",
@@ -213,8 +213,8 @@ public class ReporteDao {
            .append("JOIN usuario u ON u.id = r.docente_id WHERE 1=1");
         si(f.docenteId > 0, " AND r.docente_id = ?", f.docenteId);
         si(f.laboratorioId > 0, " AND r.laboratorio_id = ?", f.laboratorioId);
-        si(f.desde != null, " AND DATE(r.fecha_hora) >= ?", java.sql.Date.valueOf(f.desde));
-        si(f.hasta != null, " AND DATE(r.fecha_hora) <= ?", java.sql.Date.valueOf(f.hasta));
+        si(f.desde != null, " AND DATE(r.fecha_hora) >= ?", f.desde != null ? java.sql.Date.valueOf(f.desde) : null);
+        si(f.hasta != null, " AND DATE(r.fecha_hora) <= ?", f.hasta != null ? java.sql.Date.valueOf(f.hasta) : null);
         sql.append(" ORDER BY r.fecha_hora DESC");
 
         ResultadoReporte r = new ResultadoReporte("Recepciones de laboratorio registradas por docentes",
@@ -238,8 +238,8 @@ public class ReporteDao {
         si(f.laboratorioId > 0, " AND rd.laboratorio_id = ?", f.laboratorioId);
         si(f.docenteId > 0, " AND rd.docente_id = ?", f.docenteId);
         si(f.equipoId > 0, " AND rd.equipo_id = ?", f.equipoId);
-        si(f.desde != null, " AND DATE(rd.fecha_hora_reporte) >= ?", java.sql.Date.valueOf(f.desde));
-        si(f.hasta != null, " AND DATE(rd.fecha_hora_reporte) <= ?", java.sql.Date.valueOf(f.hasta));
+        si(f.desde != null, " AND DATE(rd.fecha_hora_reporte) >= ?", f.desde != null ? java.sql.Date.valueOf(f.desde) : null);
+        si(f.hasta != null, " AND DATE(rd.fecha_hora_reporte) <= ?", f.hasta != null ? java.sql.Date.valueOf(f.hasta) : null);
         sql.append(" ORDER BY l.nombre, rd.fecha_hora_reporte DESC");
 
         ResultadoReporte r = new ResultadoReporte("Equipos dañados encontrados por laboratorio",
@@ -261,8 +261,8 @@ public class ReporteDao {
            .append("JOIN usuario u ON u.id = h.docente_id WHERE 1=1");
         si(f.laboratorioId > 0, " AND h.laboratorio_id = ?", f.laboratorioId);
         si(f.docenteId > 0, " AND h.docente_id = ?", f.docenteId);
-        si(f.desde != null, " AND h.fecha >= ?", java.sql.Date.valueOf(f.desde));
-        si(f.hasta != null, " AND h.fecha <= ?", java.sql.Date.valueOf(f.hasta));
+        si(f.desde != null, " AND h.fecha >= ?", f.desde != null ? java.sql.Date.valueOf(f.desde) : null);
+        si(f.hasta != null, " AND h.fecha <= ?", f.hasta != null ? java.sql.Date.valueOf(f.hasta) : null);
         sql.append(" ORDER BY h.fecha, h.hora_inicio");
 
         ResultadoReporte r = new ResultadoReporte("Programación de uso de los laboratorios",

@@ -32,16 +32,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private PnlHorarios pnlHorarios;
     private PnlUsuarios pnlUsuarios;
 
-    private FrmEquipo frmEquipo;
-    private FrmComputadora frmComputadora;
-    private FrmSoftware frmSoftware;
-    private FrmAsistenteInstalacion frmInstalacion;
-    private FrmRecepcion frmRecepcion;
-    private FrmReporteDano frmReporteDano;
-    private FrmMantenimiento frmMantenimiento;
-    private FrmPieza frmPieza;
-    private FrmReportes frmReportes;
-
     private JPanel pnlContenido;
     private JPanel pnlMenu;
     private Usuario usuarioActual;
@@ -57,13 +47,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     private void construir() {
-        setTitle("Sistema de Gestion de Laboratorios");
+        setTitle("Sistema GEST-LAB");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setMinimumSize(new Dimension(1200, 720));
         setSize(1300, 800);
         setLocationRelativeTo(null);
 
-        JLabel titulo = new JLabel("  Sistema de Gestion de Laboratorios de Computo", SwingConstants.LEFT);
+        JLabel titulo = new JLabel("    SISTEMA GEST-LAB", SwingConstants.LEFT);
         titulo.setFont(titulo.getFont().deriveFont(Font.BOLD, 18f));
         titulo.setOpaque(true);
         titulo.setBackground(new Color(31, 78, 121));
@@ -88,15 +78,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         pnlLaboratorios = new PnlLaboratorios();
         pnlHorarios = new PnlHorarios();
         pnlUsuarios = new PnlUsuarios();
-        frmEquipo = new FrmEquipo(this, true);
-        frmComputadora = new FrmComputadora(this, true);
-        frmSoftware = new FrmSoftware(this, true);
-        frmInstalacion = new FrmAsistenteInstalacion(this, true);
-        frmRecepcion = new FrmRecepcion();
-        frmReporteDano = new FrmReporteDano();
-        frmMantenimiento = new FrmMantenimiento();
-        frmPieza = new FrmPieza();
-        frmReportes = new FrmReportes();
 
         pnlContenido.add(pnlLogin, LOGIN);
         pnlContenido.add(pnlCentros, CENTROS);
@@ -119,7 +100,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnComputadoras = boton("Computadoras");
         btnSoftware = boton("Software");
         btnInstalacion = boton("Instalacion de Software");
-        btnRecepcion = boton("Recepcion de Lab");
+        btnRecepcion = boton("Recepcion de Laboratorio");
         btnReporteDano = boton("Reportes de Daño");
         btnMantenimiento = boton("Mantenimiento");
         btnPiezas = boton("Piezas");
@@ -131,15 +112,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
         btnLaboratorios.addActionListener(e -> mostrarSeccion(LABORATORIOS, pnlLaboratorios, btnLaboratorios));
         btnHorarios.addActionListener(e -> mostrarSeccion(HORARIOS, pnlHorarios, btnHorarios));
         btnUsuarios.addActionListener(e -> mostrarSeccion(USUARIOS, pnlUsuarios, btnUsuarios));
-        btnEquipos.addActionListener(e -> mostrarVentana(frmEquipo));
-        btnComputadoras.addActionListener(e -> mostrarVentana(frmComputadora));
-        btnSoftware.addActionListener(e -> mostrarVentana(frmSoftware));
-        btnInstalacion.addActionListener(e -> mostrarVentana(frmInstalacion));
-        btnRecepcion.addActionListener(e -> mostrarVentana(frmRecepcion));
-        btnReporteDano.addActionListener(e -> mostrarVentana(frmReporteDano));
-        btnMantenimiento.addActionListener(e -> mostrarVentana(frmMantenimiento));
-        btnPiezas.addActionListener(e -> mostrarVentana(frmPieza));
-        btnReportes.addActionListener(e -> mostrarVentana(frmReportes));
+        btnEquipos.addActionListener(e -> mostrarVentana(new FrmEquipo(this, true)));
+        btnComputadoras.addActionListener(e -> mostrarVentana(new FrmComputadora(this, true)));
+        btnSoftware.addActionListener(e -> mostrarVentana(new FrmSoftware(this, true)));
+        btnInstalacion.addActionListener(e -> FrmAsistenteInstalacion.abrir(this));
+        btnRecepcion.addActionListener(e -> mostrarVentana(new FrmRecepcion()));
+        btnReporteDano.addActionListener(e -> mostrarVentana(new FrmReporteDano()));
+        btnMantenimiento.addActionListener(e -> mostrarVentana(new FrmMantenimiento()));
+        btnPiezas.addActionListener(e -> mostrarVentana(new FrmPieza()));
+        btnReportes.addActionListener(e -> mostrarVentana(new FrmReportes()));
         btnAyuda.addActionListener(e -> mostrarAyuda());
         btnCerrarSesion.addActionListener(e -> cerrarSesion());
 
@@ -224,7 +205,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void mostrarAyuda() {
         JOptionPane.showMessageDialog(this,
-                "Sistema de Gestion de Laboratorios\n" +
+                "Sistema GEST-LAB\n" +
                         "Version 1.0\n" +
                         "Programacion II - Universidad Mariano Galvez de Guatemala\n\n" +
                         "Funcionalidades:\n" +

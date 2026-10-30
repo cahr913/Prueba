@@ -145,6 +145,20 @@ public class MantenimientoServicio {
     }
 
     public void eliminar(int id) throws SQLException {
+        // Obtener el mantenimiento antes de eliminarlo (para saber qué equipo revertir)
+        Mantenimiento m = dao.buscarPorId(id);
+        int equipoId = (m != null) ? m.getEquipoId() : 0;
+        String estadoActual = (m != null) ? m.getEstadoTexto() : null;
+
         dao.eliminar(id);
+
+        // Revertir el estado del equipo a ACTIVO si estaba en mantenimiento
+        if (equipoId > 0 && ("PENDIENTE".equals(estadoActual) || "EN_PROCESO".equals(estadoActual))) {
+            Equipo equipo = equipoDao.buscarPorId(equipoId);
+            if (equipo != null && Equipo.MANTENIMIENTO.equalsIgnoreCase(equipo.getEstado())) {
+                equipo.cambiarEstado(Equipo.ACTIVO);
+                equipoDao.actualizar(equipo);
+            }
+        }
     }
 }
