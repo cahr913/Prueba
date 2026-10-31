@@ -3,7 +3,15 @@ package com.labcontrol.dao;
 import com.labcontrol.modelo.Equipo;
 import com.labcontrol.modelo.Computadora;
 import com.labcontrol.db.ConexionBD;
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
+
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +32,7 @@ public class EquipoDao {
             if (e.getLaboratorioId() > 0) {
                 ps.setInt(9, e.getLaboratorioId());
             } else {
-                ps.setNull(9, java.sql.Types.INTEGER);
+                ps.setNull(9, Types.INTEGER);
             }
             int filas = ps.executeUpdate();
             if (filas == 0) {

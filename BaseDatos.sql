@@ -4,7 +4,7 @@ CREATE DATABASE IF NOT EXISTS gestion_laboratorio
 
 USE gestion_laboratorio;
 
-CREATE TABLE centro_educativo (
+CREATE TABLE IF NOT EXISTS centro_educativo (
     id INT NOT NULL AUTO_INCREMENT,
     codigo_institucional VARCHAR(20) NOT NULL UNIQUE,
     nombre VARCHAR(150) NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE centro_educativo (
     PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 
-CREATE TABLE usuario (
+CREATE TABLE IF NOT EXISTS usuario (
     id INT NOT NULL AUTO_INCREMENT,
     nombre VARCHAR(100) NOT NULL,
     apellido VARCHAR(100),
@@ -29,7 +29,7 @@ CREATE TABLE usuario (
     PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 
-CREATE TABLE laboratorio (
+CREATE TABLE IF NOT EXISTS laboratorio (
     id INT NOT NULL AUTO_INCREMENT,
     codigo VARCHAR(20) NOT NULL UNIQUE,
     nombre VARCHAR(150) NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE laboratorio (
     FOREIGN KEY (centro_id) REFERENCES centro_educativo(id)
 ) ENGINE=InnoDB;
 
-CREATE TABLE equipo (
+CREATE TABLE IF NOT EXISTS equipo (
     id INT NOT NULL AUTO_INCREMENT,
     codigo_inventario VARCHAR(50) NOT NULL UNIQUE,
     tipo VARCHAR(50) NOT NULL,
@@ -58,7 +58,7 @@ CREATE TABLE equipo (
     FOREIGN KEY (laboratorio_id) REFERENCES laboratorio(id)
 ) ENGINE=InnoDB;
 
-CREATE TABLE computadora (
+CREATE TABLE IF NOT EXISTS computadora (
     id INT NOT NULL,
     hostname VARCHAR(100),
     ip VARCHAR(45),
@@ -69,7 +69,7 @@ CREATE TABLE computadora (
     FOREIGN KEY (id) REFERENCES equipo(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE software (
+CREATE TABLE IF NOT EXISTS software (
     id INT NOT NULL AUTO_INCREMENT,
     nombre VARCHAR(150) NOT NULL,
     version VARCHAR(50),
@@ -79,7 +79,7 @@ CREATE TABLE software (
     PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 
-CREATE TABLE instalacion (
+CREATE TABLE IF NOT EXISTS instalacion (
     id INT NOT NULL AUTO_INCREMENT,
     equipo_id INT NOT NULL,
     software_id INT NOT NULL,
@@ -89,7 +89,7 @@ CREATE TABLE instalacion (
     FOREIGN KEY (software_id) REFERENCES software(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE horario (
+CREATE TABLE IF NOT EXISTS horario (
     id INT NOT NULL AUTO_INCREMENT,
     docente_id INT NOT NULL,
     laboratorio_id INT NOT NULL,
@@ -103,7 +103,7 @@ CREATE TABLE horario (
     FOREIGN KEY (laboratorio_id) REFERENCES laboratorio(id)
 ) ENGINE=InnoDB;
 
-CREATE TABLE recepcion (
+CREATE TABLE IF NOT EXISTS recepcion (
     id INT NOT NULL AUTO_INCREMENT,
     laboratorio_id INT NOT NULL,
     docente_id INT NOT NULL,
@@ -122,7 +122,7 @@ CREATE TABLE recepcion (
     FOREIGN KEY (horario_id) REFERENCES horario(id)
 ) ENGINE=InnoDB;
 
-CREATE TABLE recepcion_equipo_dano (
+CREATE TABLE IF NOT EXISTS recepcion_equipo_dano (
     id INT NOT NULL AUTO_INCREMENT,
     recepcion_id INT NOT NULL,
     equipo_id INT NOT NULL,
@@ -131,7 +131,7 @@ CREATE TABLE recepcion_equipo_dano (
     FOREIGN KEY (equipo_id) REFERENCES equipo(id)
 ) ENGINE=InnoDB;
 
-CREATE TABLE reporte_dano (
+CREATE TABLE IF NOT EXISTS reporte_dano (
     id INT NOT NULL AUTO_INCREMENT,
     laboratorio_id INT NOT NULL,
     equipo_id INT NOT NULL,
@@ -149,7 +149,7 @@ CREATE TABLE reporte_dano (
     FOREIGN KEY (horario_id) REFERENCES horario(id)
 ) ENGINE=InnoDB;
 
-CREATE TABLE foto_evidencia (
+CREATE TABLE IF NOT EXISTS foto_evidencia (
     id INT NOT NULL AUTO_INCREMENT,
     reporte_dano_id INT NOT NULL,
     equipo_id INT NULL,
@@ -160,7 +160,7 @@ CREATE TABLE foto_evidencia (
     FOREIGN KEY (equipo_id) REFERENCES equipo(id)
 ) ENGINE=InnoDB;
 
-CREATE TABLE mantenimiento (
+CREATE TABLE IF NOT EXISTS mantenimiento (
     id INT NOT NULL AUTO_INCREMENT,
     numero_servicio VARCHAR(30) NOT NULL UNIQUE,
     equipo_id INT NOT NULL,
@@ -183,7 +183,7 @@ CREATE TABLE mantenimiento (
     FOREIGN KEY (responsable_id) REFERENCES usuario(id)
 ) ENGINE=InnoDB;
 
-CREATE TABLE pieza (
+CREATE TABLE IF NOT EXISTS pieza (
     id INT NOT NULL AUTO_INCREMENT,
     mantenimiento_id INT NOT NULL,
     nombre VARCHAR(150) NOT NULL,
@@ -195,7 +195,7 @@ CREATE TABLE pieza (
     FOREIGN KEY (mantenimiento_id) REFERENCES mantenimiento(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE bitacora_acceso (
+CREATE TABLE IF NOT EXISTS bitacora_acceso (
     id INT NOT NULL AUTO_INCREMENT,
     fecha_hora DATETIME NOT NULL,
     accion VARCHAR(100),

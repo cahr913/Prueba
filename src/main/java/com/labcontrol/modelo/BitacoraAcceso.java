@@ -9,6 +9,17 @@ public class BitacoraAcceso {
     private String ip;
     private String dispositivo;
 
+    public BitacoraAcceso(int idBitacora, LocalDateTime fechaHora, String accion, String ip, String dispositivo) {
+        this.idBitacora = idBitacora;
+        this.fechaHora = fechaHora;
+        this.accion = accion;
+        this.ip = ip;
+        this.dispositivo = dispositivo;
+    }
+
+    public BitacoraAcceso() {
+    }
+    
     public int getIdBitacora() {
         return idBitacora;
     }

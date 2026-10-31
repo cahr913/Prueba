@@ -1,11 +1,20 @@
 package com.labcontrol.dao;
 
-import com.labcontrol.modelo.Usuario;
-import com.labcontrol.db.ConexionBD;
-import java.sql.*;
+import com.labcontrol.modelo.*;
+import com.labcontrol.db.*;
+import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+
 
 public class UsuarioDao {
 
@@ -43,8 +52,10 @@ public class UsuarioDao {
             ps.setString(5, u.getCorreo());
             ps.setString(6, u.getRol());
             ps.setBoolean(7, u.isEstado());
+            
             LocalDate fc = u.getFechaCreacion();
-            ps.setDate(8, fc != null ? java.sql.Date.valueOf(fc) : null);
+            ps.setDate(8, fc != null ? Date.valueOf(fc) : null);
+            
             ps.setInt(9, u.getIdUsuario());
             int filas = ps.executeUpdate();
             if (filas == 0) {
@@ -93,7 +104,8 @@ public class UsuarioDao {
     public Usuario buscarPorNombreUsuario(String nombreUsuario) throws SQLException {
         String sql = "SELECT * FROM usuario WHERE nombre_usuario = (?)";
         try (Connection cn = ConexionBD.abrir();
-             PreparedStatement ps = cn.prepareStatement(sql)) {
+                PreparedStatement ps = cn.prepareStatement(sql)) {
+            
             ps.setString(1, nombreUsuario);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {

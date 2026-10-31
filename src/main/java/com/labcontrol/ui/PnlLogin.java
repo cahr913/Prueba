@@ -31,7 +31,6 @@ public class PnlLogin extends javax.swing.JPanel {
         String nombreUsuario = txtUsuario.getText().trim();
         char[] caracteres = txtClave.getPassword();
         String clave = new String(caracteres);
-        Arrays.fill(caracteres, '\0');
 
         if (nombreUsuario.isEmpty() || clave.isEmpty()) {
             lblError.setText("Ingrese el nombre de usuario y la contraseña.");
@@ -65,7 +64,7 @@ public class PnlLogin extends javax.swing.JPanel {
                     + " (" + usuario.getRol() + ")");
             
             try {
-                registro.setIp(InetAddress.getLocalHost().getHostAddress()); // obtiene la ipv4 para la bitacora
+                registro.setIp(InetAddress.getLocalHost().getHostAddress()); 
             } catch (Exception ipError) {
                 registro.setIp("localhost");
             }
